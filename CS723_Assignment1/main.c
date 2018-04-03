@@ -15,35 +15,31 @@
 #define   TASK_STACKSIZE       2048
 
 // Definition of Task Priorities
-#define PRINT_STATUS_TASK_PRIORITY 14
-#define GETSEM_TASK1_PRIORITY      13
-#define GETSEM_TASK2_PRIORITY      12
-#define RECEIVE_TASK1_PRIORITY    11
-#define RECEIVE_TASK2_PRIORITY    10
-#define SEND_TASK_PRIORITY        9
+#define SWITCH_POLLING_TASK_PRIORITY 5
+#define KEYBOARD_LOGIC_PRIORITY 4
+#define COMPUTE_TASK_PRIORITY 3
+#define OUTPUT_LOGIC_TASK_PRIORITY 2
+#define VGA_OUTPUT_TASK_PRIORITY 1
 
 // Definition of Message Queue
 #define   MSG_QUEUE_SIZE  30
-QueueHandle_t msgqueue;
+// QueueHandle_t msgqueue;
 
 // used to delete a task
 TaskHandle_t xHandle;
 
 // Definition of Semaphore
-SemaphoreHandle_t shared_resource_sem;
+SemaphoreHandle_t counterSemaphore1;
 
-// globals variables
-unsigned int number_of_messages_sent = 0;
-unsigned int number_of_messages_received_task1 = 0;
-unsigned int number_of_messages_received_task2 = 0;
-unsigned int getsem_task1_got_sem = 0;
-unsigned int getsem_task2_got_sem = 0;
-char sem_owner_task_name[20];
+// Global variables
+unsigned int TOF_500;
+unsigned int currentSwitchValue, maintenanceState;
 
 // Local Function Prototypes
 int initOSDataStructs(void);
 int initCreateTasks(void);
-
+int initFlags(void);
+int initButtonsPIO(void);
 
 
 
@@ -59,139 +55,155 @@ int initCreateTasks(void);
  */
 alt_u32 tlc_timer_isr(void* context)
 {
-	volatile int* trigger = (volatile int*)context;
-	*trigger = 1;
+	// TO DO
 	return 0;
 }
 
 
+/************/
+/*  METHODS */
+/************/
 
+void buttonsController(void* context) {
 
-// The following test prints out status information every 3 seconds.
-void print_status_task(void *pvParameters)
-{
-	while (1)
-	{
-		vTaskDelay(3000);
-		printf("****************************************************************\n");
-		printf("Hello From FreeRTOS Running on NIOS II.  Here is the status:\n");
-		printf("\n");
-		printf("The number of messages sent by the send_task:         %d\n", number_of_messages_sent);
-		printf("\n");
-		printf("The number of messages received by the receive_task1: %d\n", number_of_messages_received_task1);
-		printf("\n");
-		printf("The number of messages received by the receive_task2: %d\n", number_of_messages_received_task2);
-		printf("\n");
-		printf("The shared resource is owned by: %s\n", &sem_owner_task_name[0]);
-		printf("\n");
-		printf("The Number of times getsem_task1 acquired the semaphore %d\n", getsem_task1_got_sem);
-		printf("\n");
-		printf("The Number of times getsem_task2 acquired the semaphore %d\n", getsem_task2_got_sem);
-		printf("\n");
-		printf("****************************************************************\n");
-		printf("\n");
+	//Read edge capture register's value
+	int button_click = IORD_ALTERA_AVALON_PIO_EDGE_CAP(BUTTONS_BASE);
+
+	if (button_click == 1) { // Is this the right button press?
+		maintenanceState = 1;
+	} else { 
+		maintenanceState = 0;
 	}
+
+	//reset edge capture register
+	IOWR_ALTERA_AVALON_PIO_EDGE_CAP(BUTTONS_BASE, 0);
+
+	xSemaphoreGive(counterSemaphore1);
 }
 
-// The next two task compete for a shared resource via a semaphore.  The name of
-// the task that owns the semaphore is copied into the global variable
-// sem_owner_task_name[].
-void getsem_task1(void *pvParameters)
-{
-	while (1)
-	{
-		xSemaphoreTake(shared_resource_sem, portMAX_DELAY);
-		// block forever until receive the mutex
-		strcpy(&sem_owner_task_name[0], "getsem_task1");
-		getsem_task1_got_sem++;
-		xSemaphoreGive(shared_resource_sem);
-		vTaskDelay(100);
-	}
-}
 
-void getsem_task2(void *pvParameters)
-{
-	while (1)
-	{
-		xSemaphoreTake(shared_resource_sem, portMAX_DELAY);
-		// block forever until receive the mutex
-		strcpy(&sem_owner_task_name[0], "getsem_task2");
-		getsem_task2_got_sem++;
-		xSemaphoreGive(shared_resource_sem);
-		vTaskDelay(130);
-	}
-}
 
-// The following task fills up a message queue with incrementing data.  The data
-// is not actually used by the application.  If the queue is full the task is
-// suspended for 1 second.
-void send_task(void *pvParameters)
+
+/************/
+/*   TASKS  */
+/************/
+
+void switchPollingTask(void *pvParameters)
 {
-	unsigned int msg = 0;
 	while (1)
 	{
-		if (xQueueSend(msgqueue, (void *)&msg, 0) == pdPASS)
-		{
-			// in the message queue
-			msg++;
-			number_of_messages_sent++;
+
+		//Read edge capture register's value
+		int switch_value = IORD_ALTERA_AVALON_PIO_DATA(SWITCHES_BASE);
+		// Switch 17, the configuration switch, is on
+		int switch_changed = 0;
+		if (switch_value != currentSwitchValue) {
+			//Set global flag
+			currentSwitchValue = switch_value;
+			switch_changed = 1;
 		}
-		else
-		{
-			vTaskDelay(1000);
+
+		currentSwitchValue = switch_value;
+		
+		if (switch_changed) {
+			xSemaphoreGive(counterSemaphore1);
 		}
 	}
 }
 
-// The next two task pull messages in the queue at different rates.  The number
-// of messages received by the task is incremented when a new message is received
-void receive_task1(void *pvParameters)
+void keyboardLogicTask(void *pvParameters)
 {
-	unsigned int *msg;
 	while (1)
 	{
-		xQueueReceive(msgqueue, &msg, portMAX_DELAY);
-		number_of_messages_received_task1++;
-		vTaskDelay(333);
+		// TO DO
 	}
 }
 
-void receive_task2(void *pvParameters)
+
+void computeTask(void *pvParameters)
 {
-	unsigned int *msg;
 	while (1)
 	{
-		xQueueReceive(msgqueue, &msg, portMAX_DELAY);
-		number_of_messages_received_task2++;
-		vTaskDelay(1000);
+		// TO DO
 	}
 }
 
-// int main(int argc, char* argv[], char* envp[])
-// {
-	// initOSDataStructs();
-	// initCreateTasks();
-	// vTaskStartScheduler();
-	// for (;;);
-	// return 0;
-// }
+void outputLogicTask(void *pvParameters)
+{
+	while (1)
+	{
+		// TO DO
 
-// This function simply creates a message queue and a semaphore
+	}
+}
+
+void vgaOutputTask(void *pvParameters)
+{
+	while (1)
+	{
+		// TO DO
+
+	}
+}
+
+
+
+/************/
+/**  INIT  **/
+/************/
+// This function simply creates initial data used in the scope of program
 int initOSDataStructs(void)
 {
-	msgqueue = xQueueCreate( MSG_QUEUE_SIZE, sizeof( void* ) );
-	shared_resource_sem = xSemaphoreCreateCounting( 9999, 1 );
+	// msgqueue = xQueueCreate( MSG_QUEUE_SIZE, sizeof( void* ) );
+	counterSemaphore1 = xSemaphoreCreateCounting( 9999, 1 );
 	return 0;
 }
 
 // This function creates the tasks used in this example
 int initCreateTasks(void)
-{
-	xTaskCreate(getsem_task1, "getsem_task1", TASK_STACKSIZE, NULL, GETSEM_TASK1_PRIORITY, NULL);
-	xTaskCreate(getsem_task2, "getsem_task2", TASK_STACKSIZE, NULL, GETSEM_TASK2_PRIORITY, NULL);
-	xTaskCreate(receive_task1, "receive_task1", TASK_STACKSIZE, NULL, RECEIVE_TASK1_PRIORITY, NULL);
-	xTaskCreate(receive_task2, "receive_task2", TASK_STACKSIZE, NULL, RECEIVE_TASK2_PRIORITY, NULL);
-	xTaskCreate(send_task, "send_task", TASK_STACKSIZE, NULL, SEND_TASK_PRIORITY, NULL);
-	xTaskCreate(print_status_task, "print_status_task", TASK_STACKSIZE, NULL, PRINT_STATUS_TASK_PRIORITY, NULL);
+{	
+	xTaskCreate(switchPollingTask, "switchPollingTask", TASK_STACKSIZE, NULL, SWITCH_POLLING_TASK_PRIORITY, NULL);
+	xTaskCreate(keyboardLogicTask, "keyboardLogicTask", TASK_STACKSIZE, NULL, KEYBOARD_LOGIC_PRIORITY, NULL);
+	xTaskCreate(computeTask, "computeTask", TASK_STACKSIZE, NULL, COMPUTE_TASK_PRIORITY, NULL);
+	xTaskCreate(outputLogicTask, "outputLogicTask", TASK_STACKSIZE, NULL, OUTPUT_LOGIC_TASK_PRIORITY, NULL);
+	xTaskCreate(vgaOutputTask, "vgaOutputTask", TASK_STACKSIZE, NULL, VGA_OUTPUT_TASK_PRIORITY, NULL);
 	return 0;
 }
+
+// This function initialises all global flags
+int initFlags(void)
+{
+	TOF_500 = 0;
+	maintenanceState = 0;
+	currentSwitchValue = 0;
+	return 0;
+}
+
+void initButtonsPIO(void)
+{
+	//Enable first four interrupts
+	IOWR_ALTERA_AVALON_PIO_IRQ_MASK(BUTTONS_BASE, 0xf);
+	// Reset the edge capture register
+	IOWR_ALTERA_AVALON_PIO_EDGE_CAP(BUTTONS_BASE, 0x0);
+	//Register the interrupt handler, context is unused so pass in garbage
+	void* context = 0;
+	alt_irq_register(BUTTONS_IRQ, context, buttonsController);
+
+	return 0;
+}
+
+/************/
+/**  MAIN  **/
+/************/
+int main(int argc, char* argv[], char* envp[])
+{
+	initOSDataStructs();
+	initCreateTasks();
+	initFlags();
+	initButtonsPIO();
+	vTaskStartScheduler();
+	for (;;);
+	return 0;
+}
+
+
