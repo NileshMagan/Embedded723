@@ -142,7 +142,7 @@ void switchPollingTask(void *pvParameters)
 
 		//Read edge capture register's value
 		int switch_value = IORD_ALTERA_AVALON_PIO_DATA(SWITCHES_BASE);
-		// Switch 17, the configuration switch, is on
+
 		int switch_changed = 0;
 		if (switch_value != currentSwitchValue) {
 			//Set global flag
@@ -152,7 +152,7 @@ void switchPollingTask(void *pvParameters)
 
 		currentSwitchValue = switch_value;
 		
-		if (switch_changed) {
+		if (switch_changed) { // TO DO: May need to check switch value here as well
 			xSemaphoreGive(counterSemaphore1);
 		}
 	}
