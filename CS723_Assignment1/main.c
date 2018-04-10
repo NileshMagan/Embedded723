@@ -16,6 +16,7 @@
 #include "sys/alt_irq.h"
 
 #include <altera_avalon_pio_regs.h>
+#include "alt_types.h"                 	// alt_u32 is a kind of alt_types
 
 // Definition of Task Stacks
 #define   TASK_STACKSIZE       2048
@@ -36,7 +37,8 @@ TaskHandle_t xHandle;
 
 // Definition of Semaphore
 SemaphoreHandle_t counterSemaphore0, counterSemaphore1;
-unsigned int[FREQUENCY_DATA_QUEUE_SIZE] frequencyDataQueue = {0}; // Happy with the size?
+//
+//unsigned int[FREQUENCY_DATA_QUEUE_SIZE] frequencyDataQueue = {0}; // Happy with the size?
 // TO DO: Need to decide between making our own queue^ and using an RTOS queue (without interrupts)
 
 // Global variables
@@ -52,7 +54,7 @@ int initFlags(void);
 int initButtonsPIO(void);
 int initFrequency(void);
 int initKeyboard(void);
-int initAll(void);
+void initAll(void);
 
 // Methods
 
@@ -63,7 +65,11 @@ int initAll(void);
 /************/
 alt_u32 timerISR(void* context)
 {
-	// TO DO
+	//Set global flag
+	TOF_500 = 1;
+	
+	// Give the semaphore
+	xSemaphoreGive(counterSemaphore1);
 	return 0;
 }
 
@@ -71,18 +77,19 @@ alt_u32 timerISR(void* context)
 void buttonsISR(void* context) {
 
 	//Read edge capture register's value
-	int button_click = IORD_ALTERA_AVALON_PIO_EDGE_CAP(BUTTONS_BASE);
+	int button_click = IORD_ALTERA_AVALON_PIO_EDGE_CAP(PUSH_BUTTON_BASE);
 
-	if (button_click == 1) { // Is this the right button press?
+	if (button_click == 4) { // Is this the right button press?
 		enterMaintenanceState = 1;
-	} else { 
+	} else {
 		enterMaintenanceState = 0;
 	}
 
-	//reset edge capture register
-	IOWR_ALTERA_AVALON_PIO_EDGE_CAP(BUTTONS_BASE, 0);
+	//Reset edge capture register
+	IOWR_ALTERA_AVALON_PIO_EDGE_CAP(PUSH_BUTTON_BASE, 0x7);
 
-	// Give the semaphore
+	printf("eMS: %d\n", enterMaintenanceState);
+	//Give the semaphore
 	xSemaphoreGive(counterSemaphore1);
 }
 
@@ -118,6 +125,7 @@ void ps2ISR(void* context) {
 		{
 			// TO DO: Adds key value to queue
 		IOWR(SEVEN_SEG_BASE,0 ,key);
+		}
 	}
 
 	// Give the semaphore
@@ -139,9 +147,8 @@ void switchPollingTask(void *pvParameters)
 {
 	while (1)
 	{
-
 		//Read edge capture register's value
-		int switch_value = IORD_ALTERA_AVALON_PIO_DATA(SWITCHES_BASE);
+		int switch_value = IORD_ALTERA_AVALON_PIO_DATA(SLIDE_SWITCH_BASE);
 
 		int switch_changed = 0;
 		if (switch_value != currentSwitchValue) {
@@ -246,13 +253,13 @@ int initFlags(void)
 int initButtonsPIO(void)
 {
 	//Enable first four interrupts
-	IOWR_ALTERA_AVALON_PIO_IRQ_MASK(BUTTONS_BASE, 0xf);
+	IOWR_ALTERA_AVALON_PIO_IRQ_MASK(PUSH_BUTTON_BASE, 0x7);
 	// Reset the edge capture register
-	IOWR_ALTERA_AVALON_PIO_EDGE_CAP(BUTTONS_BASE, 0x0);
+	IOWR_ALTERA_AVALON_PIO_EDGE_CAP(PUSH_BUTTON_BASE, 0x7);
 	//Register the interrupt handler, context is unused so pass in garbage
 	void* context = 0;
-	alt_irq_register(BUTTONS_IRQ, context, buttonsISR);
-
+	alt_irq_register(PUSH_BUTTON_IRQ, context, buttonsISR);
+	printf("Finished button init");
 	return 0;
 }
 
@@ -266,7 +273,7 @@ int initFrequency(void) {
 
 	//Register the interrupt handler, context is unused so pass in garbage
 	void* context = 0;
-	alt_irq_register(ADC_base_value?, context, frequencyController);
+	//alt_irq_register(ADC_base_value?, context, frequencyController);
 
 	return 0; // success
 }
@@ -295,18 +302,21 @@ int initKeyboard(void) {
 
 
 
-int initAll(void) {
+void initAll(void) {
 	initOSDataStructs();
-	initCreateTasks();
-	initFlags();
+	//initCreateTasks();
+	//initFlags();
 	initButtonsPIO();
-	initFrequency();
-	initKeyboard();
+	//initFrequency();
+	//initKeyboard();
+	printf("Initialiased all\n");
+	return;
 }
 
 /************/
 /**  MAIN  **/
 /************/
+
 int main(int argc, char* argv[], char* envp[])
 {
 	initAll();
