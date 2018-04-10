@@ -1491,3 +1491,8 @@ java.lang.Exception: Connected system ID hash not found on target at expected ba
 
 !ENTRY com.altera.sbtgui.launch 1 0 2018-04-10 13:01:21.941
 !MESSAGE Executing: [C:/altera/13.0/quartus\bin\cygwin\bin\bash.exe, -c, nios2-download '--cable=USB-Blaster on localhost [USB-0]' --device=1 --instance=0 --go --sidp=0x430f0 --id=0x7 /cygdrive/h/COMPSYS_723/Project_workspace/CS723_Assignment1/CS723_Assignment1.elf]
+
+!ENTRY org.eclipse.core.resources 2 2 2018-04-10 14:00:36.497
+!MESSAGE Save operation warnings.
+!SUBENTRY 1 org.eclipse.core.resources 2 234 2018-04-10 14:00:36.497
+!MESSAGE The project description file (.project) for 'RemoteSystemsTempFiles' was missing.  This file contains important information about the project.  A new project description file has been created, but some information about the project may have been lost.

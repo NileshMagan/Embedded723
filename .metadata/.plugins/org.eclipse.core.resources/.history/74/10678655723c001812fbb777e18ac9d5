@@ -48,10 +48,9 @@ SemaphoreHandle_t counterSemaphore0, counterSemaphore1, counterSemaphore2;
 
 // Global variables
 alt_u32 tickPerSecond; // Constants
-unsigned int context;
-static volatile unsigned int currentSwitchValue; // Data
-static volatile unsigned int TOF_500, switchChanged, enterMaintenanceState, timerStarted; // Flags
-static volatile unsigned int systemState; // State
+unsigned int TOF_500, switchChanged, enterMaintenanceState; // Flags
+unsigned int currentSwitchValue; // Data
+unsigned int systemState; // State
 // 	0  IDLE
 //  1  STABLE
 //  2  UNSTABLE
@@ -80,7 +79,7 @@ void updateLEDs(unsigned int greenLEDValue, unsigned int redLEDValue);
 /************/
 /*  ISRs     */
 /************/
-alt_u32 timer500ISR(void* context)
+alt_u32 timerISR(void* context)
 {
 	//Set global flag
 	TOF_500 = 1;
@@ -271,8 +270,6 @@ void computeTask(void *pvParameters)
 	}
 }
 
-
-
 void outputLogicTask(void *pvParameters)
 {
 	while (1)
@@ -282,53 +279,27 @@ void outputLogicTask(void *pvParameters)
 		switch(systemState) {
 			case 0: // IDLE
 			case 1: // STABLE
-				// Stop 500ms timer
-				if (timerStarted == 1) {
-					alt_alarm_stop(&timer500);
-				}
+				// Restart timer
+				timer500.stop();
+				timer500.reset();
+				timer500.start();
+
 				checkSwitches();
-					currentSwitchValue;
 				checkLED();
-					int redValue = 	IORD_ALTERA_AVALON_PIO_DATA(RED_LEDS_BASE);
-					int greenValue = IORD_ALTERA_AVALON_PIO_DATA(GREEN_LEDS_BASE);
 				checkPriority();
-					// Compare currentSwitch with Green
-					if (greenValue == 0) {
-						redValue = currentSwitchValue;
-					} else {
-						greenValue = redValue ^ currentSwitchValue;
-						int bitPosition = checkPriority(greenValue, 1); // Check for high priority, returns
-						greenValue = toggleBit(bitPosition, greenValue);
-						redValue = toggleBit(bitPosition, redValue);
-					}
-
-				// Update LEDs
-				updateLEDs(greenValue, redValue); // Red LEDs mimick switch state, Green LEDs all off
-
-				// Start 500ms timer & set flag
-				alt_alarm_start(&timer500, 500, timer500ISR, context);
-				timerStarted = 1;
+				updateLEDs(); // Soft Outputs
 			case 2: // UNSTABLE
-				// Stop 500ms timer
-				if (timerStarted == 1) {
-					alt_alarm_stop(&timer500);
-				}
+				// Restart timer
+				timer500.stop();
+				timer500.reset();
+				timer500.start();
 
 				checkSwitches();
 				checkLED();
 				checkPriority();
-				updateLEDs();
-
-				// Start 500ms timer & set flag
-				alt_alarm_start(&timer500, 500, timer500ISR, context);
-				timerStarted = 1;
+				updateLEDs(); // Soft Outputs
 			case 3: // MAINTENANCE
-				// Stop 500ms timer
-				if (timerStarted == 1) {
-					alt_alarm_stop(&timer500);
-				}
 
-				// Update LEDs
 				updateLEDs(0, currentSwitchValue); // Red LEDs mimick switch state, Green LEDs all off
 		}
 	}
@@ -357,7 +328,6 @@ int initOSDataStructs(void)
 	timer200Queue = xQueueCreate(TIMER_200_QUEUE_SIZE, sizeof(alt_u32));
 
 	tickPerSecond = alt_ticks_per_second();
-	context = 0;
 	return 0;
 }
 
@@ -376,7 +346,6 @@ int initCreateTasks(void)
 int initFlags(void)
 {
 	TOF_500 = 0;
-	timerStarted = 0;
 	switchChanged = 0;
 	enterMaintenanceState = 0;
 	currentSwitchValue = 0;
@@ -398,6 +367,10 @@ int initButtonsPIO(void)
 	printf("Finished button init");
 	return 0;
 }
+
+
+	//Start timeout timer
+	alt_alarm_start(&tlc_timer, timeout[0], tlc_timer_isr, &tlc_timer_event);
 
 int initFrequency(void) {
 

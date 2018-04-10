@@ -298,12 +298,11 @@ void outputLogicTask(void *pvParameters)
 					} else {
 						greenValue = redValue ^ currentSwitchValue;
 						int bitPosition = checkPriority(greenValue, 1); // Check for high priority, returns
-						greenValue = toggleBit(bitPosition, greenValue);
-						redValue = toggleBit(bitPosition, redValue);
+						toggleGreenLEDs(bitPosition);
+						toggleRedLEDs(bitPosition);
 					}
 
-				// Update LEDs
-				updateLEDs(greenValue, redValue); // Red LEDs mimick switch state, Green LEDs all off
+				updateLEDs();
 
 				// Start 500ms timer & set flag
 				alt_alarm_start(&timer500, 500, timer500ISR, context);

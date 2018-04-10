@@ -1,7 +1,7 @@
 // Standard includes
-#include "stddef.h"
-#include "stdio.h"
-#include "string.h"
+#include <stddef.h>
+#include <stdio.h>
+#include <string.h>
 
 // Scheduler includes
 #include "freertos/FreeRTOS.h"
@@ -14,9 +14,8 @@
 #include "altera_up_avalon_ps2.h"
 #include "altera_up_ps2_keyboard.h"
 #include "sys/alt_irq.h"
-#include "sys/alt_alarm.h"
 
-#include "altera_avalon_pio_regs.h"
+#include <altera_avalon_pio_regs.h>
 #include "alt_types.h"                 	// alt_u32 is a kind of alt_types
 
 // Definition of Task Stacks
@@ -29,36 +28,22 @@
 #define OUTPUT_LOGIC_TASK_PRIORITY 2
 #define VGA_OUTPUT_TASK_PRIORITY 1
 
-// Definition of Time delay
-#define portMAX_DELAY 0
-
 // Definition of Message Queue
 #define   FREQUENCY_DATA_QUEUE_SIZE  10
-#define   TIMER_200_QUEUE_SIZE  10
+// QueueHandle_t msgqueue;
 
-QueueHandle_t timer200Queue;
-
-static alt_alarm timer500;
+// used to delete a task
+TaskHandle_t xHandle;
 
 // Definition of Semaphore
-SemaphoreHandle_t counterSemaphore0, counterSemaphore1, counterSemaphore2;
+SemaphoreHandle_t counterSemaphore0, counterSemaphore1;
 //
 //unsigned int[FREQUENCY_DATA_QUEUE_SIZE] frequencyDataQueue = {0}; // Happy with the size?
-// TODO: Need to decide between making our own queue^ and using an RTOS queue (without interrupts)
+// TO DO: Need to decide between making our own queue^ and using an RTOS queue (without interrupts)
 
 // Global variables
-alt_u32 tickPerSecond; // Constants
-unsigned int context;
-static volatile unsigned int currentSwitchValue; // Data
-static volatile unsigned int TOF_500, switchChanged, enterMaintenanceState, timerStarted; // Flags
-static volatile unsigned int systemState; // State
-// 	0  IDLE
-//  1  STABLE
-//  2  UNSTABLE
-//  3  MAINTENANCE
-
-
-
+unsigned int TOF_500;
+unsigned int currentSwitchValue, enterMaintenanceState;
 
 // NEED TO IMPLEMENT OUR OWN QUEUE FUNCTIONALITY IN C
 
@@ -72,15 +57,13 @@ int initKeyboard(void);
 void initAll(void);
 
 // Methods
-int aboveRateOfFrequency(void);
-int belowThresholdFrequency(void);
-void updateLEDs(unsigned int greenLEDValue, unsigned int redLEDValue);
+
 
 
 /************/
 /*  ISRs     */
 /************/
-alt_u32 timer500ISR(void* context)
+alt_u32 timerISR(void* context)
 {
 	//Set global flag
 	TOF_500 = 1;
@@ -94,9 +77,9 @@ alt_u32 timer500ISR(void* context)
 void buttonsISR(void* context) {
 
 	//Read edge capture register's value
-	int buttonClick = IORD_ALTERA_AVALON_PIO_EDGE_CAP(PUSH_BUTTON_BASE);
+	int button_click = IORD_ALTERA_AVALON_PIO_EDGE_CAP(PUSH_BUTTON_BASE);
 
-	if (buttonClick == 4) { // Is this the right button press?
+	if (button_click == 4) { // Is this the right button press?
 		enterMaintenanceState = 1;
 	} else {
 		enterMaintenanceState = 0;
@@ -113,16 +96,16 @@ void buttonsISR(void* context) {
 void frequencyISR(void* context) {
 
 	// Read ADC value
-	// TODO
+	// TO DO
 
 	// PERFORM BASIC CALCULATION (sample -> f)
-	// TODO
+	// TO DO
 
 	// ADD TO QUEUE
-	// TODO
+	// TO DO
 
 	// RESET BITS FOR NEXT ISR
-	// TODO
+	// TO DO
 
 	// Give the semaphore
 	xSemaphoreGive(counterSemaphore1);
@@ -140,7 +123,7 @@ void ps2ISR(void* context) {
 		// print out the result
 		switch ( decode_mode )
 		{
-			// TODO: Adds key value to queue
+			// TO DO: Adds key value to queue
 		IOWR(SEVEN_SEG_BASE,0 ,key);
 		}
 	}
@@ -155,29 +138,6 @@ void ps2ISR(void* context) {
 /************/
 
 
-int aboveRateOfFrequency(void) {
-	// Check most recent value of frequency queue, compare it previous and find gradient
-	// TODO
-	int length = frequencyQ.length();
-	result = (frequencyQ[length] - frequencyQ[length - 1])/timePeriod;
-	return (result > frequencyChangeThreshold); // 1 is Unstable
-}
-
-
-int belowThresholdFrequency(void) {
-	// TODO
-	// Check most recent value of frequency queue, compare it to threshold
-	int length = frequencyQ.length();
-	return (frequencyQ[length] < frequencyLowerThreshold); // 1 is Unstable
-}
-
-void updateLEDs(unsigned int greenLEDValue, unsigned int redLEDValue) {
-	IOWR_ALTERA_AVALON_PIO_DATA(GREEN_LEDS_BASE, greenLEDValue);
-	IOWR_ALTERA_AVALON_PIO_DATA(GREEN_LEDS_BASE, redLEDValue);
-}
-
-
-
 
 /************/
 /*   TASKS  */
@@ -190,10 +150,16 @@ void switchPollingTask(void *pvParameters)
 		//Read edge capture register's value
 		int switch_value = IORD_ALTERA_AVALON_PIO_DATA(SLIDE_SWITCH_BASE);
 
+		int switch_changed = 0;
 		if (switch_value != currentSwitchValue) {
 			//Set global flag
-			switchChanged = 1;
 			currentSwitchValue = switch_value;
+			switch_changed = 1;
+		}
+
+		currentSwitchValue = switch_value;
+		
+		if (switch_changed) { // TO DO: May need to check switch value here as well
 			xSemaphoreGive(counterSemaphore1);
 		}
 	}
@@ -203,7 +169,7 @@ void keyboardLogicTask(void *pvParameters)
 {
 	while (1)
 	{
-		// TODO
+		// TO DO
 		// Need to take value from queue and process it and see if it represents a threshold. If it does -> update global variable
 
 		// Below is code from the keyboard example that may be helpful
@@ -229,108 +195,16 @@ void computeTask(void *pvParameters)
 {
 	while (1)
 	{
-		xSemaphoreTake(counterSemaphore1, portMAX_DELAY);
-
-		unsigned int nextSystemState = systemState;
-
-		if (enterMaintenanceState) {
-			nextSystemState = 3; // 3 is Maintenance state
-
-			// TODO: May need to use a mutex/semaphore to reset
-			enterMaintenanceState = 0;
-			// May need to use a mutex/semaphore to reset
-
-		} else {
-			int frequencyUnstable = aboveRateOfFrequency() || belowThresholdFrequency();
-
-			if ( frequencyUnstable ) {
-				nextSystemState = 2; // 2 is Unstable state
-			} else if ( !frequencyUnstable ) {
-				nextSystemState = 1; // 1 is Stable state
-			}
-		}
-
-		// If nextState != prevState then restart timers,
-		if (systemState != nextSystemState || TOF_500 || switchChanged) {
-
-			if (nextSystemState != 3) { // 3 is Maintenance state
-				// Store timer TODO: Get timer syntax
-				xQueueSendToBack( timer200Queue, alt_nticks()/tickPerSecond, portMAX_DELAY );
-			}
-
-			// Clear timer flag: TODO: Check no mutex needed
-			TOF_500 = 0;
-			// Clear switch flag // TODO: Check no mutex needed
-			switchChanged = 0;
-			//Give semaphore // TODO: Check no mutex needed
-			systemState = nextSystemState;
-			xSemaphoreGive(counterSemaphore2); // Trigger output logic
-			// xSemaphoreGive(counterSemaphore1); // TODO: Give back compute semaphore?
-		}
-
+		// TO DO
 	}
 }
-
-
 
 void outputLogicTask(void *pvParameters)
 {
 	while (1)
 	{
-		// TODO
-		xSemaphoreTake(counterSemaphore2, portMAX_DELAY);
-		switch(systemState) {
-			case 0: // IDLE
-			case 1: // STABLE
-				// Stop 500ms timer
-				if (timerStarted == 1) {
-					alt_alarm_stop(&timer500);
-				}
-				checkSwitches();
-					currentSwitchValue;
-				checkLED();
-					int redValue = 	IORD_ALTERA_AVALON_PIO_DATA(RED_LEDS_BASE);
-					int greenValue = IORD_ALTERA_AVALON_PIO_DATA(GREEN_LEDS_BASE);
-				checkPriority();
-					// Compare currentSwitch with Green
-					if (greenValue == 0) {
-						redValue = currentSwitchValue;
-					} else {
-						greenValue = redValue ^ currentSwitchValue;
-						int bitPosition = checkPriority(greenValue, 1); // Check for high priority, returns
-						greenValue = toggleBit(bitPosition, greenValue);
-						redValue = toggleBit(bitPosition, redValue);
-					}
+		// TO DO
 
-				// Update LEDs
-				updateLEDs(greenValue, redValue); // Red LEDs mimick switch state, Green LEDs all off
-
-				// Start 500ms timer & set flag
-				alt_alarm_start(&timer500, 500, timer500ISR, context);
-				timerStarted = 1;
-			case 2: // UNSTABLE
-				// Stop 500ms timer
-				if (timerStarted == 1) {
-					alt_alarm_stop(&timer500);
-				}
-
-				checkSwitches();
-				checkLED();
-				checkPriority();
-				updateLEDs();
-
-				// Start 500ms timer & set flag
-				alt_alarm_start(&timer500, 500, timer500ISR, context);
-				timerStarted = 1;
-			case 3: // MAINTENANCE
-				// Stop 500ms timer
-				if (timerStarted == 1) {
-					alt_alarm_stop(&timer500);
-				}
-
-				// Update LEDs
-				updateLEDs(0, currentSwitchValue); // Red LEDs mimick switch state, Green LEDs all off
-		}
 	}
 }
 
@@ -338,7 +212,8 @@ void vgaOutputTask(void *pvParameters)
 {
 	while (1)
 	{
-		// TODO
+		// TO DO
+
 	}
 }
 
@@ -352,12 +227,6 @@ int initOSDataStructs(void)
 {
 	counterSemaphore0 = xSemaphoreCreateCounting( 9999, 1 );
 	counterSemaphore1 = xSemaphoreCreateCounting( 9999, 1 );
-	counterSemaphore2 = xSemaphoreCreateCounting( 9999, 1 );
-
-	timer200Queue = xQueueCreate(TIMER_200_QUEUE_SIZE, sizeof(alt_u32));
-
-	tickPerSecond = alt_ticks_per_second();
-	context = 0;
 	return 0;
 }
 
@@ -376,13 +245,8 @@ int initCreateTasks(void)
 int initFlags(void)
 {
 	TOF_500 = 0;
-	timerStarted = 0;
-	switchChanged = 0;
 	enterMaintenanceState = 0;
 	currentSwitchValue = 0;
-
-	// State
-	systemState = 0; //
 	return 0;
 }
 
@@ -441,7 +305,7 @@ int initKeyboard(void) {
 void initAll(void) {
 	initOSDataStructs();
 	//initCreateTasks();
-	initFlags();
+	//initFlags();
 	initButtonsPIO();
 	//initFrequency();
 	//initKeyboard();
