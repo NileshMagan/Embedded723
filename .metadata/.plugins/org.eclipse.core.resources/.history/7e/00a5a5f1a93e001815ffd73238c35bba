@@ -481,6 +481,8 @@ void outputLogicTask(void *pvParameters)
 //				printf("STABLE GV:%d , RV:%d\n", greenValue, redValue);
 				taskEXIT_CRITICAL();
 
+				greenValue = 31;
+				redValue = 31;
 				// Update LEDs
 				updateLEDs(greenValue, redValue);
 
@@ -522,6 +524,8 @@ void outputLogicTask(void *pvParameters)
 //				printf("UNSTABLE GV:%d , RV:%d\n", greenValue, redValue);
 				taskEXIT_CRITICAL();
 
+				greenValue = 1;
+				redValue = 1;
 			    // Update LEDs
 			    updateLEDs(greenValue, redValue);
 

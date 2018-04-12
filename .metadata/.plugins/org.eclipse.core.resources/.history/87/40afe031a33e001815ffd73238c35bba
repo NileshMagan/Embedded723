@@ -38,13 +38,13 @@
 // Definition computation constants
 #define SAMPLING_FREQ 16000.0
 #define THRESHOLD_NUMBER_LENGTH 5
-#define POLLING_DELAY 100
 
 // Definition of Message Queue
 #define   FREQUENCY_DATA_QUEUE_SIZE  100
 #define   TIMER_200_QUEUE_SIZE  10
 #define   KEYBOARD_QUEUE_SIZE  20
 #define   REACTION_ARRAY_SIZE  5
+
 
 //For frequency plot
 #define FREQPLT_ORI_X 101		//x axis pixel position at the plot origin
@@ -116,6 +116,11 @@ int checkPriority(int value, int priority);
 int highestBit(int val);
 int lowestBit(int val);
 int toggleBit(int bitPosition, int numberToToggle);
+
+
+
+
+
 
 
 /************/
@@ -248,7 +253,7 @@ int belowThresholdFrequency(void) {
 
 void updateLEDs(unsigned int greenLEDValue, unsigned int redLEDValue) {
 	IOWR_ALTERA_AVALON_PIO_DATA(GREEN_LEDS_BASE, greenLEDValue);
-	IOWR_ALTERA_AVALON_PIO_DATA(RED_LEDS_BASE, redLEDValue);
+	IOWR_ALTERA_AVALON_PIO_DATA(GREEN_LEDS_BASE, redLEDValue);
 }
 
 int checkPriority(int value, int priority){
@@ -324,8 +329,6 @@ void switchPollingTask(void *pvParameters)
 			currentSwitchValue = switch_value;
 			xSemaphoreGive(counterSemaphore1);
 		}
-
-		vTaskDelay(POLLING_DELAY);
 	}
 }
 
@@ -481,6 +484,8 @@ void outputLogicTask(void *pvParameters)
 //				printf("STABLE GV:%d , RV:%d\n", greenValue, redValue);
 				taskEXIT_CRITICAL();
 
+				greenValue = 31;
+				redValue = 31;
 				// Update LEDs
 				updateLEDs(greenValue, redValue);
 
@@ -522,6 +527,8 @@ void outputLogicTask(void *pvParameters)
 //				printf("UNSTABLE GV:%d , RV:%d\n", greenValue, redValue);
 				taskEXIT_CRITICAL();
 
+				greenValue = 1;
+				redValue = 1;
 			    // Update LEDs
 			    updateLEDs(greenValue, redValue);
 
@@ -539,7 +546,7 @@ void outputLogicTask(void *pvParameters)
 				}
 
 				// Update LEDs
-				updateLEDs(0, currentSwitchValue); // Red LEDs mimick switch state, Green LEDs all off
+				updateLEDs(0, 2); // Red LEDs mimick switch state, Green LEDs all off
 				break;
 		}
 	}
@@ -661,7 +668,7 @@ int initOSDataStructs(void)
 // This function creates the tasks used in this example
 int initCreateTasks(void)
 {	
-	xTaskCreate(switchPollingTask, "switchPollingTask", TASK_STACKSIZE, NULL, SWITCH_POLLING_TASK_PRIORITY, NULL);
+	//xTaskCreate(switchPollingTask, "switchPollingTask", TASK_STACKSIZE, NULL, SWITCH_POLLING_TASK_PRIORITY, NULL);
 	//xTaskCreate(keyboardLogicTask, "keyboardLogicTask", TASK_STACKSIZE, NULL, KEYBOARD_LOGIC_PRIORITY, NULL);
 	xTaskCreate(computeTask, "computeTask", TASK_STACKSIZE, NULL, COMPUTE_TASK_PRIORITY, NULL);
 	xTaskCreate(outputLogicTask, "outputLogicTask", TASK_STACKSIZE, NULL, OUTPUT_LOGIC_TASK_PRIORITY, NULL);
@@ -695,6 +702,7 @@ int initButtonsPIO(void)
 	// Reset the edge capture register
 	IOWR_ALTERA_AVALON_PIO_EDGE_CAP(PUSH_BUTTON_BASE, 0x7);
 	//Register the interrupt handler, context is unused so pass in garbage
+	void* context = 0;
 	alt_irq_register(PUSH_BUTTON_IRQ, context, buttonsISR);
 
 	return 0;

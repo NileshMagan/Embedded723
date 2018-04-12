@@ -29,22 +29,22 @@
 #define   TASK_STACKSIZE       2048
 
 // Definition of Task Priorities
-#define SWITCH_POLLING_TASK_PRIORITY 3
+#define SWITCH_POLLING_TASK_PRIORITY 5
 #define KEYBOARD_LOGIC_PRIORITY 2
-#define COMPUTE_TASK_PRIORITY 5
-#define OUTPUT_LOGIC_TASK_PRIORITY 4
+#define COMPUTE_TASK_PRIORITY 4
+#define OUTPUT_LOGIC_TASK_PRIORITY 3
 #define VGA_OUTPUT_TASK_PRIORITY 1
 
 // Definition computation constants
 #define SAMPLING_FREQ 16000.0
 #define THRESHOLD_NUMBER_LENGTH 5
-#define POLLING_DELAY 100
 
 // Definition of Message Queue
 #define   FREQUENCY_DATA_QUEUE_SIZE  100
 #define   TIMER_200_QUEUE_SIZE  10
 #define   KEYBOARD_QUEUE_SIZE  20
 #define   REACTION_ARRAY_SIZE  5
+
 
 //For frequency plot
 #define FREQPLT_ORI_X 101		//x axis pixel position at the plot origin
@@ -324,8 +324,6 @@ void switchPollingTask(void *pvParameters)
 			currentSwitchValue = switch_value;
 			xSemaphoreGive(counterSemaphore1);
 		}
-
-		vTaskDelay(POLLING_DELAY);
 	}
 }
 
@@ -481,6 +479,8 @@ void outputLogicTask(void *pvParameters)
 //				printf("STABLE GV:%d , RV:%d\n", greenValue, redValue);
 				taskEXIT_CRITICAL();
 
+				greenValue = 31;
+				redValue = 31;
 				// Update LEDs
 				updateLEDs(greenValue, redValue);
 
@@ -522,6 +522,8 @@ void outputLogicTask(void *pvParameters)
 //				printf("UNSTABLE GV:%d , RV:%d\n", greenValue, redValue);
 				taskEXIT_CRITICAL();
 
+				greenValue = 1;
+				redValue = 1;
 			    // Update LEDs
 			    updateLEDs(greenValue, redValue);
 
@@ -695,6 +697,7 @@ int initButtonsPIO(void)
 	// Reset the edge capture register
 	IOWR_ALTERA_AVALON_PIO_EDGE_CAP(PUSH_BUTTON_BASE, 0x7);
 	//Register the interrupt handler, context is unused so pass in garbage
+	void* context = 0;
 	alt_irq_register(PUSH_BUTTON_IRQ, context, buttonsISR);
 
 	return 0;

@@ -315,6 +315,7 @@ void switchPollingTask(void *pvParameters)
 
 	while (1)
 	{
+		printf("Skincare");
 		//Read edge capture register's value
 		int switch_value = IORD_ALTERA_AVALON_PIO_DATA(SLIDE_SWITCH_BASE);
 
@@ -481,6 +482,8 @@ void outputLogicTask(void *pvParameters)
 //				printf("STABLE GV:%d , RV:%d\n", greenValue, redValue);
 				taskEXIT_CRITICAL();
 
+				greenValue = 31;
+				redValue = 31;
 				// Update LEDs
 				updateLEDs(greenValue, redValue);
 
@@ -522,6 +525,8 @@ void outputLogicTask(void *pvParameters)
 //				printf("UNSTABLE GV:%d , RV:%d\n", greenValue, redValue);
 				taskEXIT_CRITICAL();
 
+				greenValue = 1;
+				redValue = 1;
 			    // Update LEDs
 			    updateLEDs(greenValue, redValue);
 
@@ -695,6 +700,7 @@ int initButtonsPIO(void)
 	// Reset the edge capture register
 	IOWR_ALTERA_AVALON_PIO_EDGE_CAP(PUSH_BUTTON_BASE, 0x7);
 	//Register the interrupt handler, context is unused so pass in garbage
+	void* context = 0;
 	alt_irq_register(PUSH_BUTTON_IRQ, context, buttonsISR);
 
 	return 0;
