@@ -151,22 +151,22 @@ void freq_relay(){
 }
 
 
-//
-//int main()
-//{
-//	Q_freq_data = xQueueCreate( 100, sizeof(double) );
-//
-//
-//	alt_irq_register(FREQUENCY_ANALYSER_IRQ, 0, freq_relay);
-//
-//	xTaskCreate( PRVGADraw_Task, "DrawTsk", configMINIMAL_STACK_SIZE, NULL, PRVGADraw_Task_P, &PRVGADraw );
-//
-//
-//
-//	vTaskStartScheduler();
-//
-//	while(1)
-//
-//  return 0;
-//}
+
+int main()
+{
+	Q_freq_data = xQueueCreate( 100, sizeof(double) );
+
+
+	alt_irq_register(FREQUENCY_ANALYSER_IRQ, 0, freq_relay);
+
+	xTaskCreate( PRVGADraw_Task, "DrawTsk", configMINIMAL_STACK_SIZE, NULL, PRVGADraw_Task_P, &PRVGADraw );
+
+
+
+	vTaskStartScheduler();
+
+	while(1)
+
+  return 0;
+}
 

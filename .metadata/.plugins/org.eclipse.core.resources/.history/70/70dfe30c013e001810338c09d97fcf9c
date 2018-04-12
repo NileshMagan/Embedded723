@@ -116,7 +116,7 @@ void updateLEDs(unsigned int greenLEDValue, unsigned int redLEDValue);
 int checkPriority(int value, int priority);
 int highestBit(int val);
 int lowestBit(int val);
-int toggleBit(int bitPosition, int numberToToggle);
+
 
 
 
@@ -293,11 +293,6 @@ int lowestBit(int val) {
     return index;
 }
 
-int toggleBit(int bitPosition, int numberToToggle) {
-	int shift = 1;
-	numberToToggle ^= shift << bitPosition;
-	return numberToToggle;
-}
 
 /************/
 /*   TASKS  */
@@ -608,6 +603,9 @@ int initOSDataStructs(void)
 
 
 	frequencyIndex = 0;
+	reactionTimes = [0,0,0,0,0];
+	frequencyData = {0};
+	rateOfChangeData = {0};
 	tickPerSecond = alt_ticks_per_second();
 	return 0;
 }
@@ -637,8 +635,8 @@ int initFlags(void)
 	systemState = 0;
 
 	// Thresholds
-	levelThreshold = 48.5;
-	rateOfChangeThreshold = 20; // TODO
+	levelThreshold = 0;
+	rateOfChangeThreshold = 0; // TODO
 	return 0;
 }
 

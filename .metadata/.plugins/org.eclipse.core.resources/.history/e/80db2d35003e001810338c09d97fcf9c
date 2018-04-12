@@ -68,14 +68,11 @@ static alt_alarm timer500;
 // Definition of Semaphore
 SemaphoreHandle_t counterSemaphore0, counterSemaphore1, counterSemaphore2;
 
-// Storage arrays
-static volatile reactionTimes[REACTION_ARRAY_SIZE] = {0};
-static volatile frequencyData[FREQUENCY_DATA_QUEUE_SIZE] = {0};
-static volatile rateOfChangeData[FREQUENCY_DATA_QUEUE_SIZE] = {0};
 
 // Global variables
 alt_u32 tickPerSecond; // Constants
 unsigned int context;
+static volatile reactionTimes[REACTION_ARRAY_SIZE], frequencyData[FREQUENCY_DATA_QUEUE_SIZE],  rateOfChangeData[FREQUENCY_DATA_QUEUE_SIZE]; // Storage arrays
 static volatile unsigned int currentSwitchValue; // Data
 static volatile unsigned int TOF_500, switchChanged, enterMaintenanceState, timerStarted; // Flags
 static volatile unsigned int systemState; // State
@@ -116,7 +113,7 @@ void updateLEDs(unsigned int greenLEDValue, unsigned int redLEDValue);
 int checkPriority(int value, int priority);
 int highestBit(int val);
 int lowestBit(int val);
-int toggleBit(int bitPosition, int numberToToggle);
+
 
 
 
@@ -293,11 +290,6 @@ int lowestBit(int val) {
     return index;
 }
 
-int toggleBit(int bitPosition, int numberToToggle) {
-	int shift = 1;
-	numberToToggle ^= shift << bitPosition;
-	return numberToToggle;
-}
 
 /************/
 /*   TASKS  */
@@ -342,8 +334,8 @@ void keyboardLogicTask(void *pvParameters)
 			int thresholdTemp = 0;
 			int invalidCharFlag = 0;
 
-			int z;
-			for (z = 0; z < THRESHOLD_NUMBER_LENGTH; z++) {
+
+			for (int z = 0; z < THRESHOLD_NUMBER_LENGTH; z++) {
 				int numberConverted = keyValues[z] - '0';
 
 				// Validity checking
@@ -419,7 +411,6 @@ void computeTask(void *pvParameters)
 
 void outputLogicTask(void *pvParameters)
 {
-	int redValue, greenValue;
 	while (1)
 	{
 		// TODO
@@ -433,8 +424,8 @@ void outputLogicTask(void *pvParameters)
 					alt_alarm_stop(&timer500);
 				}
 				// Store current LED values
-				redValue = 	IORD_ALTERA_AVALON_PIO_DATA(RED_LEDS_BASE);
-				greenValue = IORD_ALTERA_AVALON_PIO_DATA(GREEN_LEDS_BASE);
+				int redValue = 	IORD_ALTERA_AVALON_PIO_DATA(RED_LEDS_BASE);
+				int greenValue = IORD_ALTERA_AVALON_PIO_DATA(GREEN_LEDS_BASE);
 
 				// If relay is not withholding loads, turn on all loads according to switches
 				if (greenValue == 0) {
@@ -468,8 +459,8 @@ void outputLogicTask(void *pvParameters)
 				}
 
 				// Store current LED values
-				redValue = 	IORD_ALTERA_AVALON_PIO_DATA(RED_LEDS_BASE);
-			    greenValue = IORD_ALTERA_AVALON_PIO_DATA(GREEN_LEDS_BASE);
+				int redValue = 	IORD_ALTERA_AVALON_PIO_DATA(RED_LEDS_BASE);
+			    int greenValue = IORD_ALTERA_AVALON_PIO_DATA(GREEN_LEDS_BASE);
 
 			    if (redValue == 0) {
 			    	break; // No loads to shed
@@ -560,8 +551,7 @@ void vgaOutputTask(void *pvParameters)
 			alt_up_pixel_buffer_dma_draw_box(pixel_buf, 101, 0, 639, 199, 0, 0);
 			alt_up_pixel_buffer_dma_draw_box(pixel_buf, 101, 201, 639, 299, 0, 0);
 
-			int j;
-			for(j=0;j<99;++j){ //i here points to the oldest data, j loops through all the data to be drawn on VGA
+			for(int j=0;j<99;++j){ //i here points to the oldest data, j loops through all the data to be drawn on VGA
 				if (((int)(frequencyData[(frequencyIndex+j)%100]) > MIN_FREQ) && ((int)(frequencyData[(frequencyIndex+j+1)%100]) > MIN_FREQ)){
 					//Calculate coordinates of the two data points to draw a line in between
 					//Frequency plot
@@ -608,6 +598,9 @@ int initOSDataStructs(void)
 
 
 	frequencyIndex = 0;
+	reactionTimes = [0,0,0,0,0];
+	frequencyData = {0};
+	rateOfChangeData = {0};
 	tickPerSecond = alt_ticks_per_second();
 	return 0;
 }
@@ -637,8 +630,8 @@ int initFlags(void)
 	systemState = 0;
 
 	// Thresholds
-	levelThreshold = 48.5;
-	rateOfChangeThreshold = 20; // TODO
+	levelThreshold = 0;
+	rateOfChangeThreshold = 0; // TODO
 	return 0;
 }
 

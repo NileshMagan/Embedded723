@@ -637,8 +637,8 @@ int initFlags(void)
 	systemState = 0;
 
 	// Thresholds
-	levelThreshold = 48.5;
-	rateOfChangeThreshold = 20; // TODO
+	levelThreshold = 0;
+	rateOfChangeThreshold = 0; // TODO
 	return 0;
 }
 
