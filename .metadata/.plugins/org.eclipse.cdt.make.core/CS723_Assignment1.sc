@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?scdStore version="2"?><scannerInfo id="org.eclipse.cdt.make.core.discoveredScannerInfo">
+<?scdStore version="2"?>
+
+<scannerInfo id="org.eclipse.cdt.make.core.discoveredScannerInfo">
 <instance id="preference.org.eclipse.cdt.managedbuilder.core.configurationDataProvider.362592976;preference.org.eclipse.cdt.managedbuilder.core.configurationDataProvider.362592976.;cdt.managedbuild.tool.gnu.cpp.compiler.cygwin.base.1976388904;cdt.managedbuild.tool.gnu.cpp.compiler.input.cygwin.893868946">
 <collector id="org.eclipse.cdt.make.core.PerProjectSICollector">
 <includePath path="C:\intelFPGA\16.1\quartus\bin64\cygwin\lib\gcc\x86_64-pc-cygwin\4.8.3\include\c++"/>

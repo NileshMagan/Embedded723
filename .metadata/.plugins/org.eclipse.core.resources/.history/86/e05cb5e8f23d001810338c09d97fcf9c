@@ -547,7 +547,7 @@ void vgaOutputTask(void *pvParameters)
 			alt_up_pixel_buffer_dma_draw_box(pixel_buf, 101, 201, 639, 299, 0, 0);
 
 			for(int j=0;j<99;++j){ //i here points to the oldest data, j loops through all the data to be drawn on VGA
-				if (((int)(frequencyData[(frequencyIndex+j)%100]) > MIN_FREQ) && ((int)(frequencyData[(frequencyIndex+j+1)%100]) > MIN_FREQ)){
+				if (((int)(frequencyData[(frequencyIndex+j)%100]) > MIN_FREQ) && ((int)(frequencyData[(i+j+1)%100]) > MIN_FREQ)){
 					//Calculate coordinates of the two data points to draw a line in between
 					//Frequency plot
 					line_freq.x1 = FREQPLT_ORI_X + FREQPLT_GRID_SIZE_X * j;
