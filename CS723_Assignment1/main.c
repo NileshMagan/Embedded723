@@ -29,14 +29,13 @@
 #define   TASK_STACKSIZE       2048
 
 // Definition of Task Priorities
-#define SWITCH_POLLING_TASK_PRIORITY 5
-#define KEYBOARD_LOGIC_PRIORITY 4
-#define COMPUTE_TASK_PRIORITY 3
-#define OUTPUT_LOGIC_TASK_PRIORITY 2
+#define SWITCH_POLLING_TASK_PRIORITY 3
+#define KEYBOARD_LOGIC_PRIORITY 2
+#define COMPUTE_TASK_PRIORITY 5
+#define OUTPUT_LOGIC_TASK_PRIORITY 4
 #define VGA_OUTPUT_TASK_PRIORITY 1
 
 // Definition computation constants
-#define portMAX_DELAY 0
 #define SAMPLING_FREQ 16000.0
 #define THRESHOLD_NUMBER_LENGTH 5
 
@@ -133,7 +132,7 @@ alt_u32 timer500ISR(void* context)
 	TOF_500 = 1;
 	
 	// Give the semaphore
-	xSemaphoreGive(counterSemaphore1);
+	//xSemaphoreGiveFromISR(counterSemaphore1, pdTRUE);
 	return 0;
 }
 
@@ -144,19 +143,21 @@ void buttonsISR(void* context) {
 	int buttonClick = IORD_ALTERA_AVALON_PIO_EDGE_CAP(PUSH_BUTTON_BASE);
 
 	if (buttonClick == 4) { // Is this the right button press?
-		enterMaintenanceState = 1;
-	} else {
-		enterMaintenanceState = 0;
+
+		enterMaintenanceState = !enterMaintenanceState;
+
+		//Give the semaphore
+		xSemaphoreGiveFromISR(counterSemaphore1, pdTRUE);
 	}
+
+
 
 	//Reset edge capture register
 	IOWR_ALTERA_AVALON_PIO_EDGE_CAP(PUSH_BUTTON_BASE, 0x7);
 
 //	taskENTER_CRITICAL();
-//	printf("eMS: %d\n", enterMaintenanceState);
+	printf("eMS: %d\n", enterMaintenanceState);
 //	taskEXIT_CRITICAL();
-	//Give the semaphore
-	xSemaphoreGive(counterSemaphore1);
 }
 
 void frequencyISR(void* context) {
@@ -171,7 +172,7 @@ void frequencyISR(void* context) {
 	xQueueSendToBackFromISR(frequencyQueue, &temp, portMAX_DELAY);
 
 	// Give the semaphore
-	xSemaphoreGive(counterSemaphore1);
+	//xSemaphoreGiveFromISR(counterSemaphore1, pdTRUE);
 }
 
 void ps2ISR(void* context) {
@@ -312,6 +313,11 @@ int toggleBit(int bitPosition, int numberToToggle) {
 
 void switchPollingTask(void *pvParameters)
 {
+	// DEBUG
+	taskENTER_CRITICAL();
+	printf("STARTED SWITCH POLLING TASK\n");
+	taskEXIT_CRITICAL();
+
 	while (1)
 	{
 		//Read edge capture register's value
@@ -321,13 +327,18 @@ void switchPollingTask(void *pvParameters)
 			//Set global flag
 			switchChanged = 1;
 			currentSwitchValue = switch_value;
-			xSemaphoreGive(counterSemaphore1);
+			//xSemaphoreGive(counterSemaphore1);
 		}
 	}
 }
 
 void keyboardLogicTask(void *pvParameters)
 {
+
+	// DEBUG
+	taskENTER_CRITICAL();
+	printf("STARTED KEYBOARD LOGIC TASK\n");
+	taskEXIT_CRITICAL();
 
 	// Array to hold keys
 	char keyValues[THRESHOLD_NUMBER_LENGTH + 1] = {0};
@@ -369,7 +380,7 @@ void keyboardLogicTask(void *pvParameters)
 				} else if (keyValues[0] == 'R') {
 					rateOfChangeThreshold = thresholdTemp;
 				}
-				xSemaphoreGive(counterSemaphore1);
+				//xSemaphoreGive(counterSemaphore1);
 			}
 
 			i = 0;
@@ -380,19 +391,19 @@ void keyboardLogicTask(void *pvParameters)
 
 void computeTask(void *pvParameters)
 {
+
+	taskENTER_CRITICAL();
+	printf("STARTED COMPUTE TASK\n");
+	taskEXIT_CRITICAL();
+
 	while (1)
 	{
 		xSemaphoreTake(counterSemaphore1, portMAX_DELAY);
-
+		printf("taken semaphore computeTask\n");
 		unsigned int nextSystemState = systemState;
 
 		if (enterMaintenanceState) {
 			nextSystemState = 3; // 3 is Maintenance state
-
-			// TODO: May need to use a mutex/semaphore to reset
-			enterMaintenanceState = 0;
-			// May need to use a mutex/semaphore to reset
-
 		} else {
 			checkNewFrequencyValues();
 			int frequencyUnstable = aboveRateOfFrequency() || belowThresholdFrequency();
@@ -431,12 +442,14 @@ void outputLogicTask(void *pvParameters)
 	int redValue, greenValue;
 	// DEBUG
 	taskENTER_CRITICAL();
-	//printf("STARTED\n");
+	printf("STARTED OUTPUT LOGIC TASK\n");
 	taskEXIT_CRITICAL();
 
 	while (1)
 	{
 		xSemaphoreTake(counterSemaphore2, portMAX_DELAY);
+		printf("taken semaphore outputTask\n");
+
 		switch(systemState) {
 			case 0: // IDLE
 				break;
@@ -459,9 +472,11 @@ void outputLogicTask(void *pvParameters)
 					// Check priority to find bit position of the load to turn on
 					int bitPosition = checkPriority(greenValue, 1); // Check for high priority (1)
 
-					// Turn load on
-					greenValue = toggleBit(bitPosition, greenValue);
-					redValue = toggleBit(bitPosition, redValue);
+					if(bitPosition != NULL) {
+						// Turn load on
+						greenValue = toggleBit(bitPosition, greenValue);
+						redValue = toggleBit(bitPosition, redValue);
+					}
 				}
 
 				// DEBUG
@@ -498,9 +513,11 @@ void outputLogicTask(void *pvParameters)
 					// Check priority to find bit position of the load to turn off
 					int bitPosition = checkPriority(redValue, 0); // Check for low priority (0)
 
-					// Turn load on
-					greenValue = toggleBit(bitPosition, greenValue);
-					redValue = toggleBit(bitPosition, redValue);
+					if(bitPosition != NULL) {
+						// Turn load on
+						greenValue = toggleBit(bitPosition, greenValue);
+						redValue = toggleBit(bitPosition, redValue);
+					}
 				}
 
 				// DEBUG
@@ -533,6 +550,11 @@ void outputLogicTask(void *pvParameters)
 
 void vgaOutputTask(void *pvParameters)
 {
+	// DEBUG
+	taskENTER_CRITICAL();
+	printf("STARTED VGA OUTPUT TASK\n");
+	taskEXIT_CRITICAL();
+
 	while (1)
 	{
 		// TODO: Add other data to output for VGA
@@ -624,9 +646,9 @@ void vgaOutputTask(void *pvParameters)
 // This function simply creates initial data used in the scope of program
 int initOSDataStructs(void)
 {
-	counterSemaphore0 = xSemaphoreCreateCounting( 9999, 1 );
-	counterSemaphore1 = xSemaphoreCreateCounting( 9999, 1 );
-	counterSemaphore2 = xSemaphoreCreateCounting( 9999, 1 );
+	counterSemaphore0 = xSemaphoreCreateCounting( 9999, 0 );
+	counterSemaphore1 = xSemaphoreCreateCounting( 9999, 0 );
+	counterSemaphore2 = xSemaphoreCreateCounting( 9999, 0 );
 
 	// INITIALISE/CREATE QUEUE
 	frequencyQueue = xQueueCreate(FREQUENCY_DATA_QUEUE_SIZE, sizeof(double));
@@ -642,11 +664,11 @@ int initOSDataStructs(void)
 // This function creates the tasks used in this example
 int initCreateTasks(void)
 {	
-	xTaskCreate(switchPollingTask, "switchPollingTask", TASK_STACKSIZE, NULL, SWITCH_POLLING_TASK_PRIORITY, NULL);
-	xTaskCreate(keyboardLogicTask, "keyboardLogicTask", TASK_STACKSIZE, NULL, KEYBOARD_LOGIC_PRIORITY, NULL);
+	//xTaskCreate(switchPollingTask, "switchPollingTask", TASK_STACKSIZE, NULL, SWITCH_POLLING_TASK_PRIORITY, NULL);
+	//xTaskCreate(keyboardLogicTask, "keyboardLogicTask", TASK_STACKSIZE, NULL, KEYBOARD_LOGIC_PRIORITY, NULL);
 	xTaskCreate(computeTask, "computeTask", TASK_STACKSIZE, NULL, COMPUTE_TASK_PRIORITY, NULL);
 	xTaskCreate(outputLogicTask, "outputLogicTask", TASK_STACKSIZE, NULL, OUTPUT_LOGIC_TASK_PRIORITY, NULL);
-	xTaskCreate(vgaOutputTask, "vgaOutputTask", TASK_STACKSIZE, NULL, VGA_OUTPUT_TASK_PRIORITY, NULL);
+	//xTaskCreate(vgaOutputTask, "vgaOutputTask", TASK_STACKSIZE, NULL, VGA_OUTPUT_TASK_PRIORITY, NULL);
 	return 0;
 }
 
@@ -708,7 +730,7 @@ int initKeyboard(void) {
 	// Register the PS/2 interrupt
 	alt_irq_register(PS2_IRQ, ps2_device, ps2ISR);
 
-	IOWR_8DIRECT(PS2_BASE,4,1);
+	//IOWR_8DIRECT(PS2_BASE,4,1); //WHAT IS THIS??
 
 	return 0; // success
 }
@@ -720,7 +742,7 @@ void initAll(void) {
 	initCreateTasks();
 	initFlags();
 	initButtonsPIO();
-	initFrequency();
+//	initFrequency();
 //	initKeyboard();
 	taskENTER_CRITICAL();
 	printf("Initialised all\n");
