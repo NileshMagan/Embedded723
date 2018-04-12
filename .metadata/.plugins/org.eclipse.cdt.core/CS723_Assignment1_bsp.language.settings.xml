@@ -31,9 +31,6 @@
 					<entry kind="macro" name="__ATOMIC_RELEASE" value="3">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
-					<entry kind="macro" name="__ATOMIC_RELEASE" value="1234">
-						<flag value="BUILTIN|READONLY"/>
-					</entry>
 					<entry kind="macro" name="__ATOMIC_SEQ_CST" value="5">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
@@ -274,9 +271,6 @@
 					<entry kind="macro" name="__GXX_ABI_VERSION" value="1009">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
-					<entry kind="macro" name="__INT16_C(c)" value="c ## ULL">
-						<flag value="BUILTIN|READONLY"/>
-					</entry>
 					<entry kind="macro" name="__INT16_C(c)" value="c">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
@@ -436,6 +430,9 @@
 					<entry kind="macro" name="__ORDER_BIG_ENDIAN__" value="4321">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
+					<entry kind="macro" name="__ORDER_LITTLE_ENDIAN__" value="1234">
+						<flag value="BUILTIN|READONLY"/>
+					</entry>
 					<entry kind="macro" name="__ORDER_PDP_ENDIAN__" value="3412">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
@@ -557,6 +554,9 @@
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
 					<entry kind="macro" name="__UINT8_TYPE__" value="unsigned char">
+						<flag value="BUILTIN|READONLY"/>
+					</entry>
+					<entry kind="macro" name="__UINTMAX_C(c)" value="c ## ULL">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
 					<entry kind="macro" name="__UINTMAX_MAX__" value="0xffffffffffffffffULL">
@@ -945,6 +945,15 @@
 					<entry kind="macro" name="__GNUC_GNU_INLINE__" value="1">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
+					<entry kind="macro" name="__GNUC_MINOR__" value="3">
+						<flag value="BUILTIN|READONLY"/>
+					</entry>
+					<entry kind="macro" name="__GNUC_PATCHLEVEL__" value="0">
+						<flag value="BUILTIN|READONLY"/>
+					</entry>
+					<entry kind="macro" name="__GNUC__" value="5">
+						<flag value="BUILTIN|READONLY"/>
+					</entry>
 					<entry kind="macro" name="__GNUG__" value="5">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
@@ -1191,6 +1200,9 @@
 					<entry kind="macro" name="__SIZE_TYPE__" value="unsigned int">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
+					<entry kind="macro" name="__STDC_HOSTED__" value="1">
+						<flag value="BUILTIN|READONLY"/>
+					</entry>
 					<entry kind="macro" name="__STDC__" value="1">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
@@ -1344,25 +1356,16 @@
 					<entry kind="macro" name="__nios2" value="1">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
-					<entry kind="macro" name="__nios2__" value="5">
-						<flag value="BUILTIN|READONLY"/>
-					</entry>
 					<entry kind="macro" name="__nios2__" value="1">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
 					<entry kind="macro" name="__nios2_arch__" value="1">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
-					<entry kind="macro" name="__nios2_little_endian" value="0">
-						<flag value="BUILTIN|READONLY"/>
-					</entry>
 					<entry kind="macro" name="__nios2_little_endian" value="1">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
 					<entry kind="macro" name="__nios2_little_endian__" value="1">
-						<flag value="BUILTIN|READONLY"/>
-					</entry>
-					<entry kind="macro" name="nios2" value="3">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
 					<entry kind="macro" name="nios2" value="1">

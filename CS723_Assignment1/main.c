@@ -2,6 +2,7 @@
 #include "stddef.h"
 #include "stdio.h"
 #include "string.h"
+#include <math.h>
 
 // Scheduler includes
 #include "freertos/FreeRTOS.h"
@@ -33,25 +34,28 @@
 #define portMAX_DELAY 0
 
 // Definition of Message Queue
-#define   FREQUENCY_DATA_QUEUE_SIZE  10
+#define   FREQUENCY_DATA_QUEUE_SIZE  100
 #define   TIMER_200_QUEUE_SIZE  10
+#define   KEYBOARD_QUEUE_SIZE  20
+#define   REACTION_ARRAY_SIZE  5
 
-QueueHandle_t timer200Queue;
+QueueHandle_t timer200Queue, frequencyQueue, keyboardQueue;
 
 static alt_alarm timer500;
 
 // Definition of Semaphore
 SemaphoreHandle_t counterSemaphore0, counterSemaphore1, counterSemaphore2;
-//
-//unsigned int[FREQUENCY_DATA_QUEUE_SIZE] frequencyDataQueue = {0}; // Happy with the size?
-// TODO: Need to decide between making our own queue^ and using an RTOS queue (without interrupts)
+
 
 // Global variables
 alt_u32 tickPerSecond; // Constants
 unsigned int context;
+static volatile reactionTimes[REACTION_ARRAY_SIZE], frequencyData[FREQUENCY_DATA_QUEUE_SIZE],  rateOfChangeData[FREQUENCY_DATA_QUEUE_SIZE]; // Storage arrays
 static volatile unsigned int currentSwitchValue; // Data
 static volatile unsigned int TOF_500, switchChanged, enterMaintenanceState, timerStarted; // Flags
 static volatile unsigned int systemState; // State
+static volatile unsigned int levelThreshold, rateOfChangeThreshold;
+static volatile unsigned int frequencyIndex;
 // 	0  IDLE
 //  1  STABLE
 //  2  UNSTABLE
@@ -72,10 +76,15 @@ int initKeyboard(void);
 void initAll(void);
 
 // Methods
+void checkNewFrequencyValues(void);
+void addToArray(alt_u32 numberTodAdd);
+void handleReactionTimer(void);
 int aboveRateOfFrequency(void);
 int belowThresholdFrequency(void);
 void updateLEDs(unsigned int greenLEDValue, unsigned int redLEDValue);
-
+int checkPriority(int value, int priority);
+int highestBit(int val);
+int lowestBit(int val);
 
 /************/
 /*  ISRs     */
@@ -113,16 +122,13 @@ void buttonsISR(void* context) {
 void frequencyISR(void* context) {
 
 	// Read ADC value
-	// TODO
+	double temp = IORD(FREQUENCY_ANALYSER_BASE, 0);
 
 	// PERFORM BASIC CALCULATION (sample -> f)
-	// TODO
+	temp = 16000/temp;
 
 	// ADD TO QUEUE
-	// TODO
-
-	// RESET BITS FOR NEXT ISR
-	// TODO
+	xQueueSendToBackFromISR(frequencyQueue, temp, portMAX_DELAY);
 
 	// Give the semaphore
 	xSemaphoreGive(counterSemaphore1);
@@ -137,16 +143,20 @@ void ps2ISR(void* context) {
 	status = decode_scancode (context, &decode_mode , &key , &ascii) ;
 	if ( status == 0 ) //success
 	{
-		// print out the result
 		switch ( decode_mode )
 		{
-			// TODO: Adds key value to queue
-		IOWR(SEVEN_SEG_BASE,0 ,key);
+		 case KB_ASCII_MAKE_CODE :
+			xQueueSendToBackFromISR(keyboardQueue, ascii, portMAX_DELAY);
+			printf ( "ASCII   : %x\n", key ) ;
+
+			// Give the semaphore
+			xSemaphoreGive(counterSemaphore0);
+			break ;
+		 default :
+			printf ( "DEFAULT   : %x\n", key ) ;
+			break ;
 		}
 	}
-
-	// Give the semaphore
-	xSemaphoreGive(counterSemaphore0);
 }
 
 
@@ -155,20 +165,43 @@ void ps2ISR(void* context) {
 /************/
 
 
-int aboveRateOfFrequency(void) {
-	// Check most recent value of frequency queue, compare it previous and find gradient
-	// TODO
-	int length = frequencyQ.length();
-	result = (frequencyQ[length] - frequencyQ[length - 1])/timePeriod;
-	return (result > frequencyChangeThreshold); // 1 is Unstable
+void checkNewFrequencyValues(void) {
+	while(uxQueueMessagesWaiting( frequencyQueue ) != 0) {
+		xQueueReceive( frequencyQueue, frequencyData+frequencyIndex, 0 );
+
+		//calculate frequency RoC
+		if(frequencyIndex==0){
+			rateOfChangeData[0] = (frequencyData[0]-frequencyData[99]) * 2.0 * frequencyData[0] * frequencyData[99] / (frequencyData[0]+frequencyData[99]);
+		}
+		else{
+			rateOfChangeData[frequencyIndex] = (frequencyData[frequencyIndex]-frequencyData[frequencyIndex-1]) * 2.0 * frequencyData[frequencyIndex]* frequencyData[frequencyIndex-1] / (frequencyData[frequencyIndex]+frequencyData[frequencyIndex-1]);
+		}
+
+		if (rateOfChangeData[frequencyIndex] > 100.0){
+			rateOfChangeData[frequencyIndex] = 100.0;
+		}
+		frequencyIndex = ++frequencyIndex%100;
+	}
 }
 
+int aboveRateOfFrequency(void) {
+	// Check most recent value of frequency queue, compare it previous and find gradient
+	return (rateOfChangeData[frequencyIndex - 1] > rateOfChangeThreshold); // 1 is Unstable
+}
+
+void handleReactionTimer(void) {
+	alt_u32 previousTime, newTime, differenceInTime;
+	xQueueReceive( timer200Queue, previousTime ,portMAX_DELAY );
+
+	// Find difference
+	newTime = alt_nticks()/tickPerSecond;
+	differenceInTime = newTime - previousTime;
+	addToArray(differenceInTime);
+}
 
 int belowThresholdFrequency(void) {
-	// TODO
 	// Check most recent value of frequency queue, compare it to threshold
-	int length = frequencyQ.length();
-	return (frequencyQ[length] < frequencyLowerThreshold); // 1 is Unstable
+	return (frequencyData[frequencyIndex - 1] > levelThreshold); // 1 is Unstable
 }
 
 void updateLEDs(unsigned int greenLEDValue, unsigned int redLEDValue) {
@@ -176,7 +209,49 @@ void updateLEDs(unsigned int greenLEDValue, unsigned int redLEDValue) {
 	IOWR_ALTERA_AVALON_PIO_DATA(GREEN_LEDS_BASE, redLEDValue);
 }
 
+int checkPriority(int value, int priority){
+	if (priority == 1) { // Find highest
+		return highestBit(value);
+	} else { // Find lowest
+		return lowestBit(value);
+	}
+}
 
+void addToArray(alt_u32 numberTodAdd) {
+	int length = sizeof(reactionTimes)/sizeof(reactionTimes[0]);
+	for (int z = (length - 1); z > 0 ; z--) {
+		reactionTimes[z] = reactionTimes[z - 1];
+	}
+	reactionTimes[0] = numberTodAdd;
+}
+
+int highestBit(int val) {
+	// Return NULL if no bits are 1
+    if (!val)
+        return NULL;
+
+    // Loop through to find highest bit
+    int shiftedValue = 1;
+
+    while (val >>= 1)
+    	shiftedValue <<= 1;
+
+    // Return the number divided by base 2 to find the index
+    return log(shiftedValue)/log(2);
+}
+
+int lowestBit(int val) {
+	// Return NULL if no bits are 1
+    if (!val)
+        return NULL;
+
+    // Loop through to find lowest bit
+    int index;
+    for(index = 0;!(val & 1);index++)
+        val >>= 1;
+
+    return index;
+}
 
 
 /************/
@@ -201,26 +276,51 @@ void switchPollingTask(void *pvParameters)
 
 void keyboardLogicTask(void *pvParameters)
 {
+
+	// Array to hold keys
+	int length = 5;
+	char keyValues[length + 1] = {0};
+	int i = 0;
+
+
 	while (1)
 	{
-		// TODO
-		// Need to take value from queue and process it and see if it represents a threshold. If it does -> update global variable
+		xSemaphoreTake(counterSemaphore0,portMAX_DELAY);
+		// Check if received enough characters yet
+		if (i < 1 + length) {
+			if (xQueueReceive(keyboardQueue, keyValues[i], portMAX_DELAY)) { //TODO check if receive buffer works
+				// Check that we have started correctly
+				if ((keyValues[0] != 'L') && (keyValues[0] != 'R')) {
+					i++;
+				}
+			}
+		} else { // Loop through filled array of characters and parse it to thresholds
+			int thresholdTemp = 0;
+			int invalidCharFlag = 0;
 
-		// Below is code from the keyboard example that may be helpful
-				// case KB_ASCII_MAKE_CODE :
-				// 	printf ( "ASCII   : %x\n", key ) ; 
-				// 	break ;
-				// case KB_LONG_BINARY_MAKE_CODE :
-				// 	// do nothing
-				// case KB_BINARY_MAKE_CODE :
-				// 	printf ( "MAKE CODE : %x\n", key ) ;
-				// 	break ;
-				// case KB_BREAK_CODE :
-				// 	// do nothing
-				// default :
-				// 	printf ( "DEFAULT   : %x\n", key ) ;
-				// 	break ;
-				// }
+
+			for (int z = 0; z < length; z++) {
+				int numberConverted = keyValues[z] - '0';
+
+				// Validity checking
+				if ((numberConverted >= 10) && (numberConverted <= -1)){
+					invalidCharFlag = 1;
+				}
+				thresholdTemp = thresholdTemp + numberConverted*pow(10, length - 1 - z);
+			}
+
+			// Update thresholds and give semaphore if valid
+			if (!invalidCharFlag) {
+				if (keyValues[0] == 'L') {
+					levelThreshold = thresholdTemp;
+				} else if (keyValues[0] == 'R') {
+					rateOfChangeThreshold = thresholdTemp;
+				}
+				xSemaphoreGive(counterSemaphore1);
+			}
+
+			i = 0;
+		}
 	}
 }
 
@@ -241,6 +341,7 @@ void computeTask(void *pvParameters)
 			// May need to use a mutex/semaphore to reset
 
 		} else {
+			checkNewFrequencyValues();
 			int frequencyUnstable = aboveRateOfFrequency() || belowThresholdFrequency();
 
 			if ( frequencyUnstable ) {
@@ -281,47 +382,75 @@ void outputLogicTask(void *pvParameters)
 		xSemaphoreTake(counterSemaphore2, portMAX_DELAY);
 		switch(systemState) {
 			case 0: // IDLE
+				break;
 			case 1: // STABLE
 				// Stop 500ms timer
 				if (timerStarted == 1) {
 					alt_alarm_stop(&timer500);
 				}
-				checkSwitches();
-					currentSwitchValue;
-				checkLED();
-					int redValue = 	IORD_ALTERA_AVALON_PIO_DATA(RED_LEDS_BASE);
-					int greenValue = IORD_ALTERA_AVALON_PIO_DATA(GREEN_LEDS_BASE);
-				checkPriority();
-					// Compare currentSwitch with Green
-					if (greenValue == 0) {
-						redValue = currentSwitchValue;
-					} else {
-						greenValue = redValue ^ currentSwitchValue;
-						int bitPosition = checkPriority(greenValue, 1); // Check for high priority, returns
-						greenValue = toggleBit(bitPosition, greenValue);
-						redValue = toggleBit(bitPosition, redValue);
-					}
+				// Store current LED values
+				int redValue = 	IORD_ALTERA_AVALON_PIO_DATA(RED_LEDS_BASE);
+				int greenValue = IORD_ALTERA_AVALON_PIO_DATA(GREEN_LEDS_BASE);
+
+				// If relay is not withholding loads, turn on all loads according to switches
+				if (greenValue == 0) {
+					redValue = currentSwitchValue;
+				} else {
+					// Update green value to store loads currently withheld and loads not yet handled
+					greenValue = redValue ^ currentSwitchValue;
+
+					// Check priority to find bit position of the load to turn on
+					int bitPosition = checkPriority(greenValue, 1); // Check for high priority (1)
+
+					// Turn load on
+					greenValue = toggleBit(bitPosition, greenValue);
+					redValue = toggleBit(bitPosition, redValue);
+				}
 
 				// Update LEDs
-				updateLEDs(greenValue, redValue); // Red LEDs mimick switch state, Green LEDs all off
+				updateLEDs(greenValue, redValue);
+
+				// Check 200ms timer
+				handleReactionTimer();
 
 				// Start 500ms timer & set flag
 				alt_alarm_start(&timer500, 500, timer500ISR, context);
 				timerStarted = 1;
+				break;
 			case 2: // UNSTABLE
 				// Stop 500ms timer
 				if (timerStarted == 1) {
 					alt_alarm_stop(&timer500);
 				}
 
-				checkSwitches();
-				checkLED();
-				checkPriority();
-				updateLEDs();
+				// Store current LED values
+				int redValue = 	IORD_ALTERA_AVALON_PIO_DATA(RED_LEDS_BASE);
+			    int greenValue = IORD_ALTERA_AVALON_PIO_DATA(GREEN_LEDS_BASE);
+
+			    if (redValue == 0) {
+			    	break; // No loads to shed
+				} else {
+					// Update red value to store loads currently on and loads not yet handled
+					redValue = greenValue ^ currentSwitchValue;
+
+					// Check priority to find bit position of the load to turn off
+					int bitPosition = checkPriority(redValue, 0); // Check for low priority (0)
+
+					// Turn load on
+					greenValue = toggleBit(bitPosition, greenValue);
+					redValue = toggleBit(bitPosition, redValue);
+				}
+
+			    // Update LEDs
+			    updateLEDs(greenValue, redValue);
+
+				// Check 200ms timer
+				handleReactionTimer();
 
 				// Start 500ms timer & set flag
 				alt_alarm_start(&timer500, 500, timer500ISR, context);
 				timerStarted = 1;
+				break;
 			case 3: // MAINTENANCE
 				// Stop 500ms timer
 				if (timerStarted == 1) {
@@ -330,6 +459,7 @@ void outputLogicTask(void *pvParameters)
 
 				// Update LEDs
 				updateLEDs(0, currentSwitchValue); // Red LEDs mimick switch state, Green LEDs all off
+				break;
 		}
 	}
 }
@@ -354,10 +484,17 @@ int initOSDataStructs(void)
 	counterSemaphore1 = xSemaphoreCreateCounting( 9999, 1 );
 	counterSemaphore2 = xSemaphoreCreateCounting( 9999, 1 );
 
+	// INITIALISE/CREATE QUEUE
+	frequencyQueue = xQueueCreate(FREQUENCY_DATA_QUEUE_SIZE, sizeof(double));
 	timer200Queue = xQueueCreate(TIMER_200_QUEUE_SIZE, sizeof(alt_u32));
+	keyboardQueue = xQueueCreate(KEYBOARD_QUEUE_SIZE, sizeof(char));
 
+
+	frequencyIndex = 0;
+	reactionTimes = [0,0,0,0,0];
+	frequencyData = {0};
+	rateOfChangeData = {0};
 	tickPerSecond = alt_ticks_per_second();
-	context = 0;
 	return 0;
 }
 
@@ -380,9 +517,14 @@ int initFlags(void)
 	switchChanged = 0;
 	enterMaintenanceState = 0;
 	currentSwitchValue = 0;
+	context = 0;
 
 	// State
-	systemState = 0; //
+	systemState = 0;
+
+	// Thresholds
+	levelThreshold = 0;
+	rateOfChangeThreshold = 0; // TODO
 	return 0;
 }
 
@@ -395,21 +537,14 @@ int initButtonsPIO(void)
 	//Register the interrupt handler, context is unused so pass in garbage
 	void* context = 0;
 	alt_irq_register(PUSH_BUTTON_IRQ, context, buttonsISR);
-	printf("Finished button init");
+
 	return 0;
 }
 
 int initFrequency(void) {
 
-	// INITIALISE/CREATE QUEUE
-	// TODO
-
-	// ENABLE ISR STUFF FOR FREQUENCY STUFF
-	// TODO
-
 	//Register the interrupt handler, context is unused so pass in garbage
-	void* context = 0;
-	//alt_irq_register(ADC_base_value?, context, frequencyController);
+	alt_irq_register(FREQUENCY_ANALYSER_IRQ, context, frequencyISR);
 
 	return 0; // success
 }
@@ -431,7 +566,6 @@ int initKeyboard(void) {
 	alt_irq_register(PS2_IRQ, ps2_device, ps2ISR);
 
 	IOWR_8DIRECT(PS2_BASE,4,1);
-
 
 	return 0; // success
 }

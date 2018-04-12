@@ -37,19 +37,16 @@
 					<entry kind="macro" name="__BIGGEST_ALIGNMENT__" value="4">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
-					<entry kind="macro" name="__BYTE_ORDER__" value="0">
-						<flag value="BUILTIN|READONLY"/>
-					</entry>
 					<entry kind="macro" name="__BYTE_ORDER__" value="__ORDER_LITTLE_ENDIAN__">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
 					<entry kind="macro" name="__CHAR16_TYPE__" value="short unsigned int">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
-					<entry kind="macro" name="__CHAR32_TYPE__" value="1234">
+					<entry kind="macro" name="__CHAR32_TYPE__" value="long unsigned int">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
-					<entry kind="macro" name="__CHAR32_TYPE__" value="long unsigned int">
+					<entry kind="macro" name="__CHAR_BIT__" value="8">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
 					<entry kind="macro" name="__DBL_DECIMAL_DIG__" value="17">
@@ -164,6 +161,9 @@
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
 					<entry kind="macro" name="__ELF__" value="1">
+						<flag value="BUILTIN|READONLY"/>
+					</entry>
+					<entry kind="macro" name="__FINITE_MATH_ONLY__" value="0">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
 					<entry kind="macro" name="__FLOAT_WORD_ORDER__" value="__ORDER_LITTLE_ENDIAN__">
@@ -295,6 +295,9 @@
 					<entry kind="macro" name="__INT64_MAX__" value="0x7fffffffffffffffLL">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
+					<entry kind="macro" name="__INT64_TYPE__" value="long long int">
+						<flag value="BUILTIN|READONLY"/>
+					</entry>
 					<entry kind="macro" name="__INT8_C(c)" value="c">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
@@ -344,9 +347,6 @@
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
 					<entry kind="macro" name="__INT_LEAST16_MAX__" value="0x7fff">
-						<flag value="BUILTIN|READONLY"/>
-					</entry>
-					<entry kind="macro" name="__INT_LEAST16_TYPE__" value="long long unsigned int">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
 					<entry kind="macro" name="__INT_LEAST16_TYPE__" value="short int">
@@ -428,6 +428,9 @@
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
 					<entry kind="macro" name="__ORDER_BIG_ENDIAN__" value="4321">
+						<flag value="BUILTIN|READONLY"/>
+					</entry>
+					<entry kind="macro" name="__ORDER_LITTLE_ENDIAN__" value="1234">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
 					<entry kind="macro" name="__ORDER_PDP_ENDIAN__" value="3412">
@@ -532,9 +535,6 @@
 					<entry kind="macro" name="__UINT32_MAX__" value="0xffffffffUL">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
-					<entry kind="macro" name="__UINT32_TYPE__" value="int">
-						<flag value="BUILTIN|READONLY"/>
-					</entry>
 					<entry kind="macro" name="__UINT32_TYPE__" value="long unsigned int">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
@@ -562,7 +562,7 @@
 					<entry kind="macro" name="__UINTMAX_MAX__" value="0xffffffffffffffffULL">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
-					<entry kind="macro" name="__UINTMAX_TYPE__" value="8">
+					<entry kind="macro" name="__UINTMAX_TYPE__" value="long long unsigned int">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
 					<entry kind="macro" name="__UINTPTR_MAX__" value="0xffffffffU">
@@ -610,9 +610,6 @@
 					<entry kind="macro" name="__UINT_LEAST64_MAX__" value="0xffffffffffffffffULL">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
-					<entry kind="macro" name="__UINT_LEAST64_TYPE__" value="long long int">
-						<flag value="BUILTIN|READONLY"/>
-					</entry>
 					<entry kind="macro" name="__UINT_LEAST64_TYPE__" value="long long unsigned int">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
@@ -635,6 +632,9 @@
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
 					<entry kind="macro" name="__WCHAR_MIN__" value="(-__WCHAR_MAX__ - 1)">
+						<flag value="BUILTIN|READONLY"/>
+					</entry>
+					<entry kind="macro" name="__WCHAR_TYPE__" value="int">
 						<flag value="BUILTIN|READONLY"/>
 					</entry>
 					<entry kind="macro" name="__WINT_MAX__" value="0xffffffffU">

@@ -1,83 +1,12 @@
-
-**** Build of configuration Nios II for project CS723_Assignment1 ****
-
+08:48:50 **** Incremental Build of configuration Nios II for project CS723_Assignment1 ****
 make all 
-      1 [main] sh 3724 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
-the public mailing list cygwin@cygwin.com
-      1 [main] sh 13864 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
-the public mailing list cygwin@cygwin.com
-      0 [main] sh 12352 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
-the public mailing list cygwin@cygwin.com
-      1 [main] sh 8720 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
-the public mailing list cygwin@cygwin.com
-      1 [main] echo 8012 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
-the public mailing list cygwin@cygwin.com
 Info: Building H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
-make --no-print-directory -C H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
-      1 [main] pwd 13268 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
-the public mailing list cygwin@cygwin.com
-      1 [main] sh 7720 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
-the public mailing list cygwin@cygwin.com
-      1 [main] sh 280 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
-the public mailing list cygwin@cygwin.com
+C:/intelFPGA/16.1/nios2eds/bin/gnu/H-x86_64-mingw32/bin/make --no-print-directory -C H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
 [BSP build complete]
-      1 [main] echo 14084 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
-the public mailing list cygwin@cygwin.com
 Info: Compiling main.c to obj/default/main.o
-      1 [main] mkdir 12116 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
-the public mailing list cygwin@cygwin.com
 nios2-elf-gcc -xc -MP -MMD -c -IH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//HAL/inc -IH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/ -IH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//drivers/inc  -DSYSTEM_BUS_WIDTH=32 -pipe -D__hal__ -DALT_NO_INSTRUCTION_EMULATION -DALT_SINGLE_THREADED    -O0 -g -Wall   -EL -mhw-div -mhw-mul -mno-hw-mulx  -o obj/default/main.o main.c
-main.c:33:1: warning: "portMAX_DELAY" redefined
-In file included from freertos/portable.h:94,
-                 from freertos/FreeRTOS.h:104,
-                 from main.c:7:
-freertos/portmacro.h:107:1: warning: this is the location of the previous definition
-main.c: In function 'ps2ISR':
-main.c:140: warning: enumeration value 'KB_ASCII_MAKE_CODE' not handled in switch
-main.c:140: warning: enumeration value 'KB_BINARY_MAKE_CODE' not handled in switch
-main.c:140: warning: enumeration value 'KB_LONG_BINARY_MAKE_CODE' not handled in switch
-main.c:140: warning: enumeration value 'KB_BREAK_CODE' not handled in switch
-main.c:140: warning: enumeration value 'KB_LONG_BREAK_CODE' not handled in switch
-main.c:140: warning: enumeration value 'KB_INVALID_CODE' not handled in switch
-main.c: In function 'aboveRateOfFrequency':
-main.c:160: error: 'frequencyQ' undeclared (first use in this function)
-main.c:160: error: (Each undeclared identifier is reported only once
-main.c:160: error: for each function it appears in.)
-main.c:161: error: 'result' undeclared (first use in this function)
-main.c:161: error: 'timePeriod' undeclared (first use in this function)
-main.c:162: error: 'frequencyChangeThreshold' undeclared (first use in this function)
-main.c:163: warning: control reaches end of non-void function
-main.c: In function 'belowThresholdFrequency':
-main.c:169: error: 'frequencyQ' undeclared (first use in this function)
-main.c:170: error: 'frequencyLowerThreshold' undeclared (first use in this function)
-main.c:171: warning: control reaches end of non-void function
-main.c: In function 'computeTask':
-main.c:257: warning: passing argument 2 of 'xQueueGenericSend' makes pointer from integer without a cast
-main.c: In function 'outputLogicTask':
-main.c:283: error: 'alt_alarm' has no member named 'stop'
-main.c:284: error: 'alt_alarm' has no member named 'reset'
-main.c:285: error: 'alt_alarm' has no member named 'start'
-main.c:287: warning: implicit declaration of function 'checkSwitches'
-main.c:288: warning: implicit declaration of function 'checkLED'
-main.c:289: warning: implicit declaration of function 'checkPriority'
-main.c:290: error: too few arguments to function 'updateLEDs'
-main.c:293: error: 'alt_alarm' has no member named 'stop'
-main.c:294: error: 'alt_alarm' has no member named 'reset'
-main.c:295: error: 'alt_alarm' has no member named 'start'
-main.c:300: error: too few arguments to function 'updateLEDs'
-main.c: In function 'initButtonsPIO':
-main.c:366: warning: passing argument 3 of 'alt_irq_register' from incompatible pointer type
-main.c: At top level:
-main.c:373: error: expected declaration specifiers or '...' before '&' token
-main.c:373: error: expected declaration specifiers or '...' before 'timeout'
-main.c:373: error: expected declaration specifiers or '...' before 'tlc_timer_isr'
-main.c:373: error: expected declaration specifiers or '...' before '&' token
-main.c:373: warning: data definition has no type or storage class
-main.c:373: warning: type defaults to 'int' in declaration of 'alt_alarm_start'
-main.c: In function 'initFrequency':
-main.c:384: warning: unused variable 'context'
-main.c: In function 'initKeyboard':
-main.c:404: warning: passing argument 3 of 'alt_irq_register' from incompatible pointer type
+nios2-elf-gcc: error: unrecognized command line option '-EL'
 make: *** [obj/default/main.o] Error 1
 
-**** Build Finished ****
+08:48:55 Build Finished (took 4s.420ms)
+

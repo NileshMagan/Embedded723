@@ -6621,3 +6621,15 @@ main.c:404: warning: passing argument 3 of 'alt_irq_register' from incompatible 
 make: *** [obj/default/main.o] Error 1
 
 **** Build Finished ****
+08:48:50 **** Incremental Build of configuration Nios II for project CS723_Assignment1 ****
+make all 
+Info: Building H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+C:/intelFPGA/16.1/nios2eds/bin/gnu/H-x86_64-mingw32/bin/make --no-print-directory -C H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+[BSP build complete]
+Info: Compiling main.c to obj/default/main.o
+nios2-elf-gcc -xc -MP -MMD -c -IH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//HAL/inc -IH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/ -IH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//drivers/inc  -DSYSTEM_BUS_WIDTH=32 -pipe -D__hal__ -DALT_NO_INSTRUCTION_EMULATION -DALT_SINGLE_THREADED    -O0 -g -Wall   -EL -mhw-div -mhw-mul -mno-hw-mulx  -o obj/default/main.o main.c
+nios2-elf-gcc: error: unrecognized command line option '-EL'
+make: *** [obj/default/main.o] Error 1
+08:48:57 **** Incremental Build of configuration Nios II for project CS723_Assignment1_bsp ****
+make all 
+[BSP build complete]
