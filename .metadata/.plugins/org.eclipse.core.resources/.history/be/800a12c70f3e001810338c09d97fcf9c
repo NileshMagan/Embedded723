@@ -187,7 +187,7 @@ void ps2ISR(void* context) {
 		{
 		 case KB_ASCII_MAKE_CODE :
 			xQueueSendToBackFromISR(keyboardQueue, ascii, portMAX_DELAY);
-			//printf ( "ASCII   : %x\n", key ) ;
+			printf ( "ASCII   : %x\n", key ) ;
 
 			// Give the semaphore
 			xSemaphoreGive(counterSemaphore0);
@@ -196,7 +196,7 @@ void ps2ISR(void* context) {
 			 //printf ( "MAKE CODE : %x\n", key ) ;
 			 break;
 		 default :
-			//printf ( "DEFAULT   : %x\n", key ) ;
+			printf ( "DEFAULT   : %x\n", key ) ;
 			break ;
 		}
 	}

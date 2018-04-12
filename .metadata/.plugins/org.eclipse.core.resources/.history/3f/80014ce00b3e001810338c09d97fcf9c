@@ -187,7 +187,7 @@ void ps2ISR(void* context) {
 		{
 		 case KB_ASCII_MAKE_CODE :
 			xQueueSendToBackFromISR(keyboardQueue, ascii, portMAX_DELAY);
-			//printf ( "ASCII   : %x\n", key ) ;
+			printf ( "ASCII   : %x\n", key ) ;
 
 			// Give the semaphore
 			xSemaphoreGive(counterSemaphore0);
@@ -196,7 +196,7 @@ void ps2ISR(void* context) {
 			 //printf ( "MAKE CODE : %x\n", key ) ;
 			 break;
 		 default :
-			//printf ( "DEFAULT   : %x\n", key ) ;
+			printf ( "DEFAULT   : %x\n", key ) ;
 			break ;
 		}
 	}
@@ -229,14 +229,12 @@ void checkNewFrequencyValues(void) {
 
 void handleReactionTimer(void) {
 	alt_u32 previousTime, newTime, differenceInTime;
-	if ( uxQueueMessagesWaiting( timer200Queue ) != 0) {
-		xQueueReceive( timer200Queue, previousTime, portMAX_DELAY );
+	xQueueReceive( timer200Queue, previousTime ,portMAX_DELAY );
 
-		// Find difference
-		newTime = alt_nticks()/tickPerSecond;
-		differenceInTime = newTime - previousTime;
-		addToArray(differenceInTime);
-	}
+	// Find difference
+	newTime = alt_nticks()/tickPerSecond;
+	differenceInTime = newTime - previousTime;
+	addToArray(differenceInTime);
 }
 
 int aboveRateOfFrequency(void) {
@@ -339,12 +337,10 @@ void keyboardLogicTask(void *pvParameters)
 		xSemaphoreTake(counterSemaphore0,portMAX_DELAY);
 		// Check if received enough characters yet
 		if (i < 1 + THRESHOLD_NUMBER_LENGTH) {
-			if ( uxQueueMessagesWaiting( keyboardQueue ) != 0) {
-				if (xQueueReceive(keyboardQueue, keyValues[i], portMAX_DELAY)) { //TODO check if receive buffer works
-					// Check that we have started correctly
-					if ((keyValues[0] != 'L') && (keyValues[0] != 'R')) {
-						i++;
-					}
+			if (xQueueReceive(keyboardQueue, keyValues[i], portMAX_DELAY)) { //TODO check if receive buffer works
+				// Check that we have started correctly
+				if ((keyValues[0] != 'L') && (keyValues[0] != 'R')) {
+					i++;
 				}
 			}
 		} else { // Loop through filled array of characters and parse it to thresholds
@@ -429,13 +425,9 @@ void computeTask(void *pvParameters)
 void outputLogicTask(void *pvParameters)
 {
 	int redValue, greenValue;
-	// DEBUG
-	taskENTER_CRITICAL();
-	//printf("STARTED\n");
-	taskEXIT_CRITICAL();
-
 	while (1)
 	{
+		// TODO
 		xSemaphoreTake(counterSemaphore2, portMAX_DELAY);
 		switch(systemState) {
 			case 0: // IDLE
@@ -466,7 +458,7 @@ void outputLogicTask(void *pvParameters)
 
 				// DEBUG
 				taskENTER_CRITICAL();
-//				printf("STABLE GV:%d , RV:%d\n", greenValue, redValue);
+				printf("STABLE GV:%d , RV:%d\n", greenValue, redValue);
 				taskEXIT_CRITICAL();
 
 				// Update LEDs
@@ -505,7 +497,7 @@ void outputLogicTask(void *pvParameters)
 
 				// DEBUG
 				taskENTER_CRITICAL();
-//				printf("UNSTABLE GV:%d , RV:%d\n", greenValue, redValue);
+				printf("UNSTABLE GV:%d , RV:%d\n", greenValue, redValue);
 				taskEXIT_CRITICAL();
 
 			    // Update LEDs

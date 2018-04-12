@@ -152,9 +152,9 @@ void buttonsISR(void* context) {
 	//Reset edge capture register
 	IOWR_ALTERA_AVALON_PIO_EDGE_CAP(PUSH_BUTTON_BASE, 0x7);
 
-//	taskENTER_CRITICAL();
-//	printf("eMS: %d\n", enterMaintenanceState);
-//	taskEXIT_CRITICAL();
+	taskENTER_CRITICAL();
+	printf("eMS: %d\n", enterMaintenanceState);
+	taskEXIT_CRITICAL();
 	//Give the semaphore
 	xSemaphoreGive(counterSemaphore1);
 }
@@ -187,16 +187,13 @@ void ps2ISR(void* context) {
 		{
 		 case KB_ASCII_MAKE_CODE :
 			xQueueSendToBackFromISR(keyboardQueue, ascii, portMAX_DELAY);
-			//printf ( "ASCII   : %x\n", key ) ;
+			printf ( "ASCII   : %x\n", key ) ;
 
 			// Give the semaphore
 			xSemaphoreGive(counterSemaphore0);
 			break ;
-		 case KB_BINARY_MAKE_CODE :
-			 //printf ( "MAKE CODE : %x\n", key ) ;
-			 break;
 		 default :
-			//printf ( "DEFAULT   : %x\n", key ) ;
+			printf ( "DEFAULT   : %x\n", key ) ;
 			break ;
 		}
 	}
@@ -229,14 +226,12 @@ void checkNewFrequencyValues(void) {
 
 void handleReactionTimer(void) {
 	alt_u32 previousTime, newTime, differenceInTime;
-	if ( uxQueueMessagesWaiting( timer200Queue ) != 0) {
-		xQueueReceive( timer200Queue, previousTime, portMAX_DELAY );
+	xQueueReceive( timer200Queue, previousTime ,portMAX_DELAY );
 
-		// Find difference
-		newTime = alt_nticks()/tickPerSecond;
-		differenceInTime = newTime - previousTime;
-		addToArray(differenceInTime);
-	}
+	// Find difference
+	newTime = alt_nticks()/tickPerSecond;
+	differenceInTime = newTime - previousTime;
+	addToArray(differenceInTime);
 }
 
 int aboveRateOfFrequency(void) {
@@ -339,12 +334,10 @@ void keyboardLogicTask(void *pvParameters)
 		xSemaphoreTake(counterSemaphore0,portMAX_DELAY);
 		// Check if received enough characters yet
 		if (i < 1 + THRESHOLD_NUMBER_LENGTH) {
-			if ( uxQueueMessagesWaiting( keyboardQueue ) != 0) {
-				if (xQueueReceive(keyboardQueue, keyValues[i], portMAX_DELAY)) { //TODO check if receive buffer works
-					// Check that we have started correctly
-					if ((keyValues[0] != 'L') && (keyValues[0] != 'R')) {
-						i++;
-					}
+			if (xQueueReceive(keyboardQueue, keyValues[i], portMAX_DELAY)) { //TODO check if receive buffer works
+				// Check that we have started correctly
+				if ((keyValues[0] != 'L') && (keyValues[0] != 'R')) {
+					i++;
 				}
 			}
 		} else { // Loop through filled array of characters and parse it to thresholds
@@ -429,13 +422,9 @@ void computeTask(void *pvParameters)
 void outputLogicTask(void *pvParameters)
 {
 	int redValue, greenValue;
-	// DEBUG
-	taskENTER_CRITICAL();
-	//printf("STARTED\n");
-	taskEXIT_CRITICAL();
-
 	while (1)
 	{
+		// TODO
 		xSemaphoreTake(counterSemaphore2, portMAX_DELAY);
 		switch(systemState) {
 			case 0: // IDLE
@@ -463,11 +452,6 @@ void outputLogicTask(void *pvParameters)
 					greenValue = toggleBit(bitPosition, greenValue);
 					redValue = toggleBit(bitPosition, redValue);
 				}
-
-				// DEBUG
-				taskENTER_CRITICAL();
-//				printf("STABLE GV:%d , RV:%d\n", greenValue, redValue);
-				taskEXIT_CRITICAL();
 
 				// Update LEDs
 				updateLEDs(greenValue, redValue);
@@ -503,11 +487,6 @@ void outputLogicTask(void *pvParameters)
 					redValue = toggleBit(bitPosition, redValue);
 				}
 
-				// DEBUG
-				taskENTER_CRITICAL();
-//				printf("UNSTABLE GV:%d , RV:%d\n", greenValue, redValue);
-				taskEXIT_CRITICAL();
-
 			    // Update LEDs
 			    updateLEDs(greenValue, redValue);
 
@@ -541,18 +520,18 @@ void vgaOutputTask(void *pvParameters)
 		alt_up_pixel_buffer_dma_dev *pixel_buf;
 		pixel_buf = alt_up_pixel_buffer_dma_open_dev(VIDEO_PIXEL_BUFFER_DMA_NAME);
 		if(pixel_buf == NULL){
-//			taskENTER_CRITICAL();
-//			printf("can't find pixel buffer device\n");
-//			taskEXIT_CRITICAL();
+			taskENTER_CRITICAL();
+			printf("can't find pixel buffer device\n");
+			taskEXIT_CRITICAL();
 		}
 		alt_up_pixel_buffer_dma_clear_screen(pixel_buf, 0);
 
 		alt_up_char_buffer_dev *char_buf;
 		char_buf = alt_up_char_buffer_open_dev("/dev/video_character_buffer_with_dma");
 		if(char_buf == NULL){
-//			taskENTER_CRITICAL();
-//			printf("can't find char buffer device\n");
-//			taskEXIT_CRITICAL();
+			taskENTER_CRITICAL();
+			printf("can't find char buffer device\n");
+			taskEXIT_CRITICAL();
 		}
 		alt_up_char_buffer_clear(char_buf);
 
@@ -696,9 +675,9 @@ int initKeyboard(void) {
 
 	// Error
 	if(ps2_device == NULL){
-//		taskENTER_CRITICAL();
-//		printf("can't find PS/2 device\n");
-//		taskEXIT_CRITICAL();
+		taskENTER_CRITICAL();
+		printf("can't find PS/2 device\n");
+		taskEXIT_CRITICAL();
 		return 1;
 	}
 
@@ -721,7 +700,7 @@ void initAll(void) {
 	initFlags();
 	initButtonsPIO();
 	initFrequency();
-//	initKeyboard();
+	initKeyboard();
 	taskENTER_CRITICAL();
 	printf("Initialised all\n");
 	taskEXIT_CRITICAL();
