@@ -60,6 +60,7 @@
 
 #define MIN_FREQ 45.0 //minimum frequency to draw
 
+
 QueueHandle_t timer200Queue, frequencyQueue, keyboardQueue;
 
 // Definition of Semaphore
@@ -665,38 +666,32 @@ void vgaOutputTask(void *pvParameters)
 		alt_up_char_buffer_string(char_buf, "-30", 9, 34);
 		alt_up_char_buffer_string(char_buf, "-60", 9, 36);
 
-		// TODO: Add reaction time data to output for VGA
+		// TODO: Add other data to output for VGA
 		// Prepare strings to be printed
 
 		char* stabilityStr;
-		char* RateOfChangeStr;
-		char* LevelThresholdStr;
-		char* systenUpTimeStr;
-		char* reactionTimeStr;
-
-		switch(systemState) {
-			case 0: // IDLE
-				sprintf(stabilityStr, "State/Stability: Unknown");
-				break;
-			case 1: // STABLE
+		switch (systemState) {
+			case 1:
 				sprintf(stabilityStr, "State/Stability: Stable");
 				break;
-			case 2: // UNSTABLE
+			case 2:
 				sprintf(stabilityStr, "State/Stability: Unstable");
 				break;
-			case 3: // MAINTENANCE
+			case 3:
 				sprintf(stabilityStr, "State/Stability: Maintenance");
 				break;
 		}
 
-		//perform reaction time calc
-
+		char* RateOfChangeStr;
 		sprintf(RateOfChangeStr, "Rate Of Change: %d", rateOfChangeThreshold);
 
+		char* LevelThresholdStr;
 		sprintf(LevelThresholdStr, "Lower Threshold: %d", levelThreshold);
 
-		alt_u32 upTime = alt_nticks()/tickPerSecond; //this is 0 when printed
-		sprintf(systenUpTimeStr, "System Up Time: %d", (int) upTime);
+
+
+		char* systenUpTimeStr;
+		sprintf(LevelThresholdStr, "System Up Time: %d", (int) alt_nticks());
 
 		// Draw strings
 		alt_up_char_buffer_string(char_buf, stabilityStr, 4, 40);

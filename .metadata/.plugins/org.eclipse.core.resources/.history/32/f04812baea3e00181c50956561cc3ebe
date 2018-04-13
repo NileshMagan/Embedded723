@@ -689,13 +689,11 @@ void vgaOutputTask(void *pvParameters)
 				break;
 		}
 
-		//perform reaction time calc
-
 		sprintf(RateOfChangeStr, "Rate Of Change: %d", rateOfChangeThreshold);
 
 		sprintf(LevelThresholdStr, "Lower Threshold: %d", levelThreshold);
 
-		alt_u32 upTime = alt_nticks()/tickPerSecond; //this is 0 when printed
+		alt_u32 upTime = alt_nticks()/tickPerSecond;
 		sprintf(systenUpTimeStr, "System Up Time: %d", (int) upTime);
 
 		// Draw strings
