@@ -17,6 +17,7 @@
 #include "altera_up_ps2_keyboard.h"
 #include "sys/alt_irq.h"
 #include "sys/alt_alarm.h"
+#include "sys/alt_timestamp.h"
 
 #include "altera_avalon_pio_regs.h"
 #include "alt_types.h"                 	// alt_u32 is a kind of alt_types
@@ -29,6 +30,7 @@
 #define   TASK_STACKSIZE       2048
 
 // Definition of Task Priorities
+#define TIMER_500_TASK_PRIORITY 6
 #define SWITCH_POLLING_TASK_PRIORITY 3
 #define KEYBOARD_LOGIC_PRIORITY 2
 #define COMPUTE_TASK_PRIORITY 5
@@ -38,7 +40,7 @@
 // Definition computation constants
 #define SAMPLING_FREQ 16000.0
 #define THRESHOLD_NUMBER_LENGTH 5
-#define POLLING_DELAY 100
+#define POLLING_DELAY 300
 
 // Definition of Message Queue
 #define   FREQUENCY_DATA_QUEUE_SIZE  100
@@ -62,8 +64,6 @@
 
 QueueHandle_t timer200Queue, frequencyQueue, keyboardQueue;
 
-static alt_alarm timer500;
-
 // Definition of Semaphore
 SemaphoreHandle_t counterSemaphore0, counterSemaphore1, counterSemaphore2;
 
@@ -81,6 +81,7 @@ static volatile unsigned int systemState; // State
 static volatile unsigned int levelThreshold, rateOfChangeThreshold;
 static volatile unsigned int frequencyIndex;
 static volatile unsigned int semCountDebug = 0;
+static volatile double prevTime;
 // 	0  IDLE
 //  1  STABLE
 //  2  UNSTABLE
@@ -117,24 +118,11 @@ int checkPriority(int value, int priority);
 int highestBit(int val);
 int lowestBit(int val);
 int toggleBit(int bitPosition, int numberToToggle);
-
+double getTime(void);
 
 /************/
 /*  ISRs     */
 /************/
-alt_u32 timer500ISR(void* context)
-{
-	//Set global flag
-	TOF_500 = 1;
-	
-	printf("Given from timer ISR\n");
-
-	// Give the semaphore
-	xSemaphoreGiveFromISR(counterSemaphore1, pdTRUE);
-	return 0;
-}
-
-
 void buttonsISR(void* context) {
 
 	//Read edge capture register's value
@@ -275,7 +263,7 @@ void addToArray(alt_u32 numberTodAdd) {
 int highestBit(int val) {
 	// Return NULL if no bits are 1
     if (!val)
-        return NULL;
+        return 100;
 
     // Loop through to find highest bit
     int shiftedValue = 1;
@@ -290,7 +278,7 @@ int highestBit(int val) {
 int lowestBit(int val) {
 	// Return NULL if no bits are 1
     if (!val)
-        return NULL;
+        return 100;
 
     // Loop through to find lowest bit
     int index;
@@ -306,9 +294,34 @@ int toggleBit(int bitPosition, int numberToToggle) {
 	return numberToToggle;
 }
 
+double getTime(void) {
+	return (double)alt_timestamp()/100000000; // Convert to usalt_timestamp_start() // TODO: check
+}
+
 /************/
 /*   TASKS  */
 /************/
+
+//void timer500Task(void* pvParameters)
+//{
+//	xSuspendTask(timer500Task);
+//	while(1) {
+//		xTaskDelay(500);
+//
+//		//Set global flag
+//		TOF_500 = 1;
+//
+//		// Give the semaphore
+//		xSemaphoreGive(counterSemaphore1);
+//
+//		printf("Given from timer Task\n");
+//		xSuspendTask(timer500Task);
+//	}
+//
+//	return;
+//}
+
+
 
 void switchPollingTask(void *pvParameters)
 {
@@ -394,6 +407,8 @@ void keyboardLogicTask(void *pvParameters)
 void computeTask(void *pvParameters)
 {
 
+	initAll();
+
 	taskENTER_CRITICAL();
 	printf("STARTED COMPUTE TASK\n");
 	taskEXIT_CRITICAL();
@@ -401,7 +416,14 @@ void computeTask(void *pvParameters)
 	while (1)
 	{
 		xSemaphoreTake(counterSemaphore1, portMAX_DELAY);
+//		printf("Compute Task took semaphore: %d\n", semCountDebug++ );
 		unsigned int nextSystemState = systemState;
+
+		double difference = getTime() - prevTime;
+		if ((difference >= 0.5) && (prevTime != 0)) {
+			TOF_500 = 1;
+			prevTime = 0;
+		}
 
 		if (enterMaintenanceState) {
 			nextSystemState = 3; // 3 is Maintenance state
@@ -417,7 +439,9 @@ void computeTask(void *pvParameters)
 		}
 
 		// If nextState != prevState then restart timers,
-		if (systemState != nextSystemState || TOF_500 || switchChanged) {
+		if ((systemState != nextSystemState) || TOF_500 || switchChanged) {
+
+			printf("StateChange: %d, TOV: %d, SWC: %d\n", (systemState != nextSystemState), TOF_500, switchChanged);
 
 			if (nextSystemState != 3) { // 3 is Maintenance state
 				// Store timer TODO: Check timer syntax
@@ -431,7 +455,7 @@ void computeTask(void *pvParameters)
 			//Give semaphore // TODO: Check no mutex needed
 			systemState = nextSystemState;
 			xSemaphoreGive(counterSemaphore2); // Trigger output logic
-			printf("Given semaphore, semaphoreCount: %d\n", semCountDebug++ );
+			printf("Compute task executed\n");
 		}
 
 	}
@@ -442,16 +466,22 @@ void computeTask(void *pvParameters)
 void outputLogicTask(void *pvParameters)
 {
 	int redValue, greenValue;
+	greenValue = 0;
+	redValue = 0;
+
 	// DEBUG
 	taskENTER_CRITICAL();
 	printf("STARTED OUTPUT LOGIC TASK\n");
 	taskEXIT_CRITICAL();
 
+
+
 	while (1)
 	{
 		xSemaphoreTake(counterSemaphore2, portMAX_DELAY);
-		printf("Taken semaphore, semaphoreCount: %d\n", semCountDebug-- );
 //		printf("STATE IS: STABLE\n");
+
+		int bitPosition;
 
 		systemState = 2;
 		switch(systemState) {
@@ -459,35 +489,33 @@ void outputLogicTask(void *pvParameters)
 				break;
 			case 1: // STABLE
 
-				// Stop 500ms timer
-				if (timerStarted == 1) {
-					alt_alarm_stop(&timer500);
-				}
+				// DEBUG
+				taskENTER_CRITICAL();
+				printf("---- STABLE ----\n");
+				taskEXIT_CRITICAL();
+
 				// Store current LED values
 				redValue = 	IORD_ALTERA_AVALON_PIO_DATA(RED_LEDS_BASE);
 				greenValue = IORD_ALTERA_AVALON_PIO_DATA(GREEN_LEDS_BASE);
 
+
 				// If relay is not withholding loads, turn on all loads according to switches
-				if (greenValue == 0) {
-					redValue = currentSwitchValue;
-				} else {
+//				if (greenValue == 0) {
+//					redValue = currentSwitchValue;
+//				} else {
 					// Update green value to store loads currently withheld and loads not yet handled
 					greenValue = redValue ^ currentSwitchValue;
 
 					// Check priority to find bit position of the load to turn on
-					int bitPosition = checkPriority(greenValue, 1); // Check for high priority (1)
+					bitPosition = checkPriority(greenValue, 1); // Check for high priority (1)
 
-					if(bitPosition != NULL) {
+					if(bitPosition != 100) {
 						// Turn load on
 						greenValue = toggleBit(bitPosition, greenValue);
 						redValue = toggleBit(bitPosition, redValue);
 					}
-				}
+//				}
 
-				// DEBUG
-				taskENTER_CRITICAL();
-				printf("STABLE GV:%d , RV:%d\n", greenValue, redValue);
-				taskEXIT_CRITICAL();
 
 				// Update LEDs
 				updateLEDs(greenValue, redValue);
@@ -495,42 +523,64 @@ void outputLogicTask(void *pvParameters)
 				// Check 200ms timer
 				handleReactionTimer();
 
-				// Start 500ms timer & set flag
-				alt_alarm_start(&timer500, 500, timer500ISR, context);
+				// Store time for 500ms
 				printf("Started timer\n");
-				timerStarted = 1;
+				prevTime = getTime();
 				break;
 			case 2: // UNSTABLE
 
-				// Stop 500ms timer
-				if (timerStarted == 1) {
-					alt_alarm_stop(&timer500);
-				}
+				// DEBUG
+				taskENTER_CRITICAL();
+				printf("---- UNSTABLE ----\n");
+				taskEXIT_CRITICAL();
+
+			    printf("RV1: %d, GV1: %d, CSV: %d\n", redValue, greenValue, currentSwitchValue);
 
 				// Store current LED values
 				redValue = 	IORD_ALTERA_AVALON_PIO_DATA(RED_LEDS_BASE);
 			    greenValue = IORD_ALTERA_AVALON_PIO_DATA(GREEN_LEDS_BASE);
 
-//			    if (redValue == 0) {
-//			    	break; // No loads to shed
-//				} else {
+			    printf("RV2: %d, GV2: %d, CSV: %d\n", redValue, greenValue, currentSwitchValue);
+
+//				// Update red value to store loads currently on and loads not yet handled
+//				redValue = greenValue ^ currentSwitchValue;
+
+			    if (redValue == 0) {
+			    	printf("BROKEN: %d, GV3: %d, CSV: %d\n", redValue, greenValue, currentSwitchValue);
+
+			    	greenValue = currentSwitchValue;
+				    updateLEDs(greenValue, redValue);
+
+				    // Check 200ms timer
+				    handleReactionTimer();
+
+				    // Store time for 500ms
+				    printf("Started timer\n");
+				    prevTime = getTime();
+
+			    	break; // No loads to shed
+				} else {
 
 					// Update red value to store loads currently on and loads not yet handled
 					redValue = greenValue ^ currentSwitchValue;
 
-					// Check priority to find bit position of the load to turn off
-					int bitPosition = checkPriority(redValue, 0); // Check for low priority (0)
+					printf("RV3: %d, GV3: %d, CSV: %d\n", redValue, greenValue, currentSwitchValue);
+						// Check priority to find bit position of the load to turn off
+						bitPosition = checkPriority(redValue, 0); // Check for low priority (0)
 
-					if(bitPosition != NULL) {
-						// Turn load on
-						greenValue = toggleBit(bitPosition, greenValue);
-						redValue = toggleBit(bitPosition, redValue);
-//					}
+						printf("BP: %d\n", bitPosition);
+						if(bitPosition != 100) {
+							// Turn load on
+							printf("Skincare\n");
+							printf("TB_GV: %d\n", toggleBit(bitPosition, greenValue));
+							printf("TB_RV: %d\n", toggleBit(bitPosition, redValue));
+
+							greenValue = toggleBit(bitPosition, greenValue);
+							redValue = toggleBit(bitPosition, redValue);
+						}
+					printf("RV4: %d, GV4: %d, CSV: %d\n", redValue, greenValue, currentSwitchValue);
 				}
-				// DEBUG
-				taskENTER_CRITICAL();
-				printf("UNSTABLE GV:%d , RV:%d\n", greenValue, redValue);
-				taskEXIT_CRITICAL();
+
 
 			    // Update LEDs
 			    updateLEDs(greenValue, redValue);
@@ -538,20 +588,24 @@ void outputLogicTask(void *pvParameters)
 				// Check 200ms timer
 				handleReactionTimer();
 
-				// Start 500ms timer & set flag
-				alt_alarm_start(&timer500, 500, timer500ISR, context);
+				// Store time for 500ms
+				printf("Started timer\n");
+				prevTime = getTime();
+
 				timerStarted = 1;
 				break;
 			case 3: // MAINTENANCE
-				// Stop 500ms timer
-				if (timerStarted == 1) {
-					alt_alarm_stop(&timer500);
-				}
+
+				// DEBUG
+				taskENTER_CRITICAL();
+				printf("---- MAINTENANCE ----\n");
+				taskEXIT_CRITICAL();
 
 				// Update LEDs
 				updateLEDs(0, currentSwitchValue); // Red LEDs mimick switch state, Green LEDs all off
 				break;
 		}
+
 	}
 }
 
@@ -671,6 +725,7 @@ int initOSDataStructs(void)
 // This function creates the tasks used in this example
 int initCreateTasks(void)
 {	
+//	xTaskCreate(timer500Task, "timer500Task", TASK_STACKSIZE, NULL, TIMER_500_TASK_PRIORITY, NULL);
 	xTaskCreate(switchPollingTask, "switchPollingTask", TASK_STACKSIZE, NULL, SWITCH_POLLING_TASK_PRIORITY, NULL);
 	//xTaskCreate(keyboardLogicTask, "keyboardLogicTask", TASK_STACKSIZE, NULL, KEYBOARD_LOGIC_PRIORITY, NULL);
 	xTaskCreate(computeTask, "computeTask", TASK_STACKSIZE, NULL, COMPUTE_TASK_PRIORITY, NULL);
@@ -689,8 +744,12 @@ int initFlags(void)
 	currentSwitchValue = 0;
 	context = 0;
 
+	prevTime = 0;
+
+
 	// State
 	systemState = 0;
+
 
 	// Thresholds
 	levelThreshold = 48.5;
@@ -745,7 +804,7 @@ int initKeyboard(void) {
 
 void initAll(void) {
 	initOSDataStructs();
-	initCreateTasks();
+//	initCreateTasks();
 	initFlags();
 	initButtonsPIO();
 	initFrequency();
@@ -762,7 +821,9 @@ void initAll(void) {
 
 int main(int argc, char* argv[], char* envp[])
 {
-	initAll();
+	initCreateTasks();
+//	initAll();
+	alt_timestamp_start();
 	vTaskStartScheduler();
 	for (;;);
 	return 0;
