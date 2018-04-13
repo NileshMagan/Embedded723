@@ -127,8 +127,6 @@ alt_u32 timer500ISR(void* context)
 	//Set global flag
 	TOF_500 = 1;
 	
-	printf("Given from timer ISR\n");
-
 	// Give the semaphore
 	xSemaphoreGiveFromISR(counterSemaphore1, pdTRUE);
 	return 0;
@@ -497,7 +495,6 @@ void outputLogicTask(void *pvParameters)
 
 				// Start 500ms timer & set flag
 				alt_alarm_start(&timer500, 500, timer500ISR, context);
-				printf("Started timer\n");
 				timerStarted = 1;
 				break;
 			case 2: // UNSTABLE

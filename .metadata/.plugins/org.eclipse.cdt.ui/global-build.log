@@ -18274,3 +18274,2094 @@ the public mailing list cygwin@cygwin.com
 [CS723_Assignment1 build complete]
 
 **** Build Finished ****
+
+**** Build of configuration Nios II for project CS723_Assignment1 ****
+
+make all 
+      0 [main] sh 4492 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 8596 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 1772 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 10076 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] echo 4768 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Building H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+make --no-print-directory -C H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+      1 [main] pwd 11348 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 12064 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 656 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[BSP build complete]
+      0 [main] echo 8744 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Compiling main.c to obj/default/main.o
+      1 [main] mkdir 9860 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+nios2-elf-gcc -xc -MP -MMD -c -IH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//HAL/inc -IH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/ -IH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//drivers/inc  -DSYSTEM_BUS_WIDTH=32 -pipe -D__hal__ -DALT_NO_INSTRUCTION_EMULATION -DALT_SINGLE_THREADED    -O0 -g -Wall   -EL -mhw-div -mhw-mul -mno-hw-mulx  -o obj/default/main.o main.c
+main.c:71: warning: type defaults to 'int' in declaration of 'reactionTimes'
+main.c:72: warning: type defaults to 'int' in declaration of 'frequencyData'
+main.c:73: warning: type defaults to 'int' in declaration of 'rateOfChangeData'
+main.c: In function 'timer500ISR':
+main.c:130: warning: passing argument 2 of 'xQueueGiveFromISR' makes pointer from integer without a cast
+main.c: In function 'buttonsISR':
+main.c:145: warning: passing argument 2 of 'xQueueGiveFromISR' makes pointer from integer without a cast
+main.c: In function 'frequencyISR':
+main.c:167: warning: passing argument 3 of 'xQueueGenericSendFromISR' makes pointer from integer without a cast
+main.c:170: warning: passing argument 2 of 'xQueueGiveFromISR' makes pointer from integer without a cast
+main.c: In function 'ps2ISR':
+main.c:185: warning: passing argument 2 of 'xQueueGenericSendFromISR' makes pointer from integer without a cast
+main.c:185: warning: passing argument 3 of 'xQueueGenericSendFromISR' makes pointer from integer without a cast
+main.c: In function 'checkNewFrequencyValues':
+main.c:209: warning: passing argument 2 of 'xQueueGenericReceive' discards qualifiers from pointer target type
+main.c:222: warning: operation on 'frequencyIndex' may be undefined
+main.c: In function 'handleReactionTimer':
+main.c:229: warning: passing argument 2 of 'xQueueGenericReceive' makes pointer from integer without a cast
+main.c: In function 'highestBit':
+main.c:274: warning: return makes integer from pointer without a cast
+main.c: In function 'lowestBit':
+main.c:289: warning: return makes integer from pointer without a cast
+main.c: In function 'keyboardLogicTask':
+main.c:351: warning: passing argument 2 of 'xQueueGenericReceive' makes pointer from integer without a cast
+main.c: In function 'computeTask':
+main.c:420: warning: passing argument 2 of 'xQueueGenericSend' makes pointer from integer without a cast
+main.c: In function 'outputLogicTask':
+main.c:472: warning: comparison between pointer and integer
+main.c:491: warning: passing argument 4 of 'alt_alarm_start' makes pointer from integer without a cast
+main.c:513: warning: comparison between pointer and integer
+main.c:532: warning: passing argument 4 of 'alt_alarm_start' makes pointer from integer without a cast
+main.c: In function 'initButtonsPIO':
+main.c:698: warning: passing argument 2 of 'alt_irq_register' makes pointer from integer without a cast
+main.c:698: warning: passing argument 3 of 'alt_irq_register' from incompatible pointer type
+main.c: In function 'initFrequency':
+main.c:706: warning: passing argument 2 of 'alt_irq_register' makes pointer from integer without a cast
+main.c:706: warning: passing argument 3 of 'alt_irq_register' from incompatible pointer type
+main.c: In function 'initKeyboard':
+main.c:727: warning: passing argument 3 of 'alt_irq_register' from incompatible pointer type
+      0 [main] true 10696 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] echo 9640 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Linking CS723_Assignment1.elf
+nios2-elf-g++  -T'H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//linker.x' -msys-crt0='H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//obj/HAL/src/crt0.o' -msys-lib=hal_bsp -LH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/   -Wl,-Map=CS723_Assignment1.map   -O0 -g -Wall   -EL -mhw-div -mhw-mul -mno-hw-mulx  -o CS723_Assignment1.elf obj/default/FreeRTOS/croutine.o obj/default/FreeRTOS/event_groups.o obj/default/FreeRTOS/heap.o obj/default/FreeRTOS/list.o obj/default/FreeRTOS/port.o obj/default/FreeRTOS/queue.o obj/default/FreeRTOS/tasks.o obj/default/FreeRTOS/timers.o obj/default/main.o obj/default/FreeRTOS/port_asm.o -lm 
+nios2-elf-insert CS723_Assignment1.elf --thread_model hal --cpu_name nios2 --qsys true --simulation_enabled false --id 7 --sidp 0x430f0 --timestamp 1393900972 --stderr_dev jtag_uart --stdin_dev jtag_uart --stdout_dev jtag_uart --sopc_system_name nios2 --quartus_project_dir "h:/COMPSYS_723/Project_workspace/SOPC_files" --sopcinfo H:/COMPSYS_723/Project_workspace/SOPC_files/nios2.sopcinfo
+      0 [main] sh 7516 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] uname 1132 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 11760 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: (CS723_Assignment1.elf) 625 KBytes program size (code + initialized data).
+Info:                         130558 KBytes free for stack + heap.
+      1 [main] echo 9840 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Creating CS723_Assignment1.objdump
+nios2-elf-objdump --disassemble --syms --all-header --source CS723_Assignment1.elf >CS723_Assignment1.objdump
+      1 [main] sh 5696 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] sh 656 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[CS723_Assignment1 build complete]
+
+**** Build Finished ****
+
+**** Build of configuration Nios II for project CS723_Assignment1_bsp ****
+
+make all 
+      1 [main] pwd 9344 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 4768 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] sh 11424 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[BSP build complete]
+
+**** Build Finished ****
+
+**** Build of configuration Nios II for project CS723_Assignment1 ****
+
+make all 
+      1 [main] sh 12008 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 7176 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 3104 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 10672 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] echo 11504 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+Info: Building H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+the public mailing list cygwin@cygwin.com
+make --no-print-directory -C H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+      1 [main] pwd 3800 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 10848 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 756 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[BSP build complete]
+      1 [main] true 5880 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 11864 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[CS723_Assignment1 build complete]
+
+**** Build Finished ****
+
+**** Build of configuration Nios II for project CS723_Assignment1 ****
+
+make all 
+      1 [main] sh 12268 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 6932 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 3112 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 10092 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] echo 1796 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Building H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+make --no-print-directory -C H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+      1 [main] pwd 10480 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 2476 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 10956 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[BSP build complete]
+      0 [main] echo 3800 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Compiling main.c to obj/default/main.o
+      0 [main] mkdir 11924 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+nios2-elf-gcc -xc -MP -MMD -c -IH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//HAL/inc -IH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/ -IH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//drivers/inc  -DSYSTEM_BUS_WIDTH=32 -pipe -D__hal__ -DALT_NO_INSTRUCTION_EMULATION -DALT_SINGLE_THREADED    -O0 -g -Wall   -EL -mhw-div -mhw-mul -mno-hw-mulx  -o obj/default/main.o main.c
+main.c:71: warning: type defaults to 'int' in declaration of 'reactionTimes'
+main.c:72: warning: type defaults to 'int' in declaration of 'frequencyData'
+main.c:73: warning: type defaults to 'int' in declaration of 'rateOfChangeData'
+main.c: In function 'timer500ISR':
+main.c:130: warning: passing argument 2 of 'xQueueGiveFromISR' makes pointer from integer without a cast
+main.c: In function 'buttonsISR':
+main.c:145: warning: passing argument 2 of 'xQueueGiveFromISR' makes pointer from integer without a cast
+main.c: In function 'frequencyISR':
+main.c:167: warning: passing argument 3 of 'xQueueGenericSendFromISR' makes pointer from integer without a cast
+main.c:170: warning: passing argument 2 of 'xQueueGiveFromISR' makes pointer from integer without a cast
+main.c: In function 'ps2ISR':
+main.c:185: warning: passing argument 2 of 'xQueueGenericSendFromISR' makes pointer from integer without a cast
+main.c:185: warning: passing argument 3 of 'xQueueGenericSendFromISR' makes pointer from integer without a cast
+main.c: In function 'checkNewFrequencyValues':
+main.c:209: warning: passing argument 2 of 'xQueueGenericReceive' discards qualifiers from pointer target type
+main.c:222: warning: operation on 'frequencyIndex' may be undefined
+main.c: In function 'handleReactionTimer':
+main.c:229: warning: passing argument 2 of 'xQueueGenericReceive' makes pointer from integer without a cast
+main.c: In function 'highestBit':
+main.c:274: warning: return makes integer from pointer without a cast
+main.c: In function 'lowestBit':
+main.c:289: warning: return makes integer from pointer without a cast
+main.c: In function 'keyboardLogicTask':
+main.c:351: warning: passing argument 2 of 'xQueueGenericReceive' makes pointer from integer without a cast
+main.c: In function 'computeTask':
+main.c:419: warning: passing argument 2 of 'xQueueGenericSend' makes pointer from integer without a cast
+main.c: In function 'outputLogicTask':
+main.c:473: warning: comparison between pointer and integer
+main.c:492: warning: passing argument 4 of 'alt_alarm_start' makes pointer from integer without a cast
+main.c:516: warning: comparison between pointer and integer
+main.c:535: warning: passing argument 4 of 'alt_alarm_start' makes pointer from integer without a cast
+main.c: In function 'initButtonsPIO':
+main.c:701: warning: passing argument 2 of 'alt_irq_register' makes pointer from integer without a cast
+main.c:701: warning: passing argument 3 of 'alt_irq_register' from incompatible pointer type
+main.c: In function 'initFrequency':
+main.c:709: warning: passing argument 2 of 'alt_irq_register' makes pointer from integer without a cast
+main.c:709: warning: passing argument 3 of 'alt_irq_register' from incompatible pointer type
+main.c: In function 'initKeyboard':
+main.c:730: warning: passing argument 3 of 'alt_irq_register' from incompatible pointer type
+      1 [main] true 9836 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] echo 7516 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Linking CS723_Assignment1.elf
+nios2-elf-g++  -T'H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//linker.x' -msys-crt0='H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//obj/HAL/src/crt0.o' -msys-lib=hal_bsp -LH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/   -Wl,-Map=CS723_Assignment1.map   -O0 -g -Wall   -EL -mhw-div -mhw-mul -mno-hw-mulx  -o CS723_Assignment1.elf obj/default/FreeRTOS/croutine.o obj/default/FreeRTOS/event_groups.o obj/default/FreeRTOS/heap.o obj/default/FreeRTOS/list.o obj/default/FreeRTOS/port.o obj/default/FreeRTOS/queue.o obj/default/FreeRTOS/tasks.o obj/default/FreeRTOS/timers.o obj/default/main.o obj/default/FreeRTOS/port_asm.o -lm 
+nios2-elf-insert CS723_Assignment1.elf --thread_model hal --cpu_name nios2 --qsys true --simulation_enabled false --id 7 --sidp 0x430f0 --timestamp 1393900972 --stderr_dev jtag_uart --stdin_dev jtag_uart --stdout_dev jtag_uart --sopc_system_name nios2 --quartus_project_dir "h:/COMPSYS_723/Project_workspace/SOPC_files" --sopcinfo H:/COMPSYS_723/Project_workspace/SOPC_files/nios2.sopcinfo
+      1 [main] sh 8744 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] uname 9532 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 8380 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: (CS723_Assignment1.elf) 625 KBytes program size (code + initialized data).
+Info:                         130558 KBytes free for stack + heap.
+      1 [main] echo 10416 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Creating CS723_Assignment1.objdump
+nios2-elf-objdump --disassemble --syms --all-header --source CS723_Assignment1.elf >CS723_Assignment1.objdump
+      1 [main] sh 11676 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 11596 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[CS723_Assignment1 build complete]
+
+**** Build Finished ****
+
+**** Build of configuration Nios II for project CS723_Assignment1_bsp ****
+
+make all 
+      1 [main] pwd 11304 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] sh 6088 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] sh 9276 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[BSP build complete]
+
+**** Build Finished ****
+
+**** Build of configuration Nios II for project CS723_Assignment1 ****
+
+make all 
+      0 [main] sh 11100 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 11384 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 8212 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 8956 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] echo 2220 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Building H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+make --no-print-directory -C H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+      0 [main] pwd 1772 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] sh 10296 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 10848 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[BSP build complete]
+      1 [main] true 10948 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 1708 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[CS723_Assignment1 build complete]
+
+**** Build Finished ****
+
+**** Build of configuration Nios II for project CS723_Assignment1 ****
+
+make all 
+      1 [main] sh 11820 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] sh 7056 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] sh 11856 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] sh 2496 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] echo 3652 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Building H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+make --no-print-directory -C H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+      1 [main] pwd 1368 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 12024 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] sh 11676 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[BSP build complete]
+      1 [main] echo 10948 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Compiling main.c to obj/default/main.o
+      0 [main] mkdir 11712 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+nios2-elf-gcc -xc -MP -MMD -c -IH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//HAL/inc -IH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/ -IH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//drivers/inc  -DSYSTEM_BUS_WIDTH=32 -pipe -D__hal__ -DALT_NO_INSTRUCTION_EMULATION -DALT_SINGLE_THREADED    -O0 -g -Wall   -EL -mhw-div -mhw-mul -mno-hw-mulx  -o obj/default/main.o main.c
+main.c:71: warning: type defaults to 'int' in declaration of 'reactionTimes'
+main.c:72: warning: type defaults to 'int' in declaration of 'frequencyData'
+main.c:73: warning: type defaults to 'int' in declaration of 'rateOfChangeData'
+main.c: In function 'timer500ISR':
+main.c:130: warning: passing argument 2 of 'xQueueGiveFromISR' makes pointer from integer without a cast
+main.c: In function 'buttonsISR':
+main.c:145: warning: passing argument 2 of 'xQueueGiveFromISR' makes pointer from integer without a cast
+main.c: In function 'frequencyISR':
+main.c:167: warning: passing argument 3 of 'xQueueGenericSendFromISR' makes pointer from integer without a cast
+main.c:170: warning: passing argument 2 of 'xQueueGiveFromISR' makes pointer from integer without a cast
+main.c: In function 'ps2ISR':
+main.c:185: warning: passing argument 2 of 'xQueueGenericSendFromISR' makes pointer from integer without a cast
+main.c:185: warning: passing argument 3 of 'xQueueGenericSendFromISR' makes pointer from integer without a cast
+main.c: In function 'checkNewFrequencyValues':
+main.c:209: warning: passing argument 2 of 'xQueueGenericReceive' discards qualifiers from pointer target type
+main.c:222: warning: operation on 'frequencyIndex' may be undefined
+main.c: In function 'handleReactionTimer':
+main.c:229: warning: passing argument 2 of 'xQueueGenericReceive' makes pointer from integer without a cast
+main.c: In function 'highestBit':
+main.c:274: warning: return makes integer from pointer without a cast
+main.c: In function 'lowestBit':
+main.c:289: warning: return makes integer from pointer without a cast
+main.c: In function 'keyboardLogicTask':
+main.c:351: warning: passing argument 2 of 'xQueueGenericReceive' makes pointer from integer without a cast
+main.c: In function 'computeTask':
+main.c:419: warning: passing argument 2 of 'xQueueGenericSend' makes pointer from integer without a cast
+main.c:429: warning: implicit declaration of function 'uxSemaphoreGetCount'
+main.c: In function 'outputLogicTask':
+main.c:476: warning: comparison between pointer and integer
+main.c:495: warning: passing argument 4 of 'alt_alarm_start' makes pointer from integer without a cast
+main.c:519: warning: comparison between pointer and integer
+main.c:538: warning: passing argument 4 of 'alt_alarm_start' makes pointer from integer without a cast
+main.c: In function 'initButtonsPIO':
+main.c:704: warning: passing argument 2 of 'alt_irq_register' makes pointer from integer without a cast
+main.c:704: warning: passing argument 3 of 'alt_irq_register' from incompatible pointer type
+main.c: In function 'initFrequency':
+main.c:712: warning: passing argument 2 of 'alt_irq_register' makes pointer from integer without a cast
+main.c:712: warning: passing argument 3 of 'alt_irq_register' from incompatible pointer type
+main.c: In function 'initKeyboard':
+main.c:733: warning: passing argument 3 of 'alt_irq_register' from incompatible pointer type
+      1 [main] true 9960 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] echo 12188 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Linking CS723_Assignment1.elf
+nios2-elf-g++  -T'H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//linker.x' -msys-crt0='H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//obj/HAL/src/crt0.o' -msys-lib=hal_bsp -LH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/   -Wl,-Map=CS723_Assignment1.map   -O0 -g -Wall   -EL -mhw-div -mhw-mul -mno-hw-mulx  -o CS723_Assignment1.elf obj/default/FreeRTOS/croutine.o obj/default/FreeRTOS/event_groups.o obj/default/FreeRTOS/heap.o obj/default/FreeRTOS/list.o obj/default/FreeRTOS/port.o obj/default/FreeRTOS/queue.o obj/default/FreeRTOS/tasks.o obj/default/FreeRTOS/timers.o obj/default/main.o obj/default/FreeRTOS/port_asm.o -lm 
+obj/default/main.o: In function `computeTask':
+H:\COMPSYS_723\Project_workspace\CS723_Assignment1/main.c:429: undefined reference to `uxSemaphoreGetCount'
+obj/default/main.o: In function `outputLogicTask':
+H:\COMPSYS_723\Project_workspace\CS723_Assignment1/main.c:448: undefined reference to `uxSemaphoreGetCount'
+collect2: ld returned 1 exit status
+make: *** [CS723_Assignment1.elf] Error 1
+
+**** Build Finished ****
+
+**** Build of configuration Nios II for project CS723_Assignment1 ****
+
+make all 
+      1 [main] sh 5936 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] sh 916 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 5316 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 3160 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] echo 4348 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Building H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+make --no-print-directory -C H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+      1 [main] pwd 12036 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 11856 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 1648 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[BSP build complete]
+      1 [main] echo 7424 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Compiling main.c to obj/default/main.o
+      1 [main] mkdir 9440 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+nios2-elf-gcc -xc -MP -MMD -c -IH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//HAL/inc -IH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/ -IH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//drivers/inc  -DSYSTEM_BUS_WIDTH=32 -pipe -D__hal__ -DALT_NO_INSTRUCTION_EMULATION -DALT_SINGLE_THREADED    -O0 -g -Wall   -EL -mhw-div -mhw-mul -mno-hw-mulx  -o obj/default/main.o main.c
+main.c:71: warning: type defaults to 'int' in declaration of 'reactionTimes'
+main.c:72: warning: type defaults to 'int' in declaration of 'frequencyData'
+main.c:73: warning: type defaults to 'int' in declaration of 'rateOfChangeData'
+main.c: In function 'timer500ISR':
+main.c:131: warning: passing argument 2 of 'xQueueGiveFromISR' makes pointer from integer without a cast
+main.c: In function 'buttonsISR':
+main.c:146: warning: passing argument 2 of 'xQueueGiveFromISR' makes pointer from integer without a cast
+main.c: In function 'frequencyISR':
+main.c:168: warning: passing argument 3 of 'xQueueGenericSendFromISR' makes pointer from integer without a cast
+main.c:171: warning: passing argument 2 of 'xQueueGiveFromISR' makes pointer from integer without a cast
+main.c: In function 'ps2ISR':
+main.c:186: warning: passing argument 2 of 'xQueueGenericSendFromISR' makes pointer from integer without a cast
+main.c:186: warning: passing argument 3 of 'xQueueGenericSendFromISR' makes pointer from integer without a cast
+main.c: In function 'checkNewFrequencyValues':
+main.c:210: warning: passing argument 2 of 'xQueueGenericReceive' discards qualifiers from pointer target type
+main.c:223: warning: operation on 'frequencyIndex' may be undefined
+main.c: In function 'handleReactionTimer':
+main.c:230: warning: passing argument 2 of 'xQueueGenericReceive' makes pointer from integer without a cast
+main.c: In function 'highestBit':
+main.c:275: warning: return makes integer from pointer without a cast
+main.c: In function 'lowestBit':
+main.c:290: warning: return makes integer from pointer without a cast
+main.c: In function 'keyboardLogicTask':
+main.c:352: warning: passing argument 2 of 'xQueueGenericReceive' makes pointer from integer without a cast
+main.c: In function 'computeTask':
+main.c:420: warning: passing argument 2 of 'xQueueGenericSend' makes pointer from integer without a cast
+main.c: In function 'outputLogicTask':
+main.c:477: warning: comparison between pointer and integer
+main.c:496: warning: passing argument 4 of 'alt_alarm_start' makes pointer from integer without a cast
+main.c:520: warning: comparison between pointer and integer
+main.c:539: warning: passing argument 4 of 'alt_alarm_start' makes pointer from integer without a cast
+main.c: In function 'initButtonsPIO':
+main.c:705: warning: passing argument 2 of 'alt_irq_register' makes pointer from integer without a cast
+main.c:705: warning: passing argument 3 of 'alt_irq_register' from incompatible pointer type
+main.c: In function 'initFrequency':
+main.c:713: warning: passing argument 2 of 'alt_irq_register' makes pointer from integer without a cast
+main.c:713: warning: passing argument 3 of 'alt_irq_register' from incompatible pointer type
+main.c: In function 'initKeyboard':
+main.c:734: warning: passing argument 3 of 'alt_irq_register' from incompatible pointer type
+      0 [main] true 10696 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] echo 10828 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+Info: Linking CS723_Assignment1.elf
+the public mailing list cygwin@cygwin.com
+nios2-elf-g++  -T'H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//linker.x' -msys-crt0='H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//obj/HAL/src/crt0.o' -msys-lib=hal_bsp -LH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/   -Wl,-Map=CS723_Assignment1.map   -O0 -g -Wall   -EL -mhw-div -mhw-mul -mno-hw-mulx  -o CS723_Assignment1.elf obj/default/FreeRTOS/croutine.o obj/default/FreeRTOS/event_groups.o obj/default/FreeRTOS/heap.o obj/default/FreeRTOS/list.o obj/default/FreeRTOS/port.o obj/default/FreeRTOS/queue.o obj/default/FreeRTOS/tasks.o obj/default/FreeRTOS/timers.o obj/default/main.o obj/default/FreeRTOS/port_asm.o -lm 
+nios2-elf-insert CS723_Assignment1.elf --thread_model hal --cpu_name nios2 --qsys true --simulation_enabled false --id 7 --sidp 0x430f0 --timestamp 1393900972 --stderr_dev jtag_uart --stdin_dev jtag_uart --stdout_dev jtag_uart --sopc_system_name nios2 --quartus_project_dir "h:/COMPSYS_723/Project_workspace/SOPC_files" --sopcinfo H:/COMPSYS_723/Project_workspace/SOPC_files/nios2.sopcinfo
+      1 [main] sh 8508 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] uname 7176 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 5884 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: (CS723_Assignment1.elf) 625 KBytes program size (code + initialized data).
+Info:                         130558 KBytes free for stack + heap.
+      0 [main] echo 1692 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Creating CS723_Assignment1.objdump
+nios2-elf-objdump --disassemble --syms --all-header --source CS723_Assignment1.elf >CS723_Assignment1.objdump
+      1 [main] sh 4384 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 2436 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[CS723_Assignment1 build complete]
+
+**** Build Finished ****
+
+**** Build of configuration Nios II for project CS723_Assignment1 ****
+
+make all 
+      1 [main] sh 11972 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] sh 5492 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 4616 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 8620 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] echo 9452 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+Info: Building H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+the public mailing list cygwin@cygwin.com
+make --no-print-directory -C H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+      1 [main] pwd 7600 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 8340 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 8764 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[BSP build complete]
+      1 [main] true 6496 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 5880 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[CS723_Assignment1 build complete]
+
+**** Build Finished ****
+
+**** Build of configuration Nios II for project CS723_Assignment1_bsp ****
+
+make all 
+      1 [main] pwd 10716 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] sh 12208 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 11932 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[BSP build complete]
+
+**** Build Finished ****
+
+**** Build of configuration Nios II for project CS723_Assignment1 ****
+
+make all 
+      0 [main] sh 3160 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 4504 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 4992 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 11200 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] echo 9656 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Building H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+make --no-print-directory -C H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+      1 [main] pwd 6388 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] sh 9228 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 10108 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[BSP build complete]
+      0 [main] true 12052 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 11932 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[CS723_Assignment1 build complete]
+
+**** Build Finished ****
+
+**** Build of configuration Nios II for project CS723_Assignment1 ****
+
+make all 
+      1 [main] sh 10904 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 10680 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 8528 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 12068 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] echo 8712 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Building H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+make --no-print-directory -C H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+      1 [main] pwd 9592 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 11068 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 10148 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[BSP build complete]
+      1 [main] true 10064 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] sh 9836 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[CS723_Assignment1 build complete]
+
+**** Build Finished ****
+
+**** Build of configuration Nios II for project CS723_Assignment1_bsp ****
+
+make all 
+      0 [main] pwd 9164 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 1496 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 6572 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[BSP build complete]
+
+**** Build Finished ****
+
+**** Build of configuration Nios II for project CS723_Assignment1 ****
+
+make all 
+      1 [main] sh 11924 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 1084 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 10296 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 3380 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] echo 10832 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Building H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+make --no-print-directory -C H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+      0 [main] pwd 9404 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] sh 10680 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 3720 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[BSP build complete]
+      1 [main] echo 11840 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+Info: Compiling main.c to obj/default/main.o
+the public mailing list cygwin@cygwin.com
+      1 [main] mkdir 9784 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+nios2-elf-gcc -xc -MP -MMD -c -IH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//HAL/inc -IH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/ -IH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//drivers/inc  -DSYSTEM_BUS_WIDTH=32 -pipe -D__hal__ -DALT_NO_INSTRUCTION_EMULATION -DALT_SINGLE_THREADED    -O0 -g -Wall   -EL -mhw-div -mhw-mul -mno-hw-mulx  -o obj/default/main.o main.c
+main.c:71: warning: type defaults to 'int' in declaration of 'reactionTimes'
+main.c:72: warning: type defaults to 'int' in declaration of 'frequencyData'
+main.c:73: warning: type defaults to 'int' in declaration of 'rateOfChangeData'
+main.c: In function 'timer500ISR':
+main.c:131: warning: passing argument 2 of 'xQueueGiveFromISR' makes pointer from integer without a cast
+main.c: In function 'buttonsISR':
+main.c:146: warning: passing argument 2 of 'xQueueGiveFromISR' makes pointer from integer without a cast
+main.c: In function 'frequencyISR':
+main.c:168: warning: passing argument 3 of 'xQueueGenericSendFromISR' makes pointer from integer without a cast
+main.c:171: warning: passing argument 2 of 'xQueueGiveFromISR' makes pointer from integer without a cast
+main.c: In function 'ps2ISR':
+main.c:186: warning: passing argument 2 of 'xQueueGenericSendFromISR' makes pointer from integer without a cast
+main.c:186: warning: passing argument 3 of 'xQueueGenericSendFromISR' makes pointer from integer without a cast
+main.c: In function 'checkNewFrequencyValues':
+main.c:210: warning: passing argument 2 of 'xQueueGenericReceive' discards qualifiers from pointer target type
+main.c:223: warning: operation on 'frequencyIndex' may be undefined
+main.c: In function 'handleReactionTimer':
+main.c:230: warning: passing argument 2 of 'xQueueGenericReceive' makes pointer from integer without a cast
+main.c: In function 'highestBit':
+main.c:275: warning: return makes integer from pointer without a cast
+main.c: In function 'lowestBit':
+main.c:290: warning: return makes integer from pointer without a cast
+main.c: In function 'keyboardLogicTask':
+main.c:352: warning: passing argument 2 of 'xQueueGenericReceive' makes pointer from integer without a cast
+main.c: In function 'computeTask':
+main.c:420: warning: passing argument 2 of 'xQueueGenericSend' makes pointer from integer without a cast
+main.c: In function 'outputLogicTask':
+main.c:477: warning: comparison between pointer and integer
+main.c:496: warning: passing argument 4 of 'alt_alarm_start' makes pointer from integer without a cast
+main.c:520: warning: comparison between pointer and integer
+main.c:539: warning: passing argument 4 of 'alt_alarm_start' makes pointer from integer without a cast
+main.c: In function 'initButtonsPIO':
+main.c:705: warning: passing argument 2 of 'alt_irq_register' makes pointer from integer without a cast
+main.c:705: warning: passing argument 3 of 'alt_irq_register' from incompatible pointer type
+main.c: In function 'initFrequency':
+main.c:713: warning: passing argument 2 of 'alt_irq_register' makes pointer from integer without a cast
+main.c:713: warning: passing argument 3 of 'alt_irq_register' from incompatible pointer type
+main.c: In function 'initKeyboard':
+main.c:734: warning: passing argument 3 of 'alt_irq_register' from incompatible pointer type
+      0 [main] true 12184 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] echo 2552 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Linking CS723_Assignment1.elf
+nios2-elf-g++  -T'H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//linker.x' -msys-crt0='H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//obj/HAL/src/crt0.o' -msys-lib=hal_bsp -LH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/   -Wl,-Map=CS723_Assignment1.map   -O0 -g -Wall   -EL -mhw-div -mhw-mul -mno-hw-mulx  -o CS723_Assignment1.elf obj/default/FreeRTOS/croutine.o obj/default/FreeRTOS/event_groups.o obj/default/FreeRTOS/heap.o obj/default/FreeRTOS/list.o obj/default/FreeRTOS/port.o obj/default/FreeRTOS/queue.o obj/default/FreeRTOS/tasks.o obj/default/FreeRTOS/timers.o obj/default/main.o obj/default/FreeRTOS/port_asm.o -lm 
+nios2-elf-insert CS723_Assignment1.elf --thread_model hal --cpu_name nios2 --qsys true --simulation_enabled false --id 7 --sidp 0x430f0 --timestamp 1393900972 --stderr_dev jtag_uart --stdin_dev jtag_uart --stdout_dev jtag_uart --sopc_system_name nios2 --quartus_project_dir "h:/COMPSYS_723/Project_workspace/SOPC_files" --sopcinfo H:/COMPSYS_723/Project_workspace/SOPC_files/nios2.sopcinfo
+      0 [main] sh 8928 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] uname 11572 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 5936 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: (CS723_Assignment1.elf) 625 KBytes program size (code + initialized data).
+Info:                         130558 KBytes free for stack + heap.
+      1 [main] echo 11864 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Creating CS723_Assignment1.objdump
+nios2-elf-objdump --disassemble --syms --all-header --source CS723_Assignment1.elf >CS723_Assignment1.objdump
+      0 [main] sh 10552 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 12068 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[CS723_Assignment1 build complete]
+
+**** Build Finished ****
+
+**** Build of configuration Nios II for project CS723_Assignment1 ****
+
+make all 
+      0 [main] sh 12204 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 9868 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 3020 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] sh 900 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] echo 12188 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+Info: Building H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+the public mailing list cygwin@cygwin.com
+make --no-print-directory -C H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+      0 [main] pwd 9100 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 7452 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 1084 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[BSP build complete]
+      1 [main] true 11600 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] sh 11248 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[CS723_Assignment1 build complete]
+
+**** Build Finished ****
+
+**** Build of configuration Nios II for project CS723_Assignment1 ****
+
+make all 
+      0 [main] sh 10716 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] sh 10712 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 12208 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 9584 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] echo 12168 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Building H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+make --no-print-directory -C H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+      1 [main] pwd 11108 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 7692 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] sh 1028 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[BSP build complete]
+      1 [main] echo 5788 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Compiling main.c to obj/default/main.o
+      1 [main] mkdir 6068 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+nios2-elf-gcc -xc -MP -MMD -c -IH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//HAL/inc -IH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/ -IH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//drivers/inc  -DSYSTEM_BUS_WIDTH=32 -pipe -D__hal__ -DALT_NO_INSTRUCTION_EMULATION -DALT_SINGLE_THREADED    -O0 -g -Wall   -EL -mhw-div -mhw-mul -mno-hw-mulx  -o obj/default/main.o main.c
+main.c:71: warning: type defaults to 'int' in declaration of 'reactionTimes'
+main.c:72: warning: type defaults to 'int' in declaration of 'frequencyData'
+main.c:73: warning: type defaults to 'int' in declaration of 'rateOfChangeData'
+main.c: In function 'timer500ISR':
+main.c:131: warning: passing argument 2 of 'xQueueGiveFromISR' makes pointer from integer without a cast
+main.c: In function 'buttonsISR':
+main.c:147: warning: passing argument 2 of 'xQueueGiveFromISR' makes pointer from integer without a cast
+main.c: In function 'frequencyISR':
+main.c:169: warning: passing argument 3 of 'xQueueGenericSendFromISR' makes pointer from integer without a cast
+main.c:173: warning: passing argument 2 of 'xQueueGiveFromISR' makes pointer from integer without a cast
+main.c: In function 'ps2ISR':
+main.c:188: warning: passing argument 2 of 'xQueueGenericSendFromISR' makes pointer from integer without a cast
+main.c:188: warning: passing argument 3 of 'xQueueGenericSendFromISR' makes pointer from integer without a cast
+main.c: In function 'checkNewFrequencyValues':
+main.c:212: warning: passing argument 2 of 'xQueueGenericReceive' discards qualifiers from pointer target type
+main.c:225: warning: operation on 'frequencyIndex' may be undefined
+main.c: In function 'handleReactionTimer':
+main.c:232: warning: passing argument 2 of 'xQueueGenericReceive' makes pointer from integer without a cast
+main.c: In function 'highestBit':
+main.c:277: warning: return makes integer from pointer without a cast
+main.c: In function 'lowestBit':
+main.c:292: warning: return makes integer from pointer without a cast
+main.c: In function 'keyboardLogicTask':
+main.c:355: warning: passing argument 2 of 'xQueueGenericReceive' makes pointer from integer without a cast
+main.c: In function 'computeTask':
+main.c:423: warning: passing argument 2 of 'xQueueGenericSend' makes pointer from integer without a cast
+main.c: In function 'outputLogicTask':
+main.c:480: warning: comparison between pointer and integer
+main.c:499: warning: passing argument 4 of 'alt_alarm_start' makes pointer from integer without a cast
+main.c:523: warning: comparison between pointer and integer
+main.c:542: warning: passing argument 4 of 'alt_alarm_start' makes pointer from integer without a cast
+main.c: In function 'initButtonsPIO':
+main.c:708: warning: passing argument 2 of 'alt_irq_register' makes pointer from integer without a cast
+main.c:708: warning: passing argument 3 of 'alt_irq_register' from incompatible pointer type
+main.c: In function 'initFrequency':
+main.c:716: warning: passing argument 2 of 'alt_irq_register' makes pointer from integer without a cast
+main.c:716: warning: passing argument 3 of 'alt_irq_register' from incompatible pointer type
+main.c: In function 'initKeyboard':
+main.c:737: warning: passing argument 3 of 'alt_irq_register' from incompatible pointer type
+      1 [main] true 2436 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] echo 3424 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Linking CS723_Assignment1.elf
+nios2-elf-g++  -T'H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//linker.x' -msys-crt0='H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//obj/HAL/src/crt0.o' -msys-lib=hal_bsp -LH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/   -Wl,-Map=CS723_Assignment1.map   -O0 -g -Wall   -EL -mhw-div -mhw-mul -mno-hw-mulx  -o CS723_Assignment1.elf obj/default/FreeRTOS/croutine.o obj/default/FreeRTOS/event_groups.o obj/default/FreeRTOS/heap.o obj/default/FreeRTOS/list.o obj/default/FreeRTOS/port.o obj/default/FreeRTOS/queue.o obj/default/FreeRTOS/tasks.o obj/default/FreeRTOS/timers.o obj/default/main.o obj/default/FreeRTOS/port_asm.o -lm 
+nios2-elf-insert CS723_Assignment1.elf --thread_model hal --cpu_name nios2 --qsys true --simulation_enabled false --id 7 --sidp 0x430f0 --timestamp 1393900972 --stderr_dev jtag_uart --stdin_dev jtag_uart --stdout_dev jtag_uart --sopc_system_name nios2 --quartus_project_dir "h:/COMPSYS_723/Project_workspace/SOPC_files" --sopcinfo H:/COMPSYS_723/Project_workspace/SOPC_files/nios2.sopcinfo
+      1 [main] sh 9548 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] uname 11248 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 8508 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: (CS723_Assignment1.elf) 626 KBytes program size (code + initialized data).
+Info:                         130558 KBytes free for stack + heap.
+      1 [main] echo 7316 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Creating CS723_Assignment1.objdump
+nios2-elf-objdump --disassemble --syms --all-header --source CS723_Assignment1.elf >CS723_Assignment1.objdump
+      1 [main] sh 11840 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 11820 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[CS723_Assignment1 build complete]
+
+**** Build Finished ****
+
+**** Build of configuration Nios II for project CS723_Assignment1_bsp ****
+
+make all 
+      1 [main] pwd 4104 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 8448 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 11236 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[BSP build complete]
+
+**** Build Finished ****
+
+**** Build of configuration Nios II for project CS723_Assignment1 ****
+
+make all 
+      0 [main] sh 7128 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 11780 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 12148 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      2 [main] sh 10768 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] echo 8956 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Building H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+make --no-print-directory -C H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+      1 [main] pwd 180 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 1788 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 4348 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[BSP build complete]
+      1 [main] true 11236 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] sh 3112 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[CS723_Assignment1 build complete]
+
+**** Build Finished ****
+
+**** Build of configuration Nios II for project CS723_Assignment1 ****
+
+make all 
+      1 [main] sh 12276 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] sh 6248 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 10948 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 9996 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] echo 11576 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Building H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+make --no-print-directory -C H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+      1 [main] pwd 180 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 11504 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 1368 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[BSP build complete]
+      0 [main] echo 7452 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Compiling main.c to obj/default/main.o
+      1 [main] mkdir 11572 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+nios2-elf-gcc -xc -MP -MMD -c -IH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//HAL/inc -IH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/ -IH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//drivers/inc  -DSYSTEM_BUS_WIDTH=32 -pipe -D__hal__ -DALT_NO_INSTRUCTION_EMULATION -DALT_SINGLE_THREADED    -O0 -g -Wall   -EL -mhw-div -mhw-mul -mno-hw-mulx  -o obj/default/main.o main.c
+main.c:71: warning: type defaults to 'int' in declaration of 'reactionTimes'
+main.c:72: warning: type defaults to 'int' in declaration of 'frequencyData'
+main.c:73: warning: type defaults to 'int' in declaration of 'rateOfChangeData'
+main.c: In function 'timer500ISR':
+main.c:131: warning: passing argument 2 of 'xQueueGiveFromISR' makes pointer from integer without a cast
+main.c: In function 'buttonsISR':
+main.c:147: warning: passing argument 2 of 'xQueueGiveFromISR' makes pointer from integer without a cast
+main.c: In function 'frequencyISR':
+main.c:169: warning: passing argument 3 of 'xQueueGenericSendFromISR' makes pointer from integer without a cast
+main.c:173: warning: passing argument 2 of 'xQueueGiveFromISR' makes pointer from integer without a cast
+main.c: In function 'ps2ISR':
+main.c:188: warning: passing argument 2 of 'xQueueGenericSendFromISR' makes pointer from integer without a cast
+main.c:188: warning: passing argument 3 of 'xQueueGenericSendFromISR' makes pointer from integer without a cast
+main.c: In function 'checkNewFrequencyValues':
+main.c:212: warning: passing argument 2 of 'xQueueGenericReceive' discards qualifiers from pointer target type
+main.c:225: warning: operation on 'frequencyIndex' may be undefined
+main.c: In function 'handleReactionTimer':
+main.c:232: warning: passing argument 2 of 'xQueueGenericReceive' makes pointer from integer without a cast
+main.c: In function 'highestBit':
+main.c:277: warning: return makes integer from pointer without a cast
+main.c: In function 'lowestBit':
+main.c:292: warning: return makes integer from pointer without a cast
+main.c: In function 'keyboardLogicTask':
+main.c:355: warning: passing argument 2 of 'xQueueGenericReceive' makes pointer from integer without a cast
+main.c: In function 'computeTask':
+main.c:424: warning: passing argument 2 of 'xQueueGenericSend' makes pointer from integer without a cast
+main.c: In function 'outputLogicTask':
+main.c:481: warning: comparison between pointer and integer
+main.c:500: warning: passing argument 4 of 'alt_alarm_start' makes pointer from integer without a cast
+main.c:524: warning: comparison between pointer and integer
+main.c:543: warning: passing argument 4 of 'alt_alarm_start' makes pointer from integer without a cast
+main.c: In function 'initButtonsPIO':
+main.c:709: warning: passing argument 2 of 'alt_irq_register' makes pointer from integer without a cast
+main.c:709: warning: passing argument 3 of 'alt_irq_register' from incompatible pointer type
+main.c: In function 'initFrequency':
+main.c:717: warning: passing argument 2 of 'alt_irq_register' makes pointer from integer without a cast
+main.c:717: warning: passing argument 3 of 'alt_irq_register' from incompatible pointer type
+main.c: In function 'initKeyboard':
+main.c:738: warning: passing argument 3 of 'alt_irq_register' from incompatible pointer type
+      0 [main] true 12236 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] echo 11820 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Linking CS723_Assignment1.elf
+nios2-elf-g++  -T'H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//linker.x' -msys-crt0='H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//obj/HAL/src/crt0.o' -msys-lib=hal_bsp -LH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/   -Wl,-Map=CS723_Assignment1.map   -O0 -g -Wall   -EL -mhw-div -mhw-mul -mno-hw-mulx  -o CS723_Assignment1.elf obj/default/FreeRTOS/croutine.o obj/default/FreeRTOS/event_groups.o obj/default/FreeRTOS/heap.o obj/default/FreeRTOS/list.o obj/default/FreeRTOS/port.o obj/default/FreeRTOS/queue.o obj/default/FreeRTOS/tasks.o obj/default/FreeRTOS/timers.o obj/default/main.o obj/default/FreeRTOS/port_asm.o -lm 
+nios2-elf-insert CS723_Assignment1.elf --thread_model hal --cpu_name nios2 --qsys true --simulation_enabled false --id 7 --sidp 0x430f0 --timestamp 1393900972 --stderr_dev jtag_uart --stdin_dev jtag_uart --stdout_dev jtag_uart --sopc_system_name nios2 --quartus_project_dir "h:/COMPSYS_723/Project_workspace/SOPC_files" --sopcinfo H:/COMPSYS_723/Project_workspace/SOPC_files/nios2.sopcinfo
+      1 [main] sh 2064 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] uname 3556 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 4148 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: (CS723_Assignment1.elf) 626 KBytes program size (code + initialized data).
+Info:                         130558 KBytes free for stack + heap.
+      0 [main] echo 10948 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Creating CS723_Assignment1.objdump
+nios2-elf-objdump --disassemble --syms --all-header --source CS723_Assignment1.elf >CS723_Assignment1.objdump
+      1 [main] sh 880 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 9196 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[CS723_Assignment1 build complete]
+
+**** Build Finished ****
+
+**** Build of configuration Nios II for project CS723_Assignment1_bsp ****
+
+make all 
+      1 [main] pwd 6028 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 9532 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 11384 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[BSP build complete]
+
+**** Build Finished ****
+
+**** Build of configuration Nios II for project CS723_Assignment1 ****
+
+make all 
+      1 [main] sh 6132 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] sh 10704 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 11712 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 7692 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] echo 11652 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Building H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+make --no-print-directory -C H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+      1 [main] pwd 1400 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 1816 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] sh 11072 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[BSP build complete]
+      0 [main] true 9904 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 11220 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[CS723_Assignment1 build complete]
+
+**** Build Finished ****
+
+**** Build of configuration Nios II for project CS723_Assignment1 ****
+
+make all 
+      0 [main] sh 10148 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 3068 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 4384 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 3032 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] echo 3224 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+Info: Building H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+the public mailing list cygwin@cygwin.com
+make --no-print-directory -C H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+      1 [main] pwd 10360 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 1108 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 5316 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[BSP build complete]
+      1 [main] echo 888 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Compiling main.c to obj/default/main.o
+      0 [main] mkdir 8732 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+nios2-elf-gcc -xc -MP -MMD -c -IH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//HAL/inc -IH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/ -IH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//drivers/inc  -DSYSTEM_BUS_WIDTH=32 -pipe -D__hal__ -DALT_NO_INSTRUCTION_EMULATION -DALT_SINGLE_THREADED    -O0 -g -Wall   -EL -mhw-div -mhw-mul -mno-hw-mulx  -o obj/default/main.o main.c
+main.c:71: warning: type defaults to 'int' in declaration of 'reactionTimes'
+main.c:72: warning: type defaults to 'int' in declaration of 'frequencyData'
+main.c:73: warning: type defaults to 'int' in declaration of 'rateOfChangeData'
+main.c: In function 'timer500ISR':
+main.c:131: warning: passing argument 2 of 'xQueueGiveFromISR' makes pointer from integer without a cast
+main.c: In function 'buttonsISR':
+main.c:147: warning: passing argument 2 of 'xQueueGiveFromISR' makes pointer from integer without a cast
+main.c: In function 'frequencyISR':
+main.c:169: warning: passing argument 3 of 'xQueueGenericSendFromISR' makes pointer from integer without a cast
+main.c:172: warning: passing argument 2 of 'xQueueGiveFromISR' makes pointer from integer without a cast
+main.c: In function 'ps2ISR':
+main.c:187: warning: passing argument 2 of 'xQueueGenericSendFromISR' makes pointer from integer without a cast
+main.c:187: warning: passing argument 3 of 'xQueueGenericSendFromISR' makes pointer from integer without a cast
+main.c: In function 'checkNewFrequencyValues':
+main.c:211: warning: passing argument 2 of 'xQueueGenericReceive' discards qualifiers from pointer target type
+main.c:224: warning: operation on 'frequencyIndex' may be undefined
+main.c: In function 'handleReactionTimer':
+main.c:231: warning: passing argument 2 of 'xQueueGenericReceive' makes pointer from integer without a cast
+main.c: In function 'highestBit':
+main.c:276: warning: return makes integer from pointer without a cast
+main.c: In function 'lowestBit':
+main.c:291: warning: return makes integer from pointer without a cast
+main.c: In function 'keyboardLogicTask':
+main.c:354: warning: passing argument 2 of 'xQueueGenericReceive' makes pointer from integer without a cast
+main.c: In function 'computeTask':
+main.c:422: warning: passing argument 2 of 'xQueueGenericSend' makes pointer from integer without a cast
+main.c: In function 'outputLogicTask':
+main.c:479: warning: comparison between pointer and integer
+main.c:498: warning: passing argument 4 of 'alt_alarm_start' makes pointer from integer without a cast
+main.c:522: warning: comparison between pointer and integer
+main.c:541: warning: passing argument 4 of 'alt_alarm_start' makes pointer from integer without a cast
+main.c: In function 'initButtonsPIO':
+main.c:707: warning: passing argument 2 of 'alt_irq_register' makes pointer from integer without a cast
+main.c:707: warning: passing argument 3 of 'alt_irq_register' from incompatible pointer type
+main.c: In function 'initFrequency':
+main.c:715: warning: passing argument 2 of 'alt_irq_register' makes pointer from integer without a cast
+main.c:715: warning: passing argument 3 of 'alt_irq_register' from incompatible pointer type
+main.c: In function 'initKeyboard':
+main.c:736: warning: passing argument 3 of 'alt_irq_register' from incompatible pointer type
+      1 [main] true 1128 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] echo 9728 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Linking CS723_Assignment1.elf
+nios2-elf-g++  -T'H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//linker.x' -msys-crt0='H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//obj/HAL/src/crt0.o' -msys-lib=hal_bsp -LH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/   -Wl,-Map=CS723_Assignment1.map   -O0 -g -Wall   -EL -mhw-div -mhw-mul -mno-hw-mulx  -o CS723_Assignment1.elf obj/default/FreeRTOS/croutine.o obj/default/FreeRTOS/event_groups.o obj/default/FreeRTOS/heap.o obj/default/FreeRTOS/list.o obj/default/FreeRTOS/port.o obj/default/FreeRTOS/queue.o obj/default/FreeRTOS/tasks.o obj/default/FreeRTOS/timers.o obj/default/main.o obj/default/FreeRTOS/port_asm.o -lm 
+nios2-elf-insert CS723_Assignment1.elf --thread_model hal --cpu_name nios2 --qsys true --simulation_enabled false --id 7 --sidp 0x430f0 --timestamp 1393900972 --stderr_dev jtag_uart --stdin_dev jtag_uart --stdout_dev jtag_uart --sopc_system_name nios2 --quartus_project_dir "h:/COMPSYS_723/Project_workspace/SOPC_files" --sopcinfo H:/COMPSYS_723/Project_workspace/SOPC_files/nios2.sopcinfo
+      0 [main] sh 3536 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] uname 9308 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 748 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: (CS723_Assignment1.elf) 625 KBytes program size (code + initialized data).
+Info:                         130558 KBytes free for stack + heap.
+      0 [main] echo 8684 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Creating CS723_Assignment1.objdump
+nios2-elf-objdump --disassemble --syms --all-header --source CS723_Assignment1.elf >CS723_Assignment1.objdump
+      1 [main] sh 2320 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 5788 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[CS723_Assignment1 build complete]
+
+**** Build Finished ****
+
+**** Build of configuration Nios II for project CS723_Assignment1_bsp ****
+
+make all 
+      1 [main] pwd 9868 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 8264 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 9536 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[BSP build complete]
+
+**** Build Finished ****
+
+**** Build of configuration Nios II for project CS723_Assignment1 ****
+
+make all 
+      1 [main] sh 3896 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 11900 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] sh 8744 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 2652 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] echo 5884 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Building H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+make --no-print-directory -C H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+      1 [main] pwd 1900 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 1044 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 10416 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[BSP build complete]
+      1 [main] true 11304 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] sh 6572 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[CS723_Assignment1 build complete]
+
+**** Build Finished ****
+
+**** Build of configuration Nios II for project CS723_Assignment1 ****
+
+make all 
+      1 [main] sh 3800 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] sh 11328 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 7628 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 11972 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] echo 1788 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Building H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+make --no-print-directory -C H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+      1 [main] pwd 10008 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 12032 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] sh 656 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[BSP build complete]
+      1 [main] echo 11820 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Compiling main.c to obj/default/main.o
+      1 [main] mkdir 9960 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+nios2-elf-gcc -xc -MP -MMD -c -IH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//HAL/inc -IH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/ -IH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//drivers/inc  -DSYSTEM_BUS_WIDTH=32 -pipe -D__hal__ -DALT_NO_INSTRUCTION_EMULATION -DALT_SINGLE_THREADED    -O0 -g -Wall   -EL -mhw-div -mhw-mul -mno-hw-mulx  -o obj/default/main.o main.c
+main.c:71: warning: type defaults to 'int' in declaration of 'reactionTimes'
+main.c:72: warning: type defaults to 'int' in declaration of 'frequencyData'
+main.c:73: warning: type defaults to 'int' in declaration of 'rateOfChangeData'
+main.c: In function 'timer500ISR':
+main.c:131: warning: passing argument 2 of 'xQueueGiveFromISR' makes pointer from integer without a cast
+main.c: In function 'buttonsISR':
+main.c:147: warning: passing argument 2 of 'xQueueGiveFromISR' makes pointer from integer without a cast
+main.c: In function 'frequencyISR':
+main.c:169: warning: passing argument 3 of 'xQueueGenericSendFromISR' makes pointer from integer without a cast
+main.c:172: warning: passing argument 2 of 'xQueueGiveFromISR' makes pointer from integer without a cast
+main.c: In function 'ps2ISR':
+main.c:187: warning: passing argument 2 of 'xQueueGenericSendFromISR' makes pointer from integer without a cast
+main.c:187: warning: passing argument 3 of 'xQueueGenericSendFromISR' makes pointer from integer without a cast
+main.c: In function 'checkNewFrequencyValues':
+main.c:211: warning: passing argument 2 of 'xQueueGenericReceive' discards qualifiers from pointer target type
+main.c:224: warning: operation on 'frequencyIndex' may be undefined
+main.c: In function 'handleReactionTimer':
+main.c:231: warning: passing argument 2 of 'xQueueGenericReceive' makes pointer from integer without a cast
+main.c: In function 'highestBit':
+main.c:276: warning: return makes integer from pointer without a cast
+main.c: In function 'lowestBit':
+main.c:291: warning: return makes integer from pointer without a cast
+main.c: In function 'keyboardLogicTask':
+main.c:354: warning: passing argument 2 of 'xQueueGenericReceive' makes pointer from integer without a cast
+main.c: In function 'computeTask':
+main.c:422: warning: passing argument 2 of 'xQueueGenericSend' makes pointer from integer without a cast
+main.c: In function 'outputLogicTask':
+main.c:480: warning: comparison between pointer and integer
+main.c:499: warning: passing argument 4 of 'alt_alarm_start' makes pointer from integer without a cast
+main.c:523: warning: comparison between pointer and integer
+main.c:542: warning: passing argument 4 of 'alt_alarm_start' makes pointer from integer without a cast
+main.c: In function 'initButtonsPIO':
+main.c:708: warning: passing argument 2 of 'alt_irq_register' makes pointer from integer without a cast
+main.c:708: warning: passing argument 3 of 'alt_irq_register' from incompatible pointer type
+main.c: In function 'initFrequency':
+main.c:716: warning: passing argument 2 of 'alt_irq_register' makes pointer from integer without a cast
+main.c:716: warning: passing argument 3 of 'alt_irq_register' from incompatible pointer type
+main.c: In function 'initKeyboard':
+main.c:737: warning: passing argument 3 of 'alt_irq_register' from incompatible pointer type
+      1 [main] true 3076 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] echo 11120 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+Info: Linking CS723_Assignment1.elf
+the public mailing list cygwin@cygwin.com
+nios2-elf-g++  -T'H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//linker.x' -msys-crt0='H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//obj/HAL/src/crt0.o' -msys-lib=hal_bsp -LH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/   -Wl,-Map=CS723_Assignment1.map   -O0 -g -Wall   -EL -mhw-div -mhw-mul -mno-hw-mulx  -o CS723_Assignment1.elf obj/default/FreeRTOS/croutine.o obj/default/FreeRTOS/event_groups.o obj/default/FreeRTOS/heap.o obj/default/FreeRTOS/list.o obj/default/FreeRTOS/port.o obj/default/FreeRTOS/queue.o obj/default/FreeRTOS/tasks.o obj/default/FreeRTOS/timers.o obj/default/main.o obj/default/FreeRTOS/port_asm.o -lm 
+nios2-elf-insert CS723_Assignment1.elf --thread_model hal --cpu_name nios2 --qsys true --simulation_enabled false --id 7 --sidp 0x430f0 --timestamp 1393900972 --stderr_dev jtag_uart --stdin_dev jtag_uart --stdout_dev jtag_uart --sopc_system_name nios2 --quartus_project_dir "h:/COMPSYS_723/Project_workspace/SOPC_files" --sopcinfo H:/COMPSYS_723/Project_workspace/SOPC_files/nios2.sopcinfo
+      1 [main] sh 1108 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] uname 11188 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] sh 6904 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: (CS723_Assignment1.elf) 625 KBytes program size (code + initialized data).
+Info:                         130558 KBytes free for stack + heap.
+      1 [main] echo 3676 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Creating CS723_Assignment1.objdump
+nios2-elf-objdump --disassemble --syms --all-header --source CS723_Assignment1.elf >CS723_Assignment1.objdump
+      1 [main] sh 11328 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 660 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[CS723_Assignment1 build complete]
+
+**** Build Finished ****
+
+**** Build of configuration Nios II for project CS723_Assignment1_bsp ****
+
+make all 
+      1 [main] pwd 11200 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 12024 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 7192 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[BSP build complete]
+
+**** Build Finished ****
+
+**** Build of configuration Nios II for project CS723_Assignment1 ****
+
+make all 
+      1 [main] sh 1180 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 10412 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 2300 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] sh 3044 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] echo 10268 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+Info: Building H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+the public mailing list cygwin@cygwin.com
+make --no-print-directory -C H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+      1 [main] pwd 6180 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 10956 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 9180 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[BSP build complete]
+      1 [main] true 12024 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 8820 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[CS723_Assignment1 build complete]
+
+**** Build Finished ****
+
+**** Build of configuration Nios II for project CS723_Assignment1 ****
+
+make all 
+      1 [main] sh 11252 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] sh 12008 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 7280 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 11612 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] echo 12160 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Building H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+make --no-print-directory -C H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+      0 [main] pwd 660 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 10160 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 9468 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[BSP build complete]
+      1 [main] echo 12100 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+Info: Compiling main.c to obj/default/main.o
+the public mailing list cygwin@cygwin.com
+      0 [main] mkdir 9228 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+nios2-elf-gcc -xc -MP -MMD -c -IH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//HAL/inc -IH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/ -IH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//drivers/inc  -DSYSTEM_BUS_WIDTH=32 -pipe -D__hal__ -DALT_NO_INSTRUCTION_EMULATION -DALT_SINGLE_THREADED    -O0 -g -Wall   -EL -mhw-div -mhw-mul -mno-hw-mulx  -o obj/default/main.o main.c
+main.c:71: warning: type defaults to 'int' in declaration of 'reactionTimes'
+main.c:72: warning: type defaults to 'int' in declaration of 'frequencyData'
+main.c:73: warning: type defaults to 'int' in declaration of 'rateOfChangeData'
+main.c: In function 'timer500ISR':
+main.c:131: warning: passing argument 2 of 'xQueueGiveFromISR' makes pointer from integer without a cast
+main.c: In function 'buttonsISR':
+main.c:147: warning: passing argument 2 of 'xQueueGiveFromISR' makes pointer from integer without a cast
+main.c: In function 'frequencyISR':
+main.c:169: warning: passing argument 3 of 'xQueueGenericSendFromISR' makes pointer from integer without a cast
+main.c:172: warning: passing argument 2 of 'xQueueGiveFromISR' makes pointer from integer without a cast
+main.c: In function 'ps2ISR':
+main.c:187: warning: passing argument 2 of 'xQueueGenericSendFromISR' makes pointer from integer without a cast
+main.c:187: warning: passing argument 3 of 'xQueueGenericSendFromISR' makes pointer from integer without a cast
+main.c: In function 'checkNewFrequencyValues':
+main.c:211: warning: passing argument 2 of 'xQueueGenericReceive' discards qualifiers from pointer target type
+main.c:224: warning: operation on 'frequencyIndex' may be undefined
+main.c: In function 'handleReactionTimer':
+main.c:231: warning: passing argument 2 of 'xQueueGenericReceive' makes pointer from integer without a cast
+main.c: In function 'highestBit':
+main.c:276: warning: return makes integer from pointer without a cast
+main.c: In function 'lowestBit':
+main.c:291: warning: return makes integer from pointer without a cast
+main.c: In function 'keyboardLogicTask':
+main.c:354: warning: passing argument 2 of 'xQueueGenericReceive' makes pointer from integer without a cast
+main.c: In function 'computeTask':
+main.c:422: warning: passing argument 2 of 'xQueueGenericSend' makes pointer from integer without a cast
+main.c: In function 'outputLogicTask':
+main.c:480: warning: comparison between pointer and integer
+main.c:499: warning: passing argument 4 of 'alt_alarm_start' makes pointer from integer without a cast
+main.c:523: warning: comparison between pointer and integer
+main.c:542: warning: passing argument 4 of 'alt_alarm_start' makes pointer from integer without a cast
+main.c: In function 'initButtonsPIO':
+main.c:708: warning: passing argument 2 of 'alt_irq_register' makes pointer from integer without a cast
+main.c:708: warning: passing argument 3 of 'alt_irq_register' from incompatible pointer type
+main.c: In function 'initFrequency':
+main.c:716: warning: passing argument 2 of 'alt_irq_register' makes pointer from integer without a cast
+main.c:716: warning: passing argument 3 of 'alt_irq_register' from incompatible pointer type
+main.c: In function 'initKeyboard':
+main.c:737: warning: passing argument 3 of 'alt_irq_register' from incompatible pointer type
+      1 [main] true 4380 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] echo 2220 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Linking CS723_Assignment1.elf
+nios2-elf-g++  -T'H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//linker.x' -msys-crt0='H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//obj/HAL/src/crt0.o' -msys-lib=hal_bsp -LH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/   -Wl,-Map=CS723_Assignment1.map   -O0 -g -Wall   -EL -mhw-div -mhw-mul -mno-hw-mulx  -o CS723_Assignment1.elf obj/default/FreeRTOS/croutine.o obj/default/FreeRTOS/event_groups.o obj/default/FreeRTOS/heap.o obj/default/FreeRTOS/list.o obj/default/FreeRTOS/port.o obj/default/FreeRTOS/queue.o obj/default/FreeRTOS/tasks.o obj/default/FreeRTOS/timers.o obj/default/main.o obj/default/FreeRTOS/port_asm.o -lm 
+nios2-elf-insert CS723_Assignment1.elf --thread_model hal --cpu_name nios2 --qsys true --simulation_enabled false --id 7 --sidp 0x430f0 --timestamp 1393900972 --stderr_dev jtag_uart --stdin_dev jtag_uart --stdout_dev jtag_uart --sopc_system_name nios2 --quartus_project_dir "h:/COMPSYS_723/Project_workspace/SOPC_files" --sopcinfo H:/COMPSYS_723/Project_workspace/SOPC_files/nios2.sopcinfo
+      1 [main] sh 12168 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] uname 11324 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] sh 10652 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: (CS723_Assignment1.elf) 625 KBytes program size (code + initialized data).
+Info:                         130558 KBytes free for stack + heap.
+      1 [main] echo 9604 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Creating CS723_Assignment1.objdump
+nios2-elf-objdump --disassemble --syms --all-header --source CS723_Assignment1.elf >CS723_Assignment1.objdump
+      1 [main] sh 2496 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] sh 9152 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[CS723_Assignment1 build complete]
+
+**** Build Finished ****
+
+**** Build of configuration Nios II for project CS723_Assignment1_bsp ****
+
+make all 
+      1 [main] pwd 9024 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 9656 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 216 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[BSP build complete]
+
+**** Build Finished ****
+
+**** Build of configuration Nios II for project CS723_Assignment1 ****
+
+make all 
+      1 [main] sh 9116 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] sh 11384 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] sh 10372 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 2552 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] echo 3848 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Building H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+make --no-print-directory -C H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+      1 [main] pwd 11064 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 10276 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 1028 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[BSP build complete]
+      1 [main] true 11908 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] sh 11600 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[CS723_Assignment1 build complete]
+
+**** Build Finished ****
+
+**** Build of configuration Nios II for project CS723_Assignment1 ****
+
+make all 
+      0 [main] sh 3296 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 9308 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] sh 9784 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] sh 11764 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] echo 3624 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Building H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+make --no-print-directory -C H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+      1 [main] pwd 11360 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] sh 10208 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] sh 11072 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[BSP build complete]
+      0 [main] echo 8740 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+Info: Compiling main.c to obj/default/main.o
+the public mailing list cygwin@cygwin.com
+      1 [main] mkdir 5936 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+nios2-elf-gcc -xc -MP -MMD -c -IH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//HAL/inc -IH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/ -IH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//drivers/inc  -DSYSTEM_BUS_WIDTH=32 -pipe -D__hal__ -DALT_NO_INSTRUCTION_EMULATION -DALT_SINGLE_THREADED    -O0 -g -Wall   -EL -mhw-div -mhw-mul -mno-hw-mulx  -o obj/default/main.o main.c
+main.c:71: warning: type defaults to 'int' in declaration of 'reactionTimes'
+main.c:72: warning: type defaults to 'int' in declaration of 'frequencyData'
+main.c:73: warning: type defaults to 'int' in declaration of 'rateOfChangeData'
+main.c: In function 'timer500ISR':
+main.c:131: warning: passing argument 2 of 'xQueueGiveFromISR' makes pointer from integer without a cast
+main.c: In function 'buttonsISR':
+main.c:147: warning: passing argument 2 of 'xQueueGiveFromISR' makes pointer from integer without a cast
+main.c: In function 'frequencyISR':
+main.c:169: warning: passing argument 3 of 'xQueueGenericSendFromISR' makes pointer from integer without a cast
+main.c:172: warning: passing argument 2 of 'xQueueGiveFromISR' makes pointer from integer without a cast
+main.c: In function 'ps2ISR':
+main.c:187: warning: passing argument 2 of 'xQueueGenericSendFromISR' makes pointer from integer without a cast
+main.c:187: warning: passing argument 3 of 'xQueueGenericSendFromISR' makes pointer from integer without a cast
+main.c: In function 'checkNewFrequencyValues':
+main.c:211: warning: passing argument 2 of 'xQueueGenericReceive' discards qualifiers from pointer target type
+main.c:224: warning: operation on 'frequencyIndex' may be undefined
+main.c: In function 'handleReactionTimer':
+main.c:231: warning: passing argument 2 of 'xQueueGenericReceive' makes pointer from integer without a cast
+main.c: In function 'highestBit':
+main.c:276: warning: return makes integer from pointer without a cast
+main.c: In function 'lowestBit':
+main.c:291: warning: return makes integer from pointer without a cast
+main.c: In function 'keyboardLogicTask':
+main.c:354: warning: passing argument 2 of 'xQueueGenericReceive' makes pointer from integer without a cast
+main.c: In function 'computeTask':
+main.c:422: warning: passing argument 2 of 'xQueueGenericSend' makes pointer from integer without a cast
+main.c: In function 'outputLogicTask':
+main.c:480: warning: comparison between pointer and integer
+main.c:499: warning: passing argument 4 of 'alt_alarm_start' makes pointer from integer without a cast
+main.c:523: warning: comparison between pointer and integer
+main.c:542: warning: passing argument 4 of 'alt_alarm_start' makes pointer from integer without a cast
+main.c: In function 'initButtonsPIO':
+main.c:708: warning: passing argument 2 of 'alt_irq_register' makes pointer from integer without a cast
+main.c:708: warning: passing argument 3 of 'alt_irq_register' from incompatible pointer type
+main.c: In function 'initFrequency':
+main.c:716: warning: passing argument 2 of 'alt_irq_register' makes pointer from integer without a cast
+main.c:716: warning: passing argument 3 of 'alt_irq_register' from incompatible pointer type
+main.c: In function 'initKeyboard':
+main.c:737: warning: passing argument 3 of 'alt_irq_register' from incompatible pointer type
+      1 [main] true 6300 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] echo 11460 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Linking CS723_Assignment1.elf
+nios2-elf-g++  -T'H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//linker.x' -msys-crt0='H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//obj/HAL/src/crt0.o' -msys-lib=hal_bsp -LH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/   -Wl,-Map=CS723_Assignment1.map   -O0 -g -Wall   -EL -mhw-div -mhw-mul -mno-hw-mulx  -o CS723_Assignment1.elf obj/default/FreeRTOS/croutine.o obj/default/FreeRTOS/event_groups.o obj/default/FreeRTOS/heap.o obj/default/FreeRTOS/list.o obj/default/FreeRTOS/port.o obj/default/FreeRTOS/queue.o obj/default/FreeRTOS/tasks.o obj/default/FreeRTOS/timers.o obj/default/main.o obj/default/FreeRTOS/port_asm.o -lm 
+nios2-elf-insert CS723_Assignment1.elf --thread_model hal --cpu_name nios2 --qsys true --simulation_enabled false --id 7 --sidp 0x430f0 --timestamp 1393900972 --stderr_dev jtag_uart --stdin_dev jtag_uart --stdout_dev jtag_uart --sopc_system_name nios2 --quartus_project_dir "h:/COMPSYS_723/Project_workspace/SOPC_files" --sopcinfo H:/COMPSYS_723/Project_workspace/SOPC_files/nios2.sopcinfo
+      1 [main] sh 7424 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] uname 2556 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] sh 7072 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: (CS723_Assignment1.elf) 626 KBytes program size (code + initialized data).
+Info:                         130558 KBytes free for stack + heap.
+      0 [main] echo 3676 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Creating CS723_Assignment1.objdump
+nios2-elf-objdump --disassemble --syms --all-header --source CS723_Assignment1.elf >CS723_Assignment1.objdump
+      1 [main] sh 6904 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 10904 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[CS723_Assignment1 build complete]
+
+**** Build Finished ****
+
+**** Build of configuration Nios II for project CS723_Assignment1_bsp ****
+
+make all 
+      1 [main] pwd 2524 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] sh 8824 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 11712 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[BSP build complete]
+
+**** Build Finished ****
+
+**** Build of configuration Nios II for project CS723_Assignment1 ****
+
+make all 
+      1 [main] sh 1180 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] sh 3032 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 11068 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] sh 8264 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] echo 3996 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Building H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+make --no-print-directory -C H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+      1 [main] pwd 8820 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] sh 10108 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] sh 11584 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[BSP build complete]
+      1 [main] true 10712 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 12160 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[CS723_Assignment1 build complete]
+
+**** Build Finished ****
+
+**** Build of configuration Nios II for project CS723_Assignment1 ****
+
+make all 
+      1 [main] sh 9024 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 8732 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] sh 10652 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] sh 8712 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] echo 10360 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Building H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+make --no-print-directory -C H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+      1 [main] pwd 656 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 9672 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] sh 3112 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[BSP build complete]
+      1 [main] echo 10256 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Compiling main.c to obj/default/main.o
+      1 [main] mkdir 6272 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+nios2-elf-gcc -xc -MP -MMD -c -IH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//HAL/inc -IH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/ -IH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//drivers/inc  -DSYSTEM_BUS_WIDTH=32 -pipe -D__hal__ -DALT_NO_INSTRUCTION_EMULATION -DALT_SINGLE_THREADED    -O0 -g -Wall   -EL -mhw-div -mhw-mul -mno-hw-mulx  -o obj/default/main.o main.c
+main.c:71: warning: type defaults to 'int' in declaration of 'reactionTimes'
+main.c:72: warning: type defaults to 'int' in declaration of 'frequencyData'
+main.c:73: warning: type defaults to 'int' in declaration of 'rateOfChangeData'
+main.c: In function 'timer500ISR':
+main.c:131: warning: passing argument 2 of 'xQueueGiveFromISR' makes pointer from integer without a cast
+main.c: In function 'buttonsISR':
+main.c:147: warning: passing argument 2 of 'xQueueGiveFromISR' makes pointer from integer without a cast
+main.c: In function 'frequencyISR':
+main.c:169: warning: passing argument 3 of 'xQueueGenericSendFromISR' makes pointer from integer without a cast
+main.c:172: warning: passing argument 2 of 'xQueueGiveFromISR' makes pointer from integer without a cast
+main.c: In function 'ps2ISR':
+main.c:187: warning: passing argument 2 of 'xQueueGenericSendFromISR' makes pointer from integer without a cast
+main.c:187: warning: passing argument 3 of 'xQueueGenericSendFromISR' makes pointer from integer without a cast
+main.c: In function 'checkNewFrequencyValues':
+main.c:211: warning: passing argument 2 of 'xQueueGenericReceive' discards qualifiers from pointer target type
+main.c:224: warning: operation on 'frequencyIndex' may be undefined
+main.c: In function 'handleReactionTimer':
+main.c:231: warning: passing argument 2 of 'xQueueGenericReceive' makes pointer from integer without a cast
+main.c: In function 'highestBit':
+main.c:276: warning: return makes integer from pointer without a cast
+main.c: In function 'lowestBit':
+main.c:291: warning: return makes integer from pointer without a cast
+main.c: In function 'keyboardLogicTask':
+main.c:354: warning: passing argument 2 of 'xQueueGenericReceive' makes pointer from integer without a cast
+main.c: In function 'computeTask':
+main.c:422: warning: passing argument 2 of 'xQueueGenericSend' makes pointer from integer without a cast
+main.c: In function 'outputLogicTask':
+main.c:480: warning: comparison between pointer and integer
+main.c:499: warning: passing argument 4 of 'alt_alarm_start' makes pointer from integer without a cast
+main.c:524: warning: comparison between pointer and integer
+main.c:543: warning: passing argument 4 of 'alt_alarm_start' makes pointer from integer without a cast
+main.c: In function 'initButtonsPIO':
+main.c:709: warning: passing argument 2 of 'alt_irq_register' makes pointer from integer without a cast
+main.c:709: warning: passing argument 3 of 'alt_irq_register' from incompatible pointer type
+main.c: In function 'initFrequency':
+main.c:717: warning: passing argument 2 of 'alt_irq_register' makes pointer from integer without a cast
+main.c:717: warning: passing argument 3 of 'alt_irq_register' from incompatible pointer type
+main.c: In function 'initKeyboard':
+main.c:738: warning: passing argument 3 of 'alt_irq_register' from incompatible pointer type
+      0 [main] true 8260 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] echo 9100 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+Info: Linking CS723_Assignment1.elf
+the public mailing list cygwin@cygwin.com
+nios2-elf-g++  -T'H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//linker.x' -msys-crt0='H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//obj/HAL/src/crt0.o' -msys-lib=hal_bsp -LH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/   -Wl,-Map=CS723_Assignment1.map   -O0 -g -Wall   -EL -mhw-div -mhw-mul -mno-hw-mulx  -o CS723_Assignment1.elf obj/default/FreeRTOS/croutine.o obj/default/FreeRTOS/event_groups.o obj/default/FreeRTOS/heap.o obj/default/FreeRTOS/list.o obj/default/FreeRTOS/port.o obj/default/FreeRTOS/queue.o obj/default/FreeRTOS/tasks.o obj/default/FreeRTOS/timers.o obj/default/main.o obj/default/FreeRTOS/port_asm.o -lm 
+nios2-elf-insert CS723_Assignment1.elf --thread_model hal --cpu_name nios2 --qsys true --simulation_enabled false --id 7 --sidp 0x430f0 --timestamp 1393900972 --stderr_dev jtag_uart --stdin_dev jtag_uart --stdout_dev jtag_uart --sopc_system_name nios2 --quartus_project_dir "h:/COMPSYS_723/Project_workspace/SOPC_files" --sopcinfo H:/COMPSYS_723/Project_workspace/SOPC_files/nios2.sopcinfo
+      0 [main] sh 11304 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] uname 10156 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 11856 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: (CS723_Assignment1.elf) 626 KBytes program size (code + initialized data).
+Info:                         130558 KBytes free for stack + heap.
+      1 [main] echo 1884 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Creating CS723_Assignment1.objdump
+nios2-elf-objdump --disassemble --syms --all-header --source CS723_Assignment1.elf >CS723_Assignment1.objdump
+      1 [main] sh 4152 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 9276 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[CS723_Assignment1 build complete]
+
+**** Build Finished ****
+
+**** Build of configuration Nios II for project CS723_Assignment1_bsp ****
+
+make all 
+      1 [main] pwd 2064 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] sh 5884 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 8876 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[BSP build complete]
+
+**** Build Finished ****
+
+**** Build of configuration Nios II for project CS723_Assignment1 ****
+
+make all 
+      1 [main] sh 8860 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] sh 2940 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 8264 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 10468 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] echo 10256 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+Info: Building H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+the public mailing list cygwin@cygwin.com
+make --no-print-directory -C H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+      1 [main] pwd 6272 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 4000 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 7280 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[BSP build complete]
+      0 [main] true 11892 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 3444 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[CS723_Assignment1 build complete]
+
+**** Build Finished ****
+
+**** Build of configuration Nios II for project CS723_Assignment1 ****
+
+make all 
+      1 [main] sh 10268 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 9868 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] sh 10928 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 8468 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] echo 3700 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Building H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+make --no-print-directory -C H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+      1 [main] pwd 12200 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 4064 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 7484 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[BSP build complete]
+      1 [main] true 11904 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 9656 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[CS723_Assignment1 build complete]
+
+**** Build Finished ****
+
+**** Build of configuration Nios II for project CS723_Assignment1 ****
+
+make all 
+      0 [main] sh 652 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 2520 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 8824 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 8856 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] echo 9404 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Building H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+make --no-print-directory -C H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+      1 [main] pwd 236 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 11748 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 11712 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[BSP build complete]
+      1 [main] echo 10856 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+Info: Compiling main.c to obj/default/main.o
+the public mailing list cygwin@cygwin.com
+      1 [main] mkdir 9644 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+nios2-elf-gcc -xc -MP -MMD -c -IH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//HAL/inc -IH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/ -IH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//drivers/inc  -DSYSTEM_BUS_WIDTH=32 -pipe -D__hal__ -DALT_NO_INSTRUCTION_EMULATION -DALT_SINGLE_THREADED    -O0 -g -Wall   -EL -mhw-div -mhw-mul -mno-hw-mulx  -o obj/default/main.o main.c
+main.c:71: warning: type defaults to 'int' in declaration of 'reactionTimes'
+main.c:72: warning: type defaults to 'int' in declaration of 'frequencyData'
+main.c:73: warning: type defaults to 'int' in declaration of 'rateOfChangeData'
+main.c: In function 'timer500ISR':
+main.c:131: warning: passing argument 2 of 'xQueueGiveFromISR' makes pointer from integer without a cast
+main.c: In function 'buttonsISR':
+main.c:147: warning: passing argument 2 of 'xQueueGiveFromISR' makes pointer from integer without a cast
+main.c: In function 'frequencyISR':
+main.c:169: warning: passing argument 3 of 'xQueueGenericSendFromISR' makes pointer from integer without a cast
+main.c:172: warning: passing argument 2 of 'xQueueGiveFromISR' makes pointer from integer without a cast
+main.c: In function 'ps2ISR':
+main.c:187: warning: passing argument 2 of 'xQueueGenericSendFromISR' makes pointer from integer without a cast
+main.c:187: warning: passing argument 3 of 'xQueueGenericSendFromISR' makes pointer from integer without a cast
+main.c: In function 'checkNewFrequencyValues':
+main.c:211: warning: passing argument 2 of 'xQueueGenericReceive' discards qualifiers from pointer target type
+main.c:224: warning: operation on 'frequencyIndex' may be undefined
+main.c: In function 'handleReactionTimer':
+main.c:231: warning: passing argument 2 of 'xQueueGenericReceive' makes pointer from integer without a cast
+main.c: In function 'highestBit':
+main.c:276: warning: return makes integer from pointer without a cast
+main.c: In function 'lowestBit':
+main.c:291: warning: return makes integer from pointer without a cast
+main.c: In function 'keyboardLogicTask':
+main.c:354: warning: passing argument 2 of 'xQueueGenericReceive' makes pointer from integer without a cast
+main.c: In function 'computeTask':
+main.c:422: warning: passing argument 2 of 'xQueueGenericSend' makes pointer from integer without a cast
+main.c: In function 'outputLogicTask':
+main.c:478: warning: comparison between pointer and integer
+main.c:497: warning: passing argument 4 of 'alt_alarm_start' makes pointer from integer without a cast
+main.c:521: warning: comparison between pointer and integer
+main.c:539: warning: passing argument 4 of 'alt_alarm_start' makes pointer from integer without a cast
+main.c: In function 'initButtonsPIO':
+main.c:705: warning: passing argument 2 of 'alt_irq_register' makes pointer from integer without a cast
+main.c:705: warning: passing argument 3 of 'alt_irq_register' from incompatible pointer type
+main.c: In function 'initFrequency':
+main.c:713: warning: passing argument 2 of 'alt_irq_register' makes pointer from integer without a cast
+main.c:713: warning: passing argument 3 of 'alt_irq_register' from incompatible pointer type
+main.c: In function 'initKeyboard':
+main.c:734: warning: passing argument 3 of 'alt_irq_register' from incompatible pointer type
+Info: Linking CS723_Assignment1.elf
+      1 [main] true 8820 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+nios2-elf-g++  -T'H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//linker.x' -msys-crt0='H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//obj/HAL/src/crt0.o' -msys-lib=hal_bsp -LH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/   -Wl,-Map=CS723_Assignment1.map   -O0 -g -Wall   -EL -mhw-div -mhw-mul -mno-hw-mulx  -o CS723_Assignment1.elf obj/default/FreeRTOS/croutine.o obj/default/FreeRTOS/event_groups.o obj/default/FreeRTOS/heap.o obj/default/FreeRTOS/list.o obj/default/FreeRTOS/port.o obj/default/FreeRTOS/queue.o obj/default/FreeRTOS/tasks.o obj/default/FreeRTOS/timers.o obj/default/main.o obj/default/FreeRTOS/port_asm.o -lm 
+the public mailing list cygwin@cygwin.com
+      1 [main] echo 3996 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+nios2-elf-insert CS723_Assignment1.elf --thread_model hal --cpu_name nios2 --qsys true --simulation_enabled false --id 7 --sidp 0x430f0 --timestamp 1393900972 --stderr_dev jtag_uart --stdin_dev jtag_uart --stdout_dev jtag_uart --sopc_system_name nios2 --quartus_project_dir "h:/COMPSYS_723/Project_workspace/SOPC_files" --sopcinfo H:/COMPSYS_723/Project_workspace/SOPC_files/nios2.sopcinfo
+      0 [main] sh 9180 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] uname 7724 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 11904 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: (CS723_Assignment1.elf) 626 KBytes program size (code + initialized data).
+Info:                         130558 KBytes free for stack + heap.
+      1 [main] echo 11612 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Creating CS723_Assignment1.objdump
+nios2-elf-objdump --disassemble --syms --all-header --source CS723_Assignment1.elf >CS723_Assignment1.objdump
+      0 [main] sh 1848 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 11760 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[CS723_Assignment1 build complete]
+
+**** Build Finished ****
+
+**** Build of configuration Nios II for project CS723_Assignment1_bsp ****
+
+make all 
+      1 [main] pwd 2220 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 6248 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 3112 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[BSP build complete]
+
+**** Build Finished ****
+
+**** Build of configuration Nios II for project CS723_Assignment1 ****
+
+make all 
+      1 [main] sh 9528 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] sh 11780 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 9548 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 10212 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] echo 9276 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Building H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+make --no-print-directory -C H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+      1 [main] pwd 8876 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 9448 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 3700 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[BSP build complete]
+      1 [main] true 10976 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 8596 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[CS723_Assignment1 build complete]
+
+**** Build Finished ****
+
+**** Build of configuration Nios II for project CS723_Assignment1 ****
+
+make all 
+      0 [main] sh 6068 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 10336 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 8496 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 5104 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] echo 10696 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+Info: Building H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+the public mailing list cygwin@cygwin.com
+make --no-print-directory -C H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+      1 [main] pwd 10600 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] sh 11972 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 2276 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[BSP build complete]
+      1 [main] echo 2640 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Compiling main.c to obj/default/main.o
+      1 [main] mkdir 5188 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+nios2-elf-gcc -xc -MP -MMD -c -IH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//HAL/inc -IH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/ -IH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//drivers/inc  -DSYSTEM_BUS_WIDTH=32 -pipe -D__hal__ -DALT_NO_INSTRUCTION_EMULATION -DALT_SINGLE_THREADED    -O0 -g -Wall   -EL -mhw-div -mhw-mul -mno-hw-mulx  -o obj/default/main.o main.c
+main.c:71: warning: type defaults to 'int' in declaration of 'reactionTimes'
+main.c:72: warning: type defaults to 'int' in declaration of 'frequencyData'
+main.c:73: warning: type defaults to 'int' in declaration of 'rateOfChangeData'
+main.c: In function 'timer500ISR':
+main.c:133: warning: passing argument 2 of 'xQueueGiveFromISR' makes pointer from integer without a cast
+main.c: In function 'buttonsISR':
+main.c:149: warning: passing argument 2 of 'xQueueGiveFromISR' makes pointer from integer without a cast
+main.c: In function 'frequencyISR':
+main.c:171: warning: passing argument 3 of 'xQueueGenericSendFromISR' makes pointer from integer without a cast
+main.c:174: warning: passing argument 2 of 'xQueueGiveFromISR' makes pointer from integer without a cast
+main.c: In function 'ps2ISR':
+main.c:189: warning: passing argument 2 of 'xQueueGenericSendFromISR' makes pointer from integer without a cast
+main.c:189: warning: passing argument 3 of 'xQueueGenericSendFromISR' makes pointer from integer without a cast
+main.c: In function 'checkNewFrequencyValues':
+main.c:213: warning: passing argument 2 of 'xQueueGenericReceive' discards qualifiers from pointer target type
+main.c:226: warning: operation on 'frequencyIndex' may be undefined
+main.c: In function 'handleReactionTimer':
+main.c:233: warning: passing argument 2 of 'xQueueGenericReceive' makes pointer from integer without a cast
+main.c: In function 'highestBit':
+main.c:278: warning: return makes integer from pointer without a cast
+main.c: In function 'lowestBit':
+main.c:293: warning: return makes integer from pointer without a cast
+main.c: In function 'keyboardLogicTask':
+main.c:356: warning: passing argument 2 of 'xQueueGenericReceive' makes pointer from integer without a cast
+main.c: In function 'computeTask':
+main.c:424: warning: passing argument 2 of 'xQueueGenericSend' makes pointer from integer without a cast
+main.c: In function 'outputLogicTask':
+main.c:480: warning: comparison between pointer and integer
+main.c:499: warning: passing argument 4 of 'alt_alarm_start' makes pointer from integer without a cast
+main.c:523: warning: comparison between pointer and integer
+main.c:541: warning: passing argument 4 of 'alt_alarm_start' makes pointer from integer without a cast
+main.c: In function 'initButtonsPIO':
+main.c:707: warning: passing argument 2 of 'alt_irq_register' makes pointer from integer without a cast
+main.c:707: warning: passing argument 3 of 'alt_irq_register' from incompatible pointer type
+main.c: In function 'initFrequency':
+main.c:715: warning: passing argument 2 of 'alt_irq_register' makes pointer from integer without a cast
+main.c:715: warning: passing argument 3 of 'alt_irq_register' from incompatible pointer type
+main.c: In function 'initKeyboard':
+main.c:736: warning: passing argument 3 of 'alt_irq_register' from incompatible pointer type
+      1 [main] true 11752 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] echo 748 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Linking CS723_Assignment1.elf
+nios2-elf-g++  -T'H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//linker.x' -msys-crt0='H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//obj/HAL/src/crt0.o' -msys-lib=hal_bsp -LH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/   -Wl,-Map=CS723_Assignment1.map   -O0 -g -Wall   -EL -mhw-div -mhw-mul -mno-hw-mulx  -o CS723_Assignment1.elf obj/default/FreeRTOS/croutine.o obj/default/FreeRTOS/event_groups.o obj/default/FreeRTOS/heap.o obj/default/FreeRTOS/list.o obj/default/FreeRTOS/port.o obj/default/FreeRTOS/queue.o obj/default/FreeRTOS/tasks.o obj/default/FreeRTOS/timers.o obj/default/main.o obj/default/FreeRTOS/port_asm.o -lm 
+nios2-elf-insert CS723_Assignment1.elf --thread_model hal --cpu_name nios2 --qsys true --simulation_enabled false --id 7 --sidp 0x430f0 --timestamp 1393900972 --stderr_dev jtag_uart --stdin_dev jtag_uart --stdout_dev jtag_uart --sopc_system_name nios2 --quartus_project_dir "h:/COMPSYS_723/Project_workspace/SOPC_files" --sopcinfo H:/COMPSYS_723/Project_workspace/SOPC_files/nios2.sopcinfo
+      1 [main] sh 8928 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] uname 10708 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 10496 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: (CS723_Assignment1.elf) 626 KBytes program size (code + initialized data).
+Info:                         130558 KBytes free for stack + heap.
+      1 [main] echo 8956 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Creating CS723_Assignment1.objdump
+nios2-elf-objdump --disassemble --syms --all-header --source CS723_Assignment1.elf >CS723_Assignment1.objdump
+      1 [main] sh 11392 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 7332 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[CS723_Assignment1 build complete]
+
+**** Build Finished ****
+
+**** Build of configuration Nios II for project CS723_Assignment1_bsp ****
+
+make all 
+      1 [main] pwd 10164 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 9136 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 9452 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[BSP build complete]
+
+**** Build Finished ****
+
+**** Build of configuration Nios II for project CS723_Assignment1 ****
+
+make all 
+      0 [main] sh 2108 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 10432 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] sh 9584 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 10360 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] echo 5188 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Building H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+make --no-print-directory -C H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+      1 [main] pwd 7320 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 2740 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] sh 2640 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[BSP build complete]
+      1 [main] true 9100 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 4384 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[CS723_Assignment1 build complete]
+
+**** Build Finished ****
+
+**** Build of configuration Nios II for project CS723_Assignment1 ****
+
+make all 
+      1 [main] sh 12084 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 12068 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 8856 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 11928 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] echo 4492 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Building H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+make --no-print-directory -C H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+      1 [main] pwd 2948 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      0 [main] sh 5804 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 3996 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[BSP build complete]
+      1 [main] echo 8452 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Compiling main.c to obj/default/main.o
+      1 [main] mkdir 10420 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+nios2-elf-gcc -xc -MP -MMD -c -IH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//HAL/inc -IH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/ -IH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//drivers/inc  -DSYSTEM_BUS_WIDTH=32 -pipe -D__hal__ -DALT_NO_INSTRUCTION_EMULATION -DALT_SINGLE_THREADED    -O0 -g -Wall   -EL -mhw-div -mhw-mul -mno-hw-mulx  -o obj/default/main.o main.c
+main.c:71: warning: type defaults to 'int' in declaration of 'reactionTimes'
+main.c:72: warning: type defaults to 'int' in declaration of 'frequencyData'
+main.c:73: warning: type defaults to 'int' in declaration of 'rateOfChangeData'
+main.c: In function 'timer500ISR':
+main.c:133: warning: passing argument 2 of 'xQueueGiveFromISR' makes pointer from integer without a cast
+main.c: In function 'buttonsISR':
+main.c:149: warning: passing argument 2 of 'xQueueGiveFromISR' makes pointer from integer without a cast
+main.c: In function 'frequencyISR':
+main.c:171: warning: passing argument 3 of 'xQueueGenericSendFromISR' makes pointer from integer without a cast
+main.c:174: warning: passing argument 2 of 'xQueueGiveFromISR' makes pointer from integer without a cast
+main.c: In function 'ps2ISR':
+main.c:189: warning: passing argument 2 of 'xQueueGenericSendFromISR' makes pointer from integer without a cast
+main.c:189: warning: passing argument 3 of 'xQueueGenericSendFromISR' makes pointer from integer without a cast
+main.c: In function 'checkNewFrequencyValues':
+main.c:213: warning: passing argument 2 of 'xQueueGenericReceive' discards qualifiers from pointer target type
+main.c:226: warning: operation on 'frequencyIndex' may be undefined
+main.c: In function 'handleReactionTimer':
+main.c:233: warning: passing argument 2 of 'xQueueGenericReceive' makes pointer from integer without a cast
+main.c: In function 'highestBit':
+main.c:278: warning: return makes integer from pointer without a cast
+main.c: In function 'lowestBit':
+main.c:293: warning: return makes integer from pointer without a cast
+main.c: In function 'keyboardLogicTask':
+main.c:356: warning: passing argument 2 of 'xQueueGenericReceive' makes pointer from integer without a cast
+main.c: In function 'computeTask':
+main.c:424: warning: passing argument 2 of 'xQueueGenericSend' makes pointer from integer without a cast
+main.c: In function 'outputLogicTask':
+main.c:480: warning: comparison between pointer and integer
+main.c:499: warning: passing argument 4 of 'alt_alarm_start' makes pointer from integer without a cast
+main.c:524: warning: comparison between pointer and integer
+main.c:542: warning: passing argument 4 of 'alt_alarm_start' makes pointer from integer without a cast
+main.c: In function 'initButtonsPIO':
+main.c:708: warning: passing argument 2 of 'alt_irq_register' makes pointer from integer without a cast
+main.c:708: warning: passing argument 3 of 'alt_irq_register' from incompatible pointer type
+main.c: In function 'initFrequency':
+main.c:716: warning: passing argument 2 of 'alt_irq_register' makes pointer from integer without a cast
+main.c:716: warning: passing argument 3 of 'alt_irq_register' from incompatible pointer type
+main.c: In function 'initKeyboard':
+main.c:737: warning: passing argument 3 of 'alt_irq_register' from incompatible pointer type
+      1 [main] true 1432 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] echo 10432 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Linking CS723_Assignment1.elf
+nios2-elf-g++  -T'H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//linker.x' -msys-crt0='H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp//obj/HAL/src/crt0.o' -msys-lib=hal_bsp -LH:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/   -Wl,-Map=CS723_Assignment1.map   -O0 -g -Wall   -EL -mhw-div -mhw-mul -mno-hw-mulx  -o CS723_Assignment1.elf obj/default/FreeRTOS/croutine.o obj/default/FreeRTOS/event_groups.o obj/default/FreeRTOS/heap.o obj/default/FreeRTOS/list.o obj/default/FreeRTOS/port.o obj/default/FreeRTOS/queue.o obj/default/FreeRTOS/tasks.o obj/default/FreeRTOS/timers.o obj/default/main.o obj/default/FreeRTOS/port_asm.o -lm 
+nios2-elf-insert CS723_Assignment1.elf --thread_model hal --cpu_name nios2 --qsys true --simulation_enabled false --id 7 --sidp 0x430f0 --timestamp 1393900972 --stderr_dev jtag_uart --stdin_dev jtag_uart --stdout_dev jtag_uart --sopc_system_name nios2 --quartus_project_dir "h:/COMPSYS_723/Project_workspace/SOPC_files" --sopcinfo H:/COMPSYS_723/Project_workspace/SOPC_files/nios2.sopcinfo
+      1 [main] sh 2552 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] uname 5188 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 9532 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: (CS723_Assignment1.elf) 626 KBytes program size (code + initialized data).
+Info:                         130558 KBytes free for stack + heap.
+      1 [main] echo 1108 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Creating CS723_Assignment1.objdump
+nios2-elf-objdump --disassemble --syms --all-header --source CS723_Assignment1.elf >CS723_Assignment1.objdump
+      1 [main] sh 7824 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 9904 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[CS723_Assignment1 build complete]
+
+**** Build Finished ****
+
+**** Build of configuration Nios II for project CS723_Assignment1_bsp ****
+
+make all 
+      1 [main] pwd 9764 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 9592 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 2552 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[BSP build complete]
+
+**** Build Finished ****
+
+**** Build of configuration Nios II for project CS723_Assignment1 ****
+
+make all 
+      1 [main] sh 11860 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 216 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 10984 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 12032 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] echo 2592 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+Info: Building H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+make --no-print-directory -C H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/
+      1 [main] pwd 9196 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 3996 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 6572 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[BSP build complete]
+      1 [main] true 11876 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+      1 [main] sh 8172 find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer.  Please report this problem to
+the public mailing list cygwin@cygwin.com
+[CS723_Assignment1 build complete]
+
+**** Build Finished ****

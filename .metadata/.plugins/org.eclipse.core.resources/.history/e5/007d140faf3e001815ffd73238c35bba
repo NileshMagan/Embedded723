@@ -127,8 +127,6 @@ alt_u32 timer500ISR(void* context)
 	//Set global flag
 	TOF_500 = 1;
 	
-	printf("Given from timer ISR\n");
-
 	// Give the semaphore
 	xSemaphoreGiveFromISR(counterSemaphore1, pdTRUE);
 	return 0;
@@ -459,6 +457,8 @@ void outputLogicTask(void *pvParameters)
 				break;
 			case 1: // STABLE
 
+				printf("STATE IS: STABLE\n");
+
 				// Stop 500ms timer
 				if (timerStarted == 1) {
 					alt_alarm_stop(&timer500);
@@ -486,7 +486,7 @@ void outputLogicTask(void *pvParameters)
 
 				// DEBUG
 				taskENTER_CRITICAL();
-				printf("STABLE GV:%d , RV:%d\n", greenValue, redValue);
+//				printf("STABLE GV:%d , RV:%d\n", greenValue, redValue);
 				taskEXIT_CRITICAL();
 
 				// Update LEDs
@@ -497,11 +497,11 @@ void outputLogicTask(void *pvParameters)
 
 				// Start 500ms timer & set flag
 				alt_alarm_start(&timer500, 500, timer500ISR, context);
-				printf("Started timer\n");
 				timerStarted = 1;
 				break;
 			case 2: // UNSTABLE
 
+				printf("STATE IS: UNSTABLE\n");
 				// Stop 500ms timer
 				if (timerStarted == 1) {
 					alt_alarm_stop(&timer500);
@@ -527,9 +527,10 @@ void outputLogicTask(void *pvParameters)
 						redValue = toggleBit(bitPosition, redValue);
 //					}
 				}
+			    printf("Current Switch Value: %d", currentSwitchValue);
 				// DEBUG
 				taskENTER_CRITICAL();
-				printf("UNSTABLE GV:%d , RV:%d\n", greenValue, redValue);
+//				printf("UNSTABLE GV:%d , RV:%d\n", greenValue, redValue);
 				taskEXIT_CRITICAL();
 
 			    // Update LEDs

@@ -497,7 +497,6 @@ void outputLogicTask(void *pvParameters)
 
 				// Start 500ms timer & set flag
 				alt_alarm_start(&timer500, 500, timer500ISR, context);
-				printf("Started timer\n");
 				timerStarted = 1;
 				break;
 			case 2: // UNSTABLE

@@ -75,12 +75,11 @@ static volatile rateOfChangeData[FREQUENCY_DATA_QUEUE_SIZE] = {0};
 // Global variables
 alt_u32 tickPerSecond; // Constants
 unsigned int context;
-static volatile unsigned int currentSwitchValue = 31; // Data
+static volatile unsigned int currentSwitchValue; // Data
 static volatile unsigned int TOF_500, switchChanged, enterMaintenanceState, timerStarted; // Flags
 static volatile unsigned int systemState; // State
 static volatile unsigned int levelThreshold, rateOfChangeThreshold;
 static volatile unsigned int frequencyIndex;
-static volatile unsigned int semCountDebug = 0;
 // 	0  IDLE
 //  1  STABLE
 //  2  UNSTABLE
@@ -127,8 +126,6 @@ alt_u32 timer500ISR(void* context)
 	//Set global flag
 	TOF_500 = 1;
 	
-	printf("Given from timer ISR\n");
-
 	// Give the semaphore
 	xSemaphoreGiveFromISR(counterSemaphore1, pdTRUE);
 	return 0;
@@ -144,7 +141,6 @@ void buttonsISR(void* context) {
 
 		enterMaintenanceState = !enterMaintenanceState;
 
-		printf("Given from Button ISR\n");
 		//Give the semaphore
 		xSemaphoreGiveFromISR(counterSemaphore1, pdTRUE);
 	}
@@ -326,7 +322,6 @@ void switchPollingTask(void *pvParameters)
 			//Set global flag
 			switchChanged = 1;
 			currentSwitchValue = switch_value;
-			printf("Given from switch polling task\n");
 			xSemaphoreGive(counterSemaphore1);
 		}
 
@@ -431,7 +426,7 @@ void computeTask(void *pvParameters)
 			//Give semaphore // TODO: Check no mutex needed
 			systemState = nextSystemState;
 			xSemaphoreGive(counterSemaphore2); // Trigger output logic
-			printf("Given semaphore, semaphoreCount: %d\n", semCountDebug++ );
+			printf("Given semaphore, semaphoreCount: %d\n",uxSemaphoreGetCount(counterSemaphore2) );
 		}
 
 	}
@@ -450,14 +445,15 @@ void outputLogicTask(void *pvParameters)
 	while (1)
 	{
 		xSemaphoreTake(counterSemaphore2, portMAX_DELAY);
-		printf("Taken semaphore, semaphoreCount: %d\n", semCountDebug-- );
+		printf("Taken semaphore, semaphoreCount: %d\n",uxSemaphoreGetCount(counterSemaphore2) );
 //		printf("STATE IS: STABLE\n");
 
-		systemState = 2;
 		switch(systemState) {
 			case 0: // IDLE
 				break;
 			case 1: // STABLE
+
+//				printf("STATE IS: STABLE\n");
 
 				// Stop 500ms timer
 				if (timerStarted == 1) {
@@ -486,7 +482,7 @@ void outputLogicTask(void *pvParameters)
 
 				// DEBUG
 				taskENTER_CRITICAL();
-				printf("STABLE GV:%d , RV:%d\n", greenValue, redValue);
+//				printf("STABLE GV:%d , RV:%d\n", greenValue, redValue);
 				taskEXIT_CRITICAL();
 
 				// Update LEDs
@@ -497,11 +493,11 @@ void outputLogicTask(void *pvParameters)
 
 				// Start 500ms timer & set flag
 				alt_alarm_start(&timer500, 500, timer500ISR, context);
-				printf("Started timer\n");
 				timerStarted = 1;
 				break;
 			case 2: // UNSTABLE
 
+//				printf("STATE IS: UNSTABLE\n");
 				// Stop 500ms timer
 				if (timerStarted == 1) {
 					alt_alarm_stop(&timer500);
@@ -511,10 +507,9 @@ void outputLogicTask(void *pvParameters)
 				redValue = 	IORD_ALTERA_AVALON_PIO_DATA(RED_LEDS_BASE);
 			    greenValue = IORD_ALTERA_AVALON_PIO_DATA(GREEN_LEDS_BASE);
 
-//			    if (redValue == 0) {
-//			    	break; // No loads to shed
-//				} else {
-
+			    if (redValue == 0) {
+			    	break; // No loads to shed
+				} else {
 					// Update red value to store loads currently on and loads not yet handled
 					redValue = greenValue ^ currentSwitchValue;
 
@@ -525,11 +520,12 @@ void outputLogicTask(void *pvParameters)
 						// Turn load on
 						greenValue = toggleBit(bitPosition, greenValue);
 						redValue = toggleBit(bitPosition, redValue);
-//					}
+					}
 				}
+
 				// DEBUG
 				taskENTER_CRITICAL();
-				printf("UNSTABLE GV:%d , RV:%d\n", greenValue, redValue);
+//				printf("UNSTABLE GV:%d , RV:%d\n", greenValue, redValue);
 				taskEXIT_CRITICAL();
 
 			    // Update LEDs
