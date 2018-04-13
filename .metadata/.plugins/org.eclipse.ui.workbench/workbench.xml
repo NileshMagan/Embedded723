@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<workbench progressCount="37" version="2.0">
+<workbench progressCount="36" version="2.0">
 <workbenchAdvisor/>
-<window height="768" maximized="true" width="1024" x="26" y="26">
+<window height="1167" maximized="true" width="974" x="454" y="0">
 <fastViewData fastViewLocation="1024"/>
-<intro standby="true"/>
 <perspectiveBar>
 <itemSize x="160"/>
 </perspectiveBar>
@@ -32,25 +31,42 @@
 <presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
 <part id="0"/>
 <part id="1"/>
+<part id="2"/>
+<part id="3"/>
+<part id="4"/>
+<part id="5"/>
 </presentation>
 </folder>
 </info>
 </editorArea>
-<editor activePart="true" focus="true" id="org.eclipse.cdt.ui.editor.CEditor" name="main.c" partName="main.c" path="H:/COMPSYS_723/Project_workspace/CS723_Assignment1/main.c" title="main.c" tooltip="CS723_Assignment1/main.c" workbook="DefaultEditorWorkbook">
-<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/CS723_Assignment1/main.c"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="20651" selectionTopPixel="11734"/>
-</editor>
 <editor id="org.eclipse.cdt.ui.editor.CEditor" name="FreeRTOS_timer.c" partName="FreeRTOS_timer.c" path="H:/COMPSYS_723/Project_workspace/CS723_Assignment1/FreeRTOS_timer.c" title="FreeRTOS_timer.c" tooltip="CS723_Assignment1/FreeRTOS_timer.c" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/CS723_Assignment1/FreeRTOS_timer.c"/>
 <editorState selectionHorizontalPixel="0" selectionLength="1" selectionOffset="912" selectionTopPixel="181"/>
+</editor>
+<editor id="org.eclipse.cdt.ui.editor.CEditor" name="FreeRTOSConfig.h" partName="FreeRTOSConfig.h" path="H:/COMPSYS_723/Project_workspace/CS723_Assignment1/FreeRTOS/FreeRTOSConfig.h" title="FreeRTOSConfig.h" tooltip="CS723_Assignment1/FreeRTOS/FreeRTOSConfig.h" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/CS723_Assignment1/FreeRTOS/FreeRTOSConfig.h"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="6242" selectionTopPixel="1419"/>
+</editor>
+<editor id="org.eclipse.cdt.ui.editor.CEditor" name="alt_times.c" partName="alt_times.c" path="H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/HAL/src/alt_times.c" title="alt_times.c" tooltip="CS723_Assignment1_bsp/HAL/src/alt_times.c" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/CS723_Assignment1_bsp/HAL/src/alt_times.c"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="2537" selectionTopPixel="580"/>
+</editor>
+<editor id="org.eclipse.cdt.ui.editor.CEditor" name="alt_timestamp.h" partName="alt_timestamp.h" path="H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/HAL/inc/sys/alt_timestamp.h" title="alt_timestamp.h" tooltip="CS723_Assignment1_bsp/HAL/inc/sys/alt_timestamp.h" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/CS723_Assignment1_bsp/HAL/inc/sys/alt_timestamp.h"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="3002" selectionTopPixel="393"/>
+</editor>
+<editor activePart="true" focus="true" id="org.eclipse.cdt.ui.editor.CEditor" name="main.c" partName="main.c" path="H:/COMPSYS_723/Project_workspace/CS723_Assignment1/main.c" title="main.c" tooltip="CS723_Assignment1/main.c" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/CS723_Assignment1/main.c"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="5778" selectionTopPixel="3143"/>
+</editor>
+<editor id="org.eclipse.cdt.ui.editor.CEditor" name="system.h" partName="system.h" path="H:/COMPSYS_723/Project_workspace/CS723_Assignment1_bsp/system.h" title="system.h" tooltip="CS723_Assignment1_bsp/system.h" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/CS723_Assignment1_bsp/system.h"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="6853" selectionTopPixel="3540"/>
 </editor>
 </editors>
 <views>
 <view id="org.eclipse.ui.navigator.ProjectExplorer" partName="Project Explorer">
 <viewState CommonNavigator.LINKING_ENABLED="0" org.eclipse.cdt.ui.cview.groupincludes="false" org.eclipse.cdt.ui.cview.groupmacros="false" org.eclipse.cdt.ui.editor.CUChildren="true" org.eclipse.ui.navigator.resources.workingSets.showTopLevelWorkingSets="0"/>
-</view>
-<view id="org.eclipse.ui.views.ProgressView" partName="Progress">
-<viewState/>
 </view>
 <view id="org.eclipse.ui.views.PropertySheet" partName="Properties">
 <viewState/>
@@ -59,6 +75,7 @@
 <view id="org.eclipse.ui.views.ProblemView" partName="Problems">
 <viewState PRIMARY_SORT_FIELD="org.eclipse.ui.ide.severityAndDescriptionField" categoryGroup="org.eclipse.ui.ide.severity" markerContentGenerator="org.eclipse.ui.ide.problemsGenerator" partName="Problems">
 <expanded>
+<category IMemento.internal.id="Warnings (19 items)"/>
 <category IMemento.internal.id="Warnings"/>
 <category IMemento.internal.id="Errors"/>
 </expanded>
@@ -72,12 +89,6 @@
 </view>
 <view id="org.eclipse.ui.console.ConsoleView" partName="Console">
 <viewState/>
-</view>
-<view id="org.eclipse.ui.internal.introview" partName="Welcome">
-<viewState>
-<presentation currentPage="root" restore="true"/>
-<standbyPart/>
-</viewState>
 </view>
 <view id="org.eclipse.mylyn.tasks.ui.views.tasks" partName="Task List"/>
 <view id="org.eclipse.ui.views.TaskList" partName="Tasks">
@@ -245,8 +256,6 @@
 <view id="org.eclipse.ui.console.ConsoleView"/>
 <view id="org.eclipse.ui.views.PropertySheet"/>
 <view id="org.eclipse.ui.views.ContentOutline"/>
-<view id="org.eclipse.ui.internal.introview"/>
-<view id="org.eclipse.ui.views.ProgressView"/>
 <fastViewBars/>
 <layout>
 <mainWindow>
@@ -262,18 +271,15 @@
 </folder>
 </info>
 <info folder="true" part="org.eclipse.ui.internal.ViewStack@1816fb6" ratio="0.75" ratioLeft="750" ratioRight="250" relationship="2" relative="topLeft">
-<folder activePageID="org.eclipse.ui.internal.introview" appearance="2" expanded="2">
-<page content="org.eclipse.ui.views.ProgressView" label="Progress"/>
-<page content="org.eclipse.ui.internal.introview" label="Welcome"/>
+<folder appearance="2" expanded="2">
+<page content="org.eclipse.ui.views.ProgressView" label="LabelNotFound"/>
+<page content="org.eclipse.ui.internal.introview" label="LabelNotFound"/>
 <page content="org.eclipse.help.ui.HelpView" label="LabelNotFound"/>
 <page content="org.eclipse.ui.cheatsheets.views.CheatSheetView" label="LabelNotFound"/>
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
-<part id="0"/>
-<part id="1"/>
-</presentation>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory"/>
 </folder>
 </info>
-<info part="org.eclipse.ui.editorss" ratio="0.15096618" ratioLeft="250" ratioRight="1406" relationship="2" relative="topLeft"/>
+<info part="org.eclipse.ui.editorss" ratio="0.13095862" ratioLeft="250" ratioRight="1659" relationship="2" relative="topLeft"/>
 <info folder="true" part="bottom" ratio="0.6565176" ratioLeft="690" ratioRight="361" relationship="4" relative="org.eclipse.ui.editorss">
 <folder activePageID="com.altera.sbtgui.launch.hardware.ByteStreamConsoleView:USB-Blaster on localhost [USB-0].1.0" appearance="2" expanded="2">
 <page content="org.eclipse.ui.views.ProblemView" label="Problems"/>
@@ -292,7 +298,7 @@
 </presentation>
 </folder>
 </info>
-<info folder="true" part="topRight" ratio="0.7493333" ratioLeft="562" ratioRight="188" relationship="2" relative="org.eclipse.ui.editorss">
+<info folder="true" part="topRight" ratio="0.84726226" ratioLeft="588" ratioRight="106" relationship="2" relative="org.eclipse.ui.editorss">
 <folder activePageID="org.eclipse.ui.views.ContentOutline" appearance="2" expanded="2">
 <page content="org.eclipse.ui.views.ContentOutline" label="Outline"/>
 <presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
@@ -308,161 +314,161 @@
 <navigationHistory>
 <editors>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/CS723_Assignment1/main.c"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/CS723_Assignment1/FreeRTOS_freq_plot.c"/>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/CS723_Assignment1/FreeRTOS_timer.c"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/CS723_Assignment1_bsp/drivers/inc/altera_up_ps2_keyboard.h"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/CS723_Assignment1_bsp/HAL/src/alt_times.c"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/CS723_Assignment1_bsp/HAL/inc/sys/alt_timestamp.h"/>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/CS723_Assignment1_bsp/system.h"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.make.editor" path="/CS723_Assignment1_bsp/Makefile"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/CS723_Assignment1/main.c"/>
 </editors>
-<item historyLabel="main.c" index="0">
-<position/>
-</item>
-<item historyLabel="FreeRTOS_freq_plot.c" index="1">
-<position info="not_deleted" x="321" y="535"/>
-</item>
-<item historyLabel="main.c" index="0">
-<position/>
-</item>
-<item historyLabel="FreeRTOS_freq_plot.c" index="1">
-<position info="not_deleted" x="2799" y="25"/>
-</item>
-<item historyLabel="main.c" index="0">
-<position/>
-</item>
-<item historyLabel="FreeRTOS_freq_plot.c" index="1">
-<position info="not_deleted" x="978" y="101"/>
-</item>
-<item historyLabel="main.c" index="0">
-<position/>
-</item>
-<item historyLabel="FreeRTOS_freq_plot.c" index="1">
-<position info="not_deleted" x="2840" y="0"/>
-</item>
-<item historyLabel="main.c" index="0">
-<position/>
-</item>
-<item historyLabel="FreeRTOS_freq_plot.c" index="1">
-<position info="not_deleted" x="4960" y="339"/>
-</item>
-<item historyLabel="main.c" index="0">
-<position/>
-</item>
-<item historyLabel="main.c" index="0">
-<position/>
-</item>
-<item historyLabel="main.c" index="0">
-<position/>
-</item>
-<item historyLabel="FreeRTOS_freq_plot.c" index="1">
-<position info="not_deleted" x="4960" y="339"/>
-</item>
-<item historyLabel="main.c" index="0">
-<position/>
-</item>
-<item historyLabel="FreeRTOS_freq_plot.c" index="1">
-<position info="not_deleted" x="0" y="0"/>
-</item>
-<item historyLabel="main.c" index="0">
-<position/>
-</item>
-<item historyLabel="FreeRTOS_freq_plot.c" index="1">
-<position info="not_deleted" x="0" y="0"/>
-</item>
-<item historyLabel="main.c" index="0">
-<position/>
-</item>
-<item historyLabel="FreeRTOS_freq_plot.c" index="1">
-<position info="not_deleted" x="0" y="0"/>
-</item>
-<item historyLabel="main.c" index="0">
-<position/>
-</item>
-<item historyLabel="FreeRTOS_freq_plot.c" index="1">
-<position info="not_deleted" x="0" y="0"/>
-</item>
-<item historyLabel="main.c" index="0">
-<position/>
-</item>
-<item historyLabel="FreeRTOS_freq_plot.c" index="1">
-<position info="not_deleted" x="0" y="0"/>
-</item>
-<item historyLabel="main.c" index="0">
-<position/>
-</item>
-<item historyLabel="FreeRTOS_freq_plot.c" index="1">
-<position info="not_deleted" x="0" y="0"/>
-</item>
-<item historyLabel="main.c" index="0">
-<position/>
-</item>
-<item historyLabel="FreeRTOS_freq_plot.c" index="1">
-<position info="not_deleted" x="0" y="0"/>
-</item>
-<item historyLabel="main.c" index="0">
-<position/>
-</item>
-<item historyLabel="FreeRTOS_freq_plot.c" index="1">
-<position info="not_deleted" x="20" y="19"/>
-</item>
-<item historyLabel="main.c" index="0">
-<position/>
-</item>
-<item historyLabel="FreeRTOS_freq_plot.c" index="1">
-<position info="not_deleted" x="20" y="19"/>
-</item>
-<item historyLabel="main.c" index="0">
-<position/>
-</item>
-<item historyLabel="FreeRTOS_freq_plot.c" index="1">
-<position info="not_deleted" x="20" y="19"/>
-</item>
-<item historyLabel="FreeRTOS_timer.c" index="2">
-<position info="not_deleted" x="862" y="28"/>
-</item>
-<item historyLabel="main.c" index="0">
-<position/>
-</item>
-<item historyLabel="FreeRTOS_timer.c" index="2">
-<position info="not_deleted" x="581" y="0"/>
-</item>
-<item historyLabel="main.c" index="0">
-<position info="not_deleted" x="5054" y="7"/>
-</item>
-<item historyLabel="FreeRTOS_timer.c" index="2">
-<position info="not_deleted" x="272" y="0"/>
-</item>
-<item historyLabel="altera_up_ps2_keyboard.h" index="3">
-<position info="not_deleted" x="1276" y="15"/>
-</item>
-<item historyLabel="FreeRTOS_freq_plot.c" index="1">
-<position info="not_deleted" x="20" y="19"/>
-</item>
-<item historyLabel="main.c" index="0">
-<position info="not_deleted" x="5241" y="0"/>
-</item>
-<item historyLabel="FreeRTOS_timer.c" index="2">
-<position info="not_deleted" x="627" y="72"/>
-</item>
-<item historyLabel="main.c" index="0">
-<position info="not_deleted" x="8820" y="0"/>
-</item>
-<item historyLabel="FreeRTOS_timer.c" index="2">
-<position info="not_deleted" x="627" y="72"/>
-</item>
 <item historyLabel="system.h" index="4">
-<position info="not_deleted" x="6841" y="23"/>
+<position info="not_deleted" x="8317" y="0"/>
 </item>
-<item historyLabel="Makefile" index="5">
-<position info="not_deleted" x="21191" y="0"/>
-</item>
-<item historyLabel="main.c" index="0">
-<position info="not_deleted" x="548" y="0"/>
-</item>
-<item historyLabel="FreeRTOS_timer.c" index="2">
+<item historyLabel="FreeRTOS_timer.c" index="1">
 <position info="not_deleted" x="912" y="1"/>
 </item>
-<item active="true" historyLabel="main.c" index="0">
-<position info="not_deleted" x="548" y="0"/>
+<item historyLabel="main.c" index="0">
+<position info="not_deleted" x="15203" y="0"/>
+</item>
+<item historyLabel="main.c" index="0">
+<position/>
+</item>
+<item historyLabel="main.c" index="0">
+<position info="not_deleted" x="8484" y="0"/>
+</item>
+<item historyLabel="main.c" index="0">
+<position/>
+</item>
+<item historyLabel="main.c" index="0">
+<position info="not_deleted" x="12975" y="0"/>
+</item>
+<item historyLabel="main.c" index="0">
+<position info="not_deleted" x="23946" y="0"/>
+</item>
+<item historyLabel="alt_timestamp.h" index="3">
+<position info="not_deleted" x="3002" y="0"/>
+</item>
+<item historyLabel="main.c" index="0">
+<position info="not_deleted" x="23946" y="0"/>
+</item>
+<item historyLabel="main.c" index="0">
+<position info="not_deleted" x="8479" y="3"/>
+</item>
+<item historyLabel="alt_times.c" index="2">
+<position info="not_deleted" x="2537" y="0"/>
+</item>
+<item historyLabel="alt_timestamp.h" index="3">
+<position info="not_deleted" x="3002" y="0"/>
+</item>
+<item historyLabel="system.h" index="4">
+<position info="not_deleted" x="8007" y="0"/>
+</item>
+<item historyLabel="main.c" index="0">
+<position info="not_deleted" x="8479" y="3"/>
+</item>
+<item historyLabel="main.c" index="0">
+<position info="not_deleted" x="11419" y="0"/>
+</item>
+<item historyLabel="main.c" index="0">
+<position/>
+</item>
+<item historyLabel="main.c" index="0">
+<position info="not_deleted" x="11401" y="13"/>
+</item>
+<item historyLabel="main.c" index="0">
+<position info="not_deleted" x="11381" y="0"/>
+</item>
+<item historyLabel="main.c" index="0">
+<position info="not_deleted" x="11401" y="13"/>
+</item>
+<item historyLabel="main.c" index="0">
+<position/>
+</item>
+<item historyLabel="main.c" index="0">
+<position info="not_deleted" x="11330" y="0"/>
+</item>
+<item historyLabel="main.c" index="0">
+<position info="not_deleted" x="24079" y="0"/>
+</item>
+<item historyLabel="main.c" index="0">
+<position info="not_deleted" x="16390" y="0"/>
+</item>
+<item historyLabel="main.c" index="0">
+<position info="not_deleted" x="14276" y="11"/>
+</item>
+<item historyLabel="main.c" index="0">
+<position info="not_deleted" x="12983" y="11"/>
+</item>
+<item historyLabel="main.c" index="0">
+<position/>
+</item>
+<item historyLabel="main.c" index="0">
+<position/>
+</item>
+<item historyLabel="main.c" index="0">
+<position/>
+</item>
+<item historyLabel="main.c" index="0">
+<position info="not_deleted" x="11549" y="0"/>
+</item>
+<item historyLabel="main.c" index="0">
+<position info="not_deleted" x="11721" y="0"/>
+</item>
+<item historyLabel="main.c" index="0">
+<position info="not_deleted" x="11669" y="0"/>
+</item>
+<item historyLabel="main.c" index="0">
+<position info="not_deleted" x="7408" y="0"/>
+</item>
+<item historyLabel="system.h" index="4">
+<position info="not_deleted" x="8007" y="0"/>
+</item>
+<item historyLabel="alt_timestamp.h" index="3">
+<position info="not_deleted" x="3002" y="0"/>
+</item>
+<item historyLabel="main.c" index="5">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="main.c" index="5">
+<position/>
+</item>
+<item historyLabel="main.c" index="5">
+<position info="not_deleted" x="22844" y="22"/>
+</item>
+<item historyLabel="system.h" index="4">
+<position info="not_deleted" x="7054" y="0"/>
+</item>
+<item historyLabel="main.c" index="5">
+<position/>
+</item>
+<item historyLabel="system.h" index="4">
+<position info="not_deleted" x="6853" y="0"/>
+</item>
+<item historyLabel="main.c" index="5">
+<position info="not_deleted" x="4487" y="0"/>
+</item>
+<item historyLabel="main.c" index="5">
+<position info="not_deleted" x="4525" y="0"/>
+</item>
+<item historyLabel="main.c" index="5">
+<position/>
+</item>
+<item historyLabel="main.c" index="5">
+<position info="not_deleted" x="4482" y="45"/>
+</item>
+<item historyLabel="main.c" index="5">
+<position info="not_deleted" x="5443" y="0"/>
+</item>
+<item historyLabel="main.c" index="5">
+<position info="not_deleted" x="5443" y="0"/>
+</item>
+<item historyLabel="main.c" index="5">
+<position info="not_deleted" x="5431" y="0"/>
+</item>
+<item historyLabel="main.c" index="5">
+<position info="not_deleted" x="5447" y="60"/>
+</item>
+<item active="true" historyLabel="main.c" index="5">
+<position info="not_deleted" x="5538" y="0"/>
 </item>
 </navigationHistory>
 <input factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/" type="8"/>
@@ -482,11 +488,32 @@
 </trimLayout>
 </window>
 <mruList>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="FreeRTOS_timer.c" tooltip="CS723_Assignment1/FreeRTOS_timer.c">
-<persistable path="/CS723_Assignment1/FreeRTOS_timer.c"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="system.h" tooltip="CS723_Assignment1_bsp/system.h">
+<persistable path="/CS723_Assignment1_bsp/system.h"/>
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="main.c" tooltip="CS723_Assignment1/main.c">
 <persistable path="/CS723_Assignment1/main.c"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="alt_timestamp.h" tooltip="CS723_Assignment1_bsp/HAL/inc/sys/alt_timestamp.h">
+<persistable path="/CS723_Assignment1_bsp/HAL/inc/sys/alt_timestamp.h"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="alt_times.c" tooltip="CS723_Assignment1_bsp/HAL/src/alt_times.c">
+<persistable path="/CS723_Assignment1_bsp/HAL/src/alt_times.c"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="alt_alarm_start.c" tooltip="CS723_Assignment1_bsp/HAL/src/alt_alarm_start.c">
+<persistable path="/CS723_Assignment1_bsp/HAL/src/alt_alarm_start.c"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="altera_avalon_timer_regs.h" tooltip="CS723_Assignment1_bsp/drivers/inc/altera_avalon_timer_regs.h">
+<persistable path="/CS723_Assignment1_bsp/drivers/inc/altera_avalon_timer_regs.h"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="altera_avalon_timer.h" tooltip="CS723_Assignment1_bsp/drivers/inc/altera_avalon_timer.h">
+<persistable path="/CS723_Assignment1_bsp/drivers/inc/altera_avalon_timer.h"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="FreeRTOSConfig.h" tooltip="CS723_Assignment1/FreeRTOS/FreeRTOSConfig.h">
+<persistable path="/CS723_Assignment1/FreeRTOS/FreeRTOSConfig.h"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="FreeRTOS_timer.c" tooltip="CS723_Assignment1/FreeRTOS_timer.c">
+<persistable path="/CS723_Assignment1/FreeRTOS_timer.c"/>
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="altera_up_ps2_keyboard.h" tooltip="CS723_Assignment1_bsp/drivers/inc/altera_up_ps2_keyboard.h">
 <persistable path="/CS723_Assignment1_bsp/drivers/inc/altera_up_ps2_keyboard.h"/>
@@ -502,9 +529,6 @@
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.make.editor" name="Makefile" tooltip="CS723_Assignment1_bsp/Makefile">
 <persistable path="/CS723_Assignment1_bsp/Makefile"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="system.h" tooltip="CS723_Assignment1_bsp/system.h">
-<persistable path="/CS723_Assignment1_bsp/system.h"/>
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="button_check.c" tooltip="CS723_Assignment1/button_check.c">
 <persistable path="/CS723_Assignment1/button_check.c"/>
