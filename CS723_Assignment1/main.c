@@ -52,7 +52,7 @@
 #define FREQPLT_GRID_SIZE_X 5	//pixel separation in the x axis between two data points
 #define FREQPLT_ORI_Y 199.0		//y axis pixel position at the plot origin
 #define FREQPLT_FREQ_RES 20.0	//number of pixels per Hz (y axis scale)
-
+#define BASE_TIME 42 // Timer value
 #define ROCPLT_ORI_X 101
 #define ROCPLT_GRID_SIZE_X 5
 #define ROCPLT_ORI_Y 259.0
@@ -78,8 +78,9 @@ static volatile unsigned int currentSwitchValue = 31; // Data
 static volatile unsigned int TOF_500, switchChanged, enterMaintenanceState, timerStarted; // Flags
 static volatile unsigned int systemState, changedState; // State
 static volatile unsigned int levelThreshold, rateOfChangeThreshold;
-static volatile unsigned int frequencyIndex;
-static volatile double prevTime500, prevTime200;
+static volatile unsigned int frequencyIndex, reactionCount;
+static volatile unsigned int twoTimes;
+static volatile double prevTime500, prevTime200, timerOverflow;
 // 	0  IDLE
 //  1  STABLE
 //  2  UNSTABLE
@@ -157,31 +158,38 @@ void frequencyISR(void* context) {
 }
 
 void ps2ISR(void* context) {
-
-	char ascii;
-	int status = 0;
-	unsigned char key = 0;
-	KB_CODE_TYPE decode_mode;
-	status = decode_scancode (context, &decode_mode , &key , &ascii) ;
-	if ( status == 0 ) //success
-	{
-		switch ( decode_mode )
+	printf("////////\nIntoIsr\n");
+//	if (twoTimes == 2) {
+		twoTimes = 0;
+		char ascii;
+		int status = 0;
+		unsigned char key = 0;
+		KB_CODE_TYPE decode_mode;
+		status = decode_scancode (context, &decode_mode , &key , &ascii) ;
+		printf("Status: %d\n", status);
+		if ( status == 0 ) //success
 		{
-		 case KB_ASCII_MAKE_CODE :
-			xQueueSendToBackFromISR(keyboardQueue, ascii, pdTRUE);
-			//printf ( "ASCII   : %x\n", key ) ;
+			switch ( decode_mode )
+			{
+			 case KB_ASCII_MAKE_CODE :
+				xQueueSendToBackFromISR(keyboardQueue, ascii, pdTRUE);
+				printf ( "ASCII   : %c\n", ascii ) ;
 
-			// Give the semaphore
-			xSemaphoreGive(counterSemaphore0);
-			break ;
-		 case KB_BINARY_MAKE_CODE :
-			 //printf ( "MAKE CODE : %x\n", key ) ;
-			 break;
-		 default :
-			//printf ( "DEFAULT   : %x\n", key ) ;
-			break ;
+				// Give the semaphore
+				xSemaphoreGiveFromISR(counterSemaphore0, context);
+				break ;
+			 case KB_BINARY_MAKE_CODE :
+				 //printf ( "MAKE CODE : %x\n", key ) ;
+				 break;
+			 default :
+				//printf ( "DEFAULT   : %x\n", key ) ;
+				break ;
+			}
 		}
-	}
+//	} else {
+//		twoTimes++;
+//	}
+//	printf("TT: %d\n", twoTimes);
 }
 
 
@@ -218,9 +226,7 @@ void handleReactionTimer(void) {
 		// Find difference
 		newTime = getTime();
 		differenceInTime = newTime - prevTime200;
-		if(differenceInTime != 0){
-			addReactionTimeArray(differenceInTime);
-		}
+		addReactionTimeArray(differenceInTime);
 }
 
 int aboveRateOfFrequency(void) {
@@ -253,6 +259,9 @@ void addReactionTimeArray(double numberTodAdd) {
 		reactionTimes[i] = reactionTimes[i - 1];
 	}
 	reactionTimes[0] = numberTodAdd;
+	if (reactionCount != REACTION_ARRAY_SIZE){
+		reactionCount++;
+	}
 }
 
 double maxValueArray(double Array[], int size) {
@@ -324,7 +333,11 @@ int toggleBit(int bitPosition, int numberToToggle) {
 }
 
 double getTime(void) {
-	return (double)alt_timestamp()/100000000; // Convert to usalt_timestamp_start() // TODO: check
+	if ((double)alt_timestamp() == 0) {
+		timerOverflow++;
+		alt_timestamp_start();
+	}
+	return ((double)alt_timestamp()/100000000)+(timerOverflow * BASE_TIME); // Convert to usalt_timestamp_start() // TODO: check
 }
 
 /************/
@@ -371,43 +384,49 @@ void keyboardLogicTask(void *pvParameters)
 	while (1)
 	{
 		xSemaphoreTake(counterSemaphore0,portMAX_DELAY);
-		// Check if received enough characters yet
-		if (i < 1 + THRESHOLD_NUMBER_LENGTH) {
-			if ( uxQueueMessagesWaiting( keyboardQueue ) != 0) {
-				if (xQueueReceive(keyboardQueue, keyValues[i], portMAX_DELAY)) { //TODO check if receive buffer works
-					// Check that we have started correctly
-					if ((keyValues[0] != 'L') && (keyValues[0] != 'R')) {
-						i++;
-					}
-				}
-			}
-		} else { // Loop through filled array of characters and parse it to thresholds
-			int thresholdTemp = 0;
-			int invalidCharFlag = 0;
-
-			int z;
-			for (z = 0; z < THRESHOLD_NUMBER_LENGTH; z++) {
-				int numberConverted = keyValues[z] - '0';
-
-				// Validity checking
-				if ((numberConverted >= 10) && (numberConverted <= -1)){
-					invalidCharFlag = 1;
-				}
-				thresholdTemp = thresholdTemp + numberConverted*pow(10, THRESHOLD_NUMBER_LENGTH - 1 - z);
-			}
-
-			// Update thresholds and give semaphore if valid
-			if (!invalidCharFlag) {
-				if (keyValues[0] == 'L') {
-					levelThreshold = thresholdTemp;
-				} else if (keyValues[0] == 'R') {
-					rateOfChangeThreshold = thresholdTemp;
-				}
-				xSemaphoreGive(counterSemaphore1);
-			}
-
-			i = 0;
-		}
+		printf("Got you homie\n");
+//		// Check if received enough characters yet
+//		if (i < 1 + THRESHOLD_NUMBER_LENGTH) {
+//			if ( uxQueueMessagesWaiting( keyboardQueue ) != 0) {
+//				if (xQueueReceive(keyboardQueue, keyValues[i], portMAX_DELAY)) { //TODO check if receive buffer works
+//					// Check that we have started correctly
+//					if ((keyValues[0] != 'L') && (keyValues[0] != 'R')) {
+//						i++;
+//					}
+//				}
+//			}
+//		} else { // Loop through filled array of characters and parse it to thresholds
+//			int thresholdTemp = 0;
+//			int invalidCharFlag = 0;
+//
+//			int z;
+//			for (z = 0; z < THRESHOLD_NUMBER_LENGTH; z++) {
+//				int numberConverted = keyValues[z] - '0';
+//
+//				// Validity checking
+//				if ((numberConverted >= 10) && (numberConverted <= -1)){
+//					invalidCharFlag = 1;
+//				}
+//				thresholdTemp = thresholdTemp + numberConverted*pow(10, THRESHOLD_NUMBER_LENGTH - 1 - z);
+//				printf("ThresholdTemp: %d\n", thresholdTemp);
+//			}
+//
+//			// Update thresholds and give semaphore if valid
+//			if (!invalidCharFlag) {
+//				if (keyValues[0] == 'L') {
+//					levelThreshold = thresholdTemp;
+//					printf("STORED L THRESHOLD\n");
+//				} else if (keyValues[0] == 'R') {
+//					rateOfChangeThreshold = thresholdTemp;
+//					printf("STORED R THRESHOLD\n");
+//				}
+//
+//				xSemaphoreGive(counterSemaphore1);
+//				printf("ThresholdTemp_FINAL: %d\n", thresholdTemp);
+//			}
+//
+//			i = 0;
+//		}
 	}
 }
 
@@ -733,20 +752,20 @@ void vgaOutputTask(void *pvParameters)
 			sprintf(charData, "%.4f, %.4f, %.4f, %.4f, %.4f ms", reactionTimes[0], reactionTimes[1], reactionTimes[2], reactionTimes[3], reactionTimes[4]);
 			alt_up_char_buffer_string(char_buf, charData, 32, 50);
 
-			double minTime = minValueArray(reactionTimes, REACTION_ARRAY_SIZE);
+			double minTime = minValueArray(reactionTimes, reactionCount);
 			sprintf(charData, "%.4f ms", minTime);
 			alt_up_char_buffer_string(char_buf, charData, 27, 52);
 
-			double maxTime = maxValueArray(reactionTimes, REACTION_ARRAY_SIZE);
+			double maxTime = maxValueArray(reactionTimes, reactionCount);
 			sprintf(charData, "%.4f ms", maxTime);
 			alt_up_char_buffer_string(char_buf, charData, 27, 54);
 
-			double averageTime = AverageOfArray(reactionTimes, REACTION_ARRAY_SIZE);
+			double averageTime = AverageOfArray(reactionTimes, reactionCount);
 			sprintf(charData, "%.4f ms", averageTime);
 			alt_up_char_buffer_string(char_buf, charData, 27, 56);
 
 			double upTime = getTime();
-			sprintf(charData, "%d sec", (int) upTime);
+			sprintf(charData, "%d sec     ", (int) upTime);
 			alt_up_char_buffer_string(char_buf, charData, 20, 58);
 
 			vTaskDelay(10);
@@ -781,7 +800,7 @@ int initOSDataStructs(void)
 int initCreateTasks(void)
 {	
 	xTaskCreate(switchPollingTask, "switchPollingTask", TASK_STACKSIZE, NULL, SWITCH_POLLING_TASK_PRIORITY, NULL);
-	//xTaskCreate(keyboardLogicTask, "keyboardLogicTask", TASK_STACKSIZE, NULL, KEYBOARD_LOGIC_PRIORITY, NULL);
+//	xTaskCreate(keyboardLogicTask, "keyboardLogicTask", TASK_STACKSIZE, NULL, KEYBOARD_LOGIC_PRIORITY, NULL);
 	xTaskCreate(computeTask, "computeTask", TASK_STACKSIZE, NULL, COMPUTE_TASK_PRIORITY, NULL);
 	xTaskCreate(outputLogicTask, "outputLogicTask", TASK_STACKSIZE, NULL, OUTPUT_LOGIC_TASK_PRIORITY, NULL);
 	xTaskCreate(vgaOutputTask, "vgaOutputTask", TASK_STACKSIZE, NULL, VGA_OUTPUT_TASK_PRIORITY, NULL);
@@ -799,6 +818,9 @@ int initFlags(void)
 	context = 0;
 
 	prevTime500 = 0;
+	twoTimes = 0;
+	reactionCount = 0;
+	timerOverflow = 0;
 
 	// State
 	systemState = 0;
@@ -849,7 +871,7 @@ int initKeyboard(void) {
 	// Register the PS/2 interrupt
 	alt_irq_register(PS2_IRQ, ps2_device, ps2ISR);
 
-	//IOWR_8DIRECT(PS2_BASE,4,1); //WHAT IS THIS??
+	IOWR_8DIRECT(PS2_BASE,4,1); //WHAT IS THIS??
 
 	return 0; // success
 }
