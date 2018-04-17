@@ -36,7 +36,7 @@ TaskHandle_t xHandle;
 
 // Definition of Semaphore
 SemaphoreHandle_t counterSemaphore0, counterSemaphore1;
-unsigned int[FREQUENCY_DATA_QUEUE_SIZE] frequencyDataQueue = {0}; // Happy with the size?
+unsigned int[FREQUENCY_DATA_QUEUE_SIZE] frequencyDataQueue = {0}; 
 // TO DO: Need to decide between making our own queue^ and using an RTOS queue (without interrupts)
 
 // Global variables
@@ -63,7 +63,8 @@ int initAll(void);
 /************/
 alt_u32 timerISR(void* context)
 {
-	// TO DO
+	TOF_500 = 1;
+	xSemaphoreGive(counterSemaphore1);
 	return 0;
 }
 
