@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios2' in SOPC Builder design 'nios2'
  * SOPC Builder design path: H:/COMPSYS_723/Project_workspace/SOPC_files/nios2.sopcinfo
  *
- * Generated: Mon Apr 02 11:20:09 NZST 2018
+ * Generated: Tue Apr 10 11:45:50 NZST 2018
  */
 
 /*
@@ -262,7 +262,7 @@
 
 #define ALT_MAX_FD 32
 #define ALT_SYS_CLK TIMER1MS
-#define ALT_TIMESTAMP_CLK none
+#define ALT_TIMESTAMP_CLK TIMER1US
 
 
 /*

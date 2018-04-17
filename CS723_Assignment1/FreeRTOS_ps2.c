@@ -38,7 +38,7 @@ int main()
 {
   alt_up_ps2_dev * ps2_device = alt_up_ps2_open_dev(PS2_NAME);
 
-  
+
   if(ps2_device == NULL){
     printf("can't find PS/2 device\n");
     return 1;
