@@ -395,51 +395,40 @@ void keyboardLogicTask(void *pvParameters)
 //			if ( uxQueueMessagesWaiting( keyboardQueue ) != 0) {
 				if (xQueueReceive(keyboardQueue, keyValues+i, portMAX_DELAY)) { //TODO check if receive buffer works
 					// Check that we have started correctly
-					printf("/////////\n");
-					printf("i: %d\n", i);
-					printf("keyValues[i]: %d\n", keyValues[i]);
 					if ((keyValues[0] == L) || (keyValues[0] == R)) {
-						printf("Got in\n");
 						i++;
 					} else {
 						keyValues[i] = 0;
 					}
 				}
 //			}
-		} else { // Loop through filled array of characters and parse it to thresholds
+		} else if (xQueueReceive(keyboardQueue, keyValues+i, portMAX_DELAY)) { // Loop through filled array of characters and parse it to thresholds
 			int thresholdTemp = 0;
 			int invalidCharFlag = 0;
-
 			int z;
-			for (z = 0; z < THRESHOLD_NUMBER_LENGTH; z++) {
+			for (z = 1; z < THRESHOLD_NUMBER_LENGTH + 1; z++) {
 				int numberConverted = keyValues[z] - '0';
 
 				// Validity checking
 				if ((numberConverted >= 10) && (numberConverted <= -1)){
 					invalidCharFlag = 1;
 				}
-				thresholdTemp = thresholdTemp + numberConverted*pow(10, THRESHOLD_NUMBER_LENGTH - 1 - z);
-				printf("ThresholdTemp: %d\n", thresholdTemp);
+				thresholdTemp = thresholdTemp + numberConverted*pow(10, THRESHOLD_NUMBER_LENGTH - z);
 			}
 
 			// Update thresholds and give semaphore if valid
 			if (!invalidCharFlag) {
 				if (keyValues[0] == L) {
 					levelThreshold = thresholdTemp;
-					printf("STORED L THRESHOLD\n");
+					printf("STORED L THRESHOLD: %d\n", levelThreshold);
 				} else if (keyValues[0] == R) {
 					rateOfChangeThreshold = thresholdTemp;
-					printf("STORED R THRESHOLD\n");
+					printf("STORED R THRESHOLD: %d\n", rateOfChangeThreshold);
 				}
 
-				for (i = 0 ; i < THRESHOLD_NUMBER_LENGTH + 1; i++)
-				  {
-					keyValues[i] = 0;
-				  }
-
+				for (z = 0 ; z < THRESHOLD_NUMBER_LENGTH + 1; z++) { keyValues[z] = 0; } // Reset array to 0
 
 				xSemaphoreGive(counterSemaphore1);
-				printf("ThresholdTemp_FINAL: %d\n", thresholdTemp);
 			}
 
 			i = 0;
