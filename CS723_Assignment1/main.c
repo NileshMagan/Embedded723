@@ -29,6 +29,10 @@
 // Definition of Task Stacks
 #define   TASK_STACKSIZE       2048
 
+// Definition of Letters
+#define L 76
+#define R 82
+
 // Definition of Task Priorities
 #define SWITCH_POLLING_TASK_PRIORITY 3
 #define KEYBOARD_LOGIC_PRIORITY 2
@@ -52,7 +56,7 @@
 #define FREQPLT_GRID_SIZE_X 5	//pixel separation in the x axis between two data points
 #define FREQPLT_ORI_Y 199.0		//y axis pixel position at the plot origin
 #define FREQPLT_FREQ_RES 20.0	//number of pixels per Hz (y axis scale)
-#define BASE_TIME 42 // Timer value
+#define BASE_TIME 42.9 // Timer value
 #define ROCPLT_ORI_X 101
 #define ROCPLT_GRID_SIZE_X 5
 #define ROCPLT_ORI_Y 259.0
@@ -158,32 +162,33 @@ void frequencyISR(void* context) {
 }
 
 void ps2ISR(void* context) {
-	printf("////////\nIntoIsr\n");
-//	if (twoTimes == 2) {
-		twoTimes = 0;
 		char ascii;
 		int status = 0;
 		unsigned char key = 0;
 		KB_CODE_TYPE decode_mode;
 		status = decode_scancode (context, &decode_mode , &key , &ascii) ;
-		printf("Status: %d\n", status);
 		if ( status == 0 ) //success
 		{
-			switch ( decode_mode )
-			{
-			 case KB_ASCII_MAKE_CODE :
-				xQueueSendToBackFromISR(keyboardQueue, ascii, pdTRUE);
-				printf ( "ASCII   : %c\n", ascii ) ;
+			if (twoTimes == 1) {
+				twoTimes = 0;
+				switch ( decode_mode )
+				{
+				 case KB_ASCII_MAKE_CODE :
+					xQueueSendToBackFromISR(keyboardQueue, &ascii, pdTRUE);
+//					printf ( "ASCII   : %c\n", ascii ) ;
 
-				// Give the semaphore
-				xSemaphoreGiveFromISR(counterSemaphore0, context);
-				break ;
-			 case KB_BINARY_MAKE_CODE :
-				 //printf ( "MAKE CODE : %x\n", key ) ;
-				 break;
-			 default :
-				//printf ( "DEFAULT   : %x\n", key ) ;
-				break ;
+					// Give the semaphore
+					xSemaphoreGiveFromISR(counterSemaphore0, context);
+					break ;
+				 case KB_BINARY_MAKE_CODE :
+					 //printf ( "MAKE CODE : %x\n", key ) ;
+					 break;
+				 default :
+					//printf ( "DEFAULT   : %x\n", key ) ;
+					break ;
+				}
+			} else {
+				twoTimes++;
 			}
 		}
 //	} else {
@@ -204,6 +209,7 @@ void checkNewFrequencyValues(void) {
 		double temp;
 		xQueueReceive(frequencyQueue, (void*) &temp, portMAX_DELAY);
 		frequencyData[frequencyIndex] = temp;
+
 
 		//calculate frequency RoC
 		if(frequencyIndex==0){
@@ -231,12 +237,20 @@ void handleReactionTimer(void) {
 
 int aboveRateOfFrequency(void) {
 	// Check most recent value of frequency queue, compare it previous and find gradient
-	return (rateOfChangeData[frequencyIndex - 1] > rateOfChangeThreshold); // 1 is Unstable
+	if (!frequencyIndex) {
+		return (rateOfChangeData[99] > rateOfChangeThreshold); // 1 is Unstable
+	} else {
+		return (rateOfChangeData[frequencyIndex - 1] > rateOfChangeThreshold); // 1 is Unstable
+	}
 }
 
 int belowThresholdFrequency(void) {
 	// Check most recent value of frequency queue, compare it to threshold
-	return (frequencyData[frequencyIndex - 1] < levelThreshold); // 1 is Unstable
+	if (!frequencyIndex) {
+		return (frequencyData[99] < levelThreshold); // 1 is Unstable
+	} else {
+		return (frequencyData[frequencyIndex - 1] < levelThreshold); // 1 is Unstable
+	}
 }
 
 void updateLEDs(unsigned int greenLEDValue, unsigned int redLEDValue) {
@@ -384,49 +398,57 @@ void keyboardLogicTask(void *pvParameters)
 	while (1)
 	{
 		xSemaphoreTake(counterSemaphore0,portMAX_DELAY);
-		printf("Got you homie\n");
-//		// Check if received enough characters yet
-//		if (i < 1 + THRESHOLD_NUMBER_LENGTH) {
+//		printf("Got you homie\n");
+		// Check if received enough characters yet
+		if (i < THRESHOLD_NUMBER_LENGTH) {
 //			if ( uxQueueMessagesWaiting( keyboardQueue ) != 0) {
-//				if (xQueueReceive(keyboardQueue, keyValues[i], portMAX_DELAY)) { //TODO check if receive buffer works
-//					// Check that we have started correctly
-//					if ((keyValues[0] != 'L') && (keyValues[0] != 'R')) {
-//						i++;
-//					}
-//				}
+				if (xQueueReceive(keyboardQueue, keyValues+i, portMAX_DELAY)) { //TODO check if receive buffer works
+					// Check that we have started correctly
+					if ((keyValues[0] == L) || (keyValues[0] == R)) {
+						i++;
+					} else {
+						keyValues[i] = 0;
+					}
+				}
 //			}
-//		} else { // Loop through filled array of characters and parse it to thresholds
-//			int thresholdTemp = 0;
-//			int invalidCharFlag = 0;
-//
-//			int z;
-//			for (z = 0; z < THRESHOLD_NUMBER_LENGTH; z++) {
-//				int numberConverted = keyValues[z] - '0';
-//
-//				// Validity checking
-//				if ((numberConverted >= 10) && (numberConverted <= -1)){
-//					invalidCharFlag = 1;
-//				}
-//				thresholdTemp = thresholdTemp + numberConverted*pow(10, THRESHOLD_NUMBER_LENGTH - 1 - z);
-//				printf("ThresholdTemp: %d\n", thresholdTemp);
-//			}
-//
-//			// Update thresholds and give semaphore if valid
-//			if (!invalidCharFlag) {
-//				if (keyValues[0] == 'L') {
-//					levelThreshold = thresholdTemp;
-//					printf("STORED L THRESHOLD\n");
-//				} else if (keyValues[0] == 'R') {
-//					rateOfChangeThreshold = thresholdTemp;
-//					printf("STORED R THRESHOLD\n");
-//				}
-//
-//				xSemaphoreGive(counterSemaphore1);
-//				printf("ThresholdTemp_FINAL: %d\n", thresholdTemp);
-//			}
-//
-//			i = 0;
-//		}
+		} else if (xQueueReceive(keyboardQueue, keyValues+i, portMAX_DELAY)) { // Loop through filled array of characters and parse it to thresholds
+			int thresholdTemp = 0;
+			int invalidCharFlag = 0;
+			int decimalFlag = 0;
+			int z;
+			for (z = 1; z < THRESHOLD_NUMBER_LENGTH + 1; z++) {
+				int numberConverted = keyValues[z] - '0';
+
+				// Decimal number
+				if (keyValues[z] == 46) {
+					decimalFlag = 1;
+				}
+
+				// Validity checking
+				if (((numberConverted >= 10) && (numberConverted <= -1)) && (decimalFlag != 1)) {
+					invalidCharFlag = 1;
+				}
+
+				thresholdTemp = thresholdTemp + numberConverted*pow(10, THRESHOLD_NUMBER_LENGTH - z);
+			}
+
+			// Update thresholds and give semaphore if valid
+			if (!invalidCharFlag) {
+				if (keyValues[0] == L) {
+					levelThreshold = thresholdTemp;
+					printf("STORED L THRESHOLD: %d\n", levelThreshold);
+				} else if (keyValues[0] == R) {
+					rateOfChangeThreshold = thresholdTemp;
+					printf("STORED R THRESHOLD: %d\n", rateOfChangeThreshold);
+				}
+
+				for (z = 0 ; z < THRESHOLD_NUMBER_LENGTH + 1; z++) { keyValues[z] = 0; } // Reset array to 0
+
+				xSemaphoreGive(counterSemaphore1);
+			}
+
+			i = 0;
+		}
 	}
 }
 
@@ -456,7 +478,7 @@ void computeTask(void *pvParameters)
 
 			int frequencyUnstable = aboveRateOfFrequency() || belowThresholdFrequency();
 
-//			printf("RoC: %d, Threshold: %d\n", aboveRateOfFrequency(), belowThresholdFrequency());
+
 			if ( frequencyUnstable ) {
 				nextSystemState = 2; // 2 is Unstable state
 			} else if ( !frequencyUnstable ) {
@@ -467,7 +489,9 @@ void computeTask(void *pvParameters)
 		// If nextState != prevState then restart timers,
 		if ((systemState != nextSystemState) || TOF_500 || switchChanged) {
 
+//			printf("RoC: %d, Threshold: %d\n", aboveRateOfFrequency(), belowThresholdFrequency());
 //			printf("StateChange: %d, TOV: %d, SWC: %d\n", (systemState != nextSystemState), TOF_500, switchChanged);
+
 
 			if ((systemState != nextSystemState) && (nextSystemState != 3)) { // 3 is Maintenance state
 				// Store time
@@ -798,9 +822,9 @@ int initOSDataStructs(void)
 
 // This function creates the tasks used in this example
 int initCreateTasks(void)
-{	
+{
 	xTaskCreate(switchPollingTask, "switchPollingTask", TASK_STACKSIZE, NULL, SWITCH_POLLING_TASK_PRIORITY, NULL);
-//	xTaskCreate(keyboardLogicTask, "keyboardLogicTask", TASK_STACKSIZE, NULL, KEYBOARD_LOGIC_PRIORITY, NULL);
+	xTaskCreate(keyboardLogicTask, "keyboardLogicTask", TASK_STACKSIZE, NULL, KEYBOARD_LOGIC_PRIORITY, NULL);
 	xTaskCreate(computeTask, "computeTask", TASK_STACKSIZE, NULL, COMPUTE_TASK_PRIORITY, NULL);
 	xTaskCreate(outputLogicTask, "outputLogicTask", TASK_STACKSIZE, NULL, OUTPUT_LOGIC_TASK_PRIORITY, NULL);
 	xTaskCreate(vgaOutputTask, "vgaOutputTask", TASK_STACKSIZE, NULL, VGA_OUTPUT_TASK_PRIORITY, NULL);
@@ -829,7 +853,7 @@ int initFlags(void)
 
 	// Thresholds
 	levelThreshold = 49;
-	rateOfChangeThreshold = 10; // TODO
+	rateOfChangeThreshold = 10;
 	return 0;
 }
 
@@ -884,7 +908,7 @@ void initAll(void) {
 	initFlags();
 	initButtonsPIO();
 	initFrequency();
-//	initKeyboard();
+	initKeyboard();
 	taskENTER_CRITICAL();
 	printf("Initialised all\n");
 	taskEXIT_CRITICAL();

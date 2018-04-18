@@ -1,0 +1,46 @@
+#include <stdio.h>
+#include "system.h"
+#include "io.h"
+#include "altera_up_avalon_ps2.h"
+#include "altera_up_ps2_keyboard.h"
+#include "sys/alt_irq.h"
+
+static volatile unsigned int flag = 0;
+
+void ps2_isr (void* context, alt_u32 id)
+{
+  char ascii;
+  int status = 0;
+  unsigned char key = 0;
+  KB_CODE_TYPE decode_mode;
+  status = decode_scancode (context, &decode_mode , &key , &ascii) ;
+  if ( status == 0 ) //success
+  {
+	if (flag) {
+		  printf("%d, %d, %d\n", decode_mode, key, ascii);
+		// print out the result
+		  IOWR(SEVEN_SEG_BASE,0 ,key);
+		  flag = 0;
+	} else {
+		flag++;
+	}
+  }
+}
+int main()
+{
+  alt_up_ps2_dev * ps2_device = alt_up_ps2_open_dev(PS2_NAME);
+
+  if(ps2_device == NULL){
+    printf("can't find PS/2 device\n");
+    return 1;
+  }
+
+  alt_up_ps2_clear_fifo (ps2_device) ;
+
+  alt_irq_register(PS2_IRQ, ps2_device, ps2_isr);
+  // register the PS/2 interrupt
+  IOWR_8DIRECT(PS2_BASE,4,1);
+  vTaskStartScheduler();
+  while(1){}
+  return 0;
+}
