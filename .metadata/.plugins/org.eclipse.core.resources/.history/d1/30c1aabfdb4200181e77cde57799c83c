@@ -82,6 +82,7 @@ unsigned int context;
 
 
 // MUTEX
+static volatile unsigned int error = 0; // Data: binarySemaphore3
 static volatile unsigned int currentSwitchValue; // Data: binarySemaphore3
 static volatile unsigned int systemState; // State: binarySemaphore2
 static volatile unsigned int frequencyIndex; // // binarySemaphore0
@@ -511,8 +512,8 @@ void computeTask(void *pvParameters)
 		// If nextState != prevState then restart timers,
 		if ((currentSystemState != nextSystemState) || TOF_500 || switchChanged) {
 
-//			printf("RoC: %d, Threshold: %d\n", aboveRateOfFrequency(), belowThresholdFrequency());
-//			printf("StateChange: %d, TOV: %d, SWC: %d\n", (systemState != nextSystemState), TOF_500, switchChanged);
+			printf("RoC: %d, Threshold: %d\n", aboveRateOfFrequency(), belowThresholdFrequency());
+			printf("StateChange: %d, TOV: %d, SWC: %d\n", (systemState != nextSystemState), TOF_500, switchChanged);
 
 
 			if ((currentSystemState != nextSystemState) && (nextSystemState != 3)) { // 3 is Maintenance state
@@ -587,10 +588,10 @@ void outputLogicTask(void *pvParameters)
 				    updateLEDs(greenValue, redValue);
 
 				    // Check 200ms timer
-				    if(changedState == 1){
+//				    if(changedState = 1){
 					    handleReactionTimer();
 					    changedState = 0;
-				    }
+//				    }
 
 				    // TODO: Used to check time
 
@@ -614,10 +615,10 @@ void outputLogicTask(void *pvParameters)
 				updateLEDs(greenValue, redValue);
 
 				// Check 200ms timer
-				if(changedState == 1){
+//				if(changedState = 1){
 					handleReactionTimer();
 					changedState = 0;
-				}
+//				}
 
 				// TODO: Used to check time
 				break;
@@ -638,10 +639,10 @@ void outputLogicTask(void *pvParameters)
 				    updateLEDs(greenValue, redValue);
 
 //				    // Check 200ms timer
-				    if(changedState == 1){
+//				    if(changedState = 1){
 				    	handleReactionTimer();
 				    	changedState = 0;
-				    }
+//				    }
 
 				    // TODO: Used to check time
 
@@ -664,10 +665,10 @@ void outputLogicTask(void *pvParameters)
 			    updateLEDs(greenValue, redValue);
 
 				// Check 200ms timer
-			    if(changedState == 1){
+//			    if(changedState = 1){
 			   		handleReactionTimer();
 			   		changedState = 0;
-			   	}
+//			   	}
 
 
 				// TODO: Used to take time

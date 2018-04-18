@@ -511,8 +511,8 @@ void computeTask(void *pvParameters)
 		// If nextState != prevState then restart timers,
 		if ((currentSystemState != nextSystemState) || TOF_500 || switchChanged) {
 
-//			printf("RoC: %d, Threshold: %d\n", aboveRateOfFrequency(), belowThresholdFrequency());
-//			printf("StateChange: %d, TOV: %d, SWC: %d\n", (systemState != nextSystemState), TOF_500, switchChanged);
+			printf("RoC: %d, Threshold: %d\n", aboveRateOfFrequency(), belowThresholdFrequency());
+			printf("StateChange: %d, TOV: %d, SWC: %d\n", (systemState != nextSystemState), TOF_500, switchChanged);
 
 
 			if ((currentSystemState != nextSystemState) && (nextSystemState != 3)) { // 3 is Maintenance state
