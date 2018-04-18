@@ -11,6 +11,7 @@
 #include "freertos/queue.h"
 #include "freertos/semphr.h"
 
+// Altera includes
 #include "system.h"
 #include "io.h"
 #include "altera_up_avalon_ps2.h"
@@ -18,18 +19,17 @@
 #include "sys/alt_irq.h"
 #include "sys/alt_alarm.h"
 #include "sys/alt_timestamp.h"
-
 #include "altera_avalon_pio_regs.h"
-#include "alt_types.h"                 	// alt_u32 is a kind of alt_types
-
+#include "alt_types.h"
 #include "altera_up_avalon_video_character_buffer_with_dma.h"
 #include "altera_up_avalon_video_pixel_buffer_dma.h"
 
+// =============== Defines ===============
 
 // Definition of Task Stacks
 #define   TASK_STACKSIZE       2048
 
-// Definition of Letters
+// Definition of Letters for keyboard interaction
 #define L 76
 #define R 82
 
@@ -40,10 +40,11 @@
 #define OUTPUT_LOGIC_TASK_PRIORITY 4
 #define VGA_OUTPUT_TASK_PRIORITY 1
 
-// Definition computation constants
+// Definition of computation constants
 #define SAMPLING_FREQ 16000.0
 #define THRESHOLD_NUMBER_LENGTH 5
 #define POLLING_DELAY 300
+#define VGA_DELAY 10
 
 // Definition of Message Queue
 #define FREQUENCY_DATA_QUEUE_SIZE  100
@@ -51,63 +52,54 @@
 #define KEYBOARD_QUEUE_SIZE  20
 #define REACTION_ARRAY_SIZE  100
 
-//For frequency plot
-#define FREQPLT_ORI_X 101		//x axis pixel position at the plot origin
-#define FREQPLT_GRID_SIZE_X 5	//pixel separation in the x axis between two data points
-#define FREQPLT_ORI_Y 199.0		//y axis pixel position at the plot origin
-#define FREQPLT_FREQ_RES 20.0	//number of pixels per Hz (y axis scale)
-#define BASE_TIME 42.9 // Timer value
-#define ROCPLT_ORI_X 101
-#define ROCPLT_GRID_SIZE_X 5
-#define ROCPLT_ORI_Y 259.0
-#define ROCPLT_ROC_RES 0.5		//number of pixels per Hz/s (y axis scale)
+//Definition of constants for VGA frequency plot
+#define FREQPLT_ORI_X 101		// x axis pixel position at the plot origin
+#define FREQPLT_GRID_SIZE_X 5	// Pixel separation in the x axis between two data points
+#define FREQPLT_ORI_Y 199.0		// y axis pixel position at the plot origin
+#define FREQPLT_FREQ_RES 20.0	// Number of pixels per Hz (y axis scale)
+#define BASE_TIME 42.9 			// Timer overflow value
+#define ROCPLT_ORI_X 101		// x axis pixel position at the plot origin
+#define ROCPLT_GRID_SIZE_X 5	// Pixel separation in the x axis between two data points
+#define ROCPLT_ORI_Y 259.0		// y axis pixel position at the plot origin
+#define ROCPLT_ROC_RES 0.5		// Number of pixels per Hz/s (y axis scale)
 
-#define MIN_FREQ 45.0 //minimum frequency to draw
+#define MIN_FREQ 45.0 			// Minimum frequency to draw
 
+
+// =============== Global Variables ===============
+
+// Definition of Queues
 QueueHandle_t frequencyQueue, keyboardQueue;
 
+// Definition of Semaphores
+SemaphoreHandle_t counterSemaphore0, counterSemaphore1, counterSemaphore2; 					// Counting
+SemaphoreHandle_t binarySemaphore0, binarySemaphore1, binarySemaphore2, binarySemaphore3; 	// Binary
 
-// Definition of Semaphore
-SemaphoreHandle_t counterSemaphore0, counterSemaphore1, counterSemaphore2; // Counting
-SemaphoreHandle_t binarySemaphore0, binarySemaphore1, binarySemaphore2, binarySemaphore3;//, binarySemaphore4, binarySemaphore5; // Binary
-
-// Storage arrays
+// Data storage arrays
 double reactionTimes[REACTION_ARRAY_SIZE] = {1};
 double frequencyData[FREQUENCY_DATA_QUEUE_SIZE] = {0};
 double rateOfChangeData[FREQUENCY_DATA_QUEUE_SIZE] = {0};
 
-// Global variables
-alt_u32 tickPerSecond; // Constants
-unsigned int context;
+//Mutex protected
+static volatile unsigned int currentSwitchValue; 				// Guarded by binarySemaphore3
+static volatile unsigned int systemState; 						// Guarded by binarySemaphore2
+static volatile unsigned int frequencyIndex; 					// Guarded by binarySemaphore0
+static volatile double prevTime500; 							// Guarded by binarySemaphore1
+static volatile double levelThreshold, rateOfChangeThreshold; 	// Guarded by binarySemaphore0
 
+// Not mutex protected
+static volatile double timerOverflow, prevTime200;								// Data stroage for reaction time handling
+static volatile unsigned int changedState, twoTimes, reactionCount;				// Flags for reaction time handling
+static volatile unsigned int TOF_500, switchChanged, enterMaintenanceState; 	// Other flags
+static volatile unsigned int context;											// To be given where needed, never read
 
-// MUTEX
-static volatile unsigned int currentSwitchValue; // Data: binarySemaphore3
-static volatile unsigned int systemState; // State: binarySemaphore2
-static volatile unsigned int frequencyIndex; // // binarySemaphore0
-static volatile double prevTime500; // binarySemaphore1
-static volatile double levelThreshold, rateOfChangeThreshold; // // binarySemaphore0
-
-// NO MUTEX
-static volatile double timerOverflow, prevTime200;
-static volatile unsigned int changedState, twoTimes, reactionCount;
-static volatile unsigned int TOF_500, switchChanged, enterMaintenanceState; // Flags
-
-// 	0  IDLE
-//  1  STABLE
-//  2  UNSTABLE
-//  3  MAINTENANCE
-
+// Definition used for plotting frequency in VGA
 typedef struct{
 	unsigned int x1;
 	unsigned int y1;
 	unsigned int x2;
 	unsigned int y2;
 }Line;
-
-
-
-// NEED TO IMPLEMENT OUR OWN QUEUE FUNCTIONALITY IN C
 
 // Local Function Prototypes
 int initOSDataStructs(void);
@@ -134,20 +126,18 @@ double maxValueArray(double Array[], int size);
 double minValueArray(double Array[], int size);
 double AverageOfArray(double Array[], int size);
 
-/************/
-/*  ISRs     */
-/************/
+// =============== ISRs ===============
 void buttonsISR(void* context) {
 
 	//Read edge capture register's value
 	int buttonClick = IORD_ALTERA_AVALON_PIO_EDGE_CAP(PUSH_BUTTON_BASE);
 
-	if (buttonClick == 4) { // Is this the right button press?
+	if (buttonClick == 4) {
 
 		enterMaintenanceState = !enterMaintenanceState;
 
-		//Give the semaphore
-		xSemaphoreGiveFromISR(counterSemaphore1, pdTRUE);
+		//Give the semaphore, scheduling Compute task
+		xSemaphoreGiveFromISR(counterSemaphore1, context);
 	}
 
 	//Reset edge capture register
@@ -159,13 +149,13 @@ void frequencyISR(void* context) {
 	// Read ADC value
 	double temp = (double)IORD(FREQUENCY_ANALYSER_BASE, 0);
 
-	// PERFORM BASIC CALCULATION (sample -> f)
+	// Perform basic calculation (sample -> f)
 	temp = SAMPLING_FREQ/temp;
 
-	// ADD TO QUEUE
+	// Add to queue
 	xQueueSendToBackFromISR(frequencyQueue, &temp, pdFALSE);
 
-	// Give the semaphore
+	// Give the semaphore, scheduling Compute task
 	xSemaphoreGiveFromISR(counterSemaphore1, context);
 }
 
@@ -174,48 +164,47 @@ void ps2ISR(void* context) {
 		int status = 0;
 		unsigned char key = 0;
 		KB_CODE_TYPE decode_mode;
+
+
+		// Determine is key was successfully scanned
 		status = decode_scancode (context, &decode_mode , &key , &ascii) ;
-		if ( status == 0 ) //success
-		{
+		if ( status == 0 ) {
+
+			// Handled the double occurance of ISR for single key press
 			if (twoTimes == 1) {
 				twoTimes = 0;
-				switch ( decode_mode )
-				{
-				 case KB_ASCII_MAKE_CODE :
-					xQueueSendToBackFromISR(keyboardQueue, &ascii, pdTRUE);
-//					printf ( "ASCII   : %c\n", ascii ) ;
 
-					// Give the semaphore
+				switch (decode_mode) {
+
+				 case KB_ASCII_MAKE_CODE :
+				 	// Store ascii value on queue
+					xQueueSendToBackFromISR(keyboardQueue, &ascii, context);
+					// Give semaphore, scheduling keyboard task
 					xSemaphoreGiveFromISR(counterSemaphore0, context);
 					break ;
-				 case KB_BINARY_MAKE_CODE :
-					 //printf ( "MAKE CODE : %x\n", key ) ;
-					 break;
+
 				 default :
-					//printf ( "DEFAULT   : %x\n", key ) ;
 					break ;
 				}
+
 			} else {
 				twoTimes++;
 			}
 		}
 }
 
-
-/************/
-/*  METHODS */
-/************/
-
+// =============== Methods ===============
 
 void checkNewFrequencyValues(void) {
 	while(uxQueueMessagesWaiting(frequencyQueue) != 0) {
 
+		// Receive value from queue
 		double temp;
 		xQueueReceive(frequencyQueue, (void*) &temp, portMAX_DELAY);
 		frequencyData[frequencyIndex] = temp;
 
 
-		//calculate frequency RoC
+		// Calculate frequency RoC
 		if(frequencyIndex==0){
 			rateOfChangeData[0] = fabs(frequencyData[0]-frequencyData[99]) * 2.0 * frequencyData[0] * frequencyData[99] / (frequencyData[0]+frequencyData[99]);
 		}
@@ -226,6 +215,7 @@ void checkNewFrequencyValues(void) {
 		if (rateOfChangeData[frequencyIndex] > 100.0){
 			rateOfChangeData[frequencyIndex] = 100.0;
 		}
+		// Increments index 0-99 in a circular fashion
 		frequencyIndex = ++frequencyIndex%100;
 
 	}
@@ -233,14 +223,15 @@ void checkNewFrequencyValues(void) {
 
 void handleReactionTimer(void) {
 	double newTime, differenceInTime;
-		// Find difference
+		// Find difference in time
 		newTime = getTime();
 		differenceInTime = newTime - prevTime200;
+		// Add to array
 		addReactionTimeArray(differenceInTime);
 }
 
 int aboveRateOfFrequency(void) {
-	// Check most recent value of frequency queue, compare it previous and find gradient
+	// Check most recent RoC value and compare to constraint value
 	if (!frequencyIndex) {
 		return (rateOfChangeData[99] > rateOfChangeThreshold); // 1 is Unstable
 	} else {
@@ -249,7 +240,7 @@ int aboveRateOfFrequency(void) {
 }
 
 int belowThresholdFrequency(void) {
-	// Check most recent value of frequency queue, compare it to threshold
+	// Check most recent frequency value, compare it to threshold
 	if (!frequencyIndex) {
 		return (frequencyData[99] < levelThreshold); // 1 is Unstable
 	} else {
@@ -258,14 +249,19 @@ int belowThresholdFrequency(void) {
 }
 
 void updateLEDs(unsigned int greenLEDValue, unsigned int redLEDValue) {
+
+	// Write to LEDs
 	IOWR_ALTERA_AVALON_PIO_DATA(GREEN_LEDS_BASE, greenLEDValue);
 	IOWR_ALTERA_AVALON_PIO_DATA(RED_LEDS_BASE, redLEDValue);
 }
 
 int checkPriority(int value, int priority){
-	if (priority == 1) { // Find highest
+
+	if (priority == 1) {
+		// Find highest priority bit
 		return highestBit(value);
-	} else { // Find lowest
+	} else {
+		// Find lowest priority bit
 		return lowestBit(value);
 	}
 }
@@ -273,10 +269,15 @@ int checkPriority(int value, int priority){
 void addReactionTimeArray(double numberTodAdd) {
 	int length = sizeof(reactionTimes)/sizeof(reactionTimes[0]);
 	int i;
+
+	// Shuffle all elements in array towards the back by one place
 	for(i = (length - 1); i > 0; i--) {
 		reactionTimes[i] = reactionTimes[i - 1];
 	}
+	// Store new value at front of array
 	reactionTimes[0] = numberTodAdd;
+
+	// Define how many elements are in the array until full
 	if (reactionCount != REACTION_ARRAY_SIZE){
 		reactionCount++;
 	}
@@ -286,6 +287,7 @@ double maxValueArray(double Array[], int size) {
     int i;
     double maxValue = Array[0];
 
+    // Check each array element to find the maximum value
     for (i = 1; i < size; ++i) {
         if ( Array[i] > maxValue ) {
             maxValue = Array[i];
@@ -298,6 +300,7 @@ double minValueArray(double Array[], int size) {
     int i;
     double minValue = Array[0];
 
+    // Check each array element to find the minimum value
     for (i = 1; i < size; ++i) {
         if ( Array[i] < minValue ) {
             minValue = Array[i];
@@ -310,6 +313,7 @@ double AverageOfArray(double Array[], int size) {
     int i;
     double averageValue = Array[0];
 
+    // Access every element of the array to calculate the average
     for (i = 1; i < size; ++i) {
     	averageValue = Array[i];
     }
@@ -346,40 +350,40 @@ int lowestBit(int val) {
 
 int toggleBit(int bitPosition, int numberToToggle) {
 	int shift = 1;
+	// Shift 1 by bit position and XOR to toggle
 	numberToToggle ^= shift << bitPosition;
 	return numberToToggle;
 }
 
 double getTime(void) {
+
+	// If timer has overflowed increment counter
 	if ((double)alt_timestamp() == 0) {
 		timerOverflow++;
+		// Start the overflowed timer
 		alt_timestamp_start();
 	}
-	return ((double)alt_timestamp()/100000000)+(timerOverflow * BASE_TIME); // Convert to usalt_timestamp_start() // TODO: check
+	// Current time is the timestamp value (in ms) plus any overflows
+	return ((double)alt_timestamp()/100000000)+(timerOverflow * BASE_TIME);
 }
 
-/************/
-/*   TASKS  */
-/************/
+// =============== Tasks ===============
 
 void switchPollingTask(void *pvParameters)
 {
 
-	taskENTER_CRITICAL();
 	printf("STARTED SWITCH POLLING TASK\n");
-	taskEXIT_CRITICAL();
 
 	while (1)
 	{
-		//Read edge capture register's value
+		// Read edge capture register's value
 		int switch_value = IORD_ALTERA_AVALON_PIO_DATA(SLIDE_SWITCH_BASE);
 
 		xSemaphoreTake(binarySemaphore3, portMAX_DELAY);
 		if (switch_value != currentSwitchValue) {
-			//Set global flag
+			// Set global flag and store value to global variable
 			switchChanged = 1;
 			currentSwitchValue = switch_value;
-//			printf("Given from switch polling task\n");
 			xSemaphoreGive(counterSemaphore1);
 		}
 		xSemaphoreGive(binarySemaphore3);
@@ -391,9 +395,7 @@ void switchPollingTask(void *pvParameters)
 void keyboardLogicTask(void *pvParameters)
 {
 
-	taskENTER_CRITICAL();
 	printf("STARTED KEYBOARD LOGIC TASK\n");
-	taskEXIT_CRITICAL();
 
 	// Array to hold keys
 	char keyValues[THRESHOLD_NUMBER_LENGTH + 1] = {0};
@@ -406,8 +408,7 @@ void keyboardLogicTask(void *pvParameters)
 
 		// Check if received enough characters yet
 		if (i < THRESHOLD_NUMBER_LENGTH) {
-//			if ( uxQueueMessagesWaiting( keyboardQueue ) != 0) {
-				if (xQueueReceive(keyboardQueue, keyValues+i, portMAX_DELAY)) { //TODO check if receive buffer works
+				if (xQueueReceive(keyboardQueue, keyValues+i, portMAX_DELAY)) {
 					// Check that we have started correctly
 					if ((keyValues[0] == L) || (keyValues[0] == R)) {
 						int numberConverted = keyValues[i] - '0';
@@ -420,15 +421,16 @@ void keyboardLogicTask(void *pvParameters)
 						keyValues[i] = 0;
 					}
 				}
-//			}
-		} else if (xQueueReceive(keyboardQueue, keyValues+i, portMAX_DELAY)) { // Loop through filled array of characters and parse it to thresholds
+		// Loop through filled array of characters and set thresholds
+		} else if (xQueueReceive(keyboardQueue, keyValues+i, portMAX_DELAY)) {
 			float thresholdTemp = 0;
 			int invalidCharFlag = 0;
 			int decimalFlag = 0;
 
 			int z;
 		    for (z = 1; z < THRESHOLD_NUMBER_LENGTH + 1; z++) {
-		        if ((keyValues[z] == 46) && !decimalFlag) { // Decimal place
+		    	// Find decimal place
+		        if ((keyValues[z] == 46) && !decimalFlag) {
 		            decimalFlag = 1;
 		            decimalIndex = z;
 		        }
@@ -442,16 +444,16 @@ void keyboardLogicTask(void *pvParameters)
 
 
 		        if (!decimalFlag) {
+		        	// No decimal to handle
 		            thresholdTemp = numberConverted + thresholdTemp*10;
 		        } else if (decimalIndex != z) {
+		        	// Handle decimal
 		            thresholdTemp = numberConverted*pow(10, decimalIndex-z) + thresholdTemp;
 		        }
 
-	            printf("thesholdTemp: %f\n", thresholdTemp);
-
 		    }
 
-			// Update thresholds and give semaphore if valid
+			// Update thresholds
 			if (!invalidCharFlag) {
 				xSemaphoreTake(binarySemaphore0, portMAX_DELAY);
 				if (keyValues[0] == L) {
@@ -463,8 +465,9 @@ void keyboardLogicTask(void *pvParameters)
 				}
 				xSemaphoreGive(binarySemaphore0);
 
-				for (z = 0 ; z < THRESHOLD_NUMBER_LENGTH + 1; z++) { keyValues[z] = 0; } // Reset array to 0
-
+				// Reset array to 0
+				for (z = 0 ; z < THRESHOLD_NUMBER_LENGTH + 1; z++) { keyValues[z] = 0; }
+				// Give semaphore, scheduling Compute task
 				xSemaphoreGive(counterSemaphore1);
 			}
 
@@ -477,14 +480,13 @@ void keyboardLogicTask(void *pvParameters)
 
 void computeTask(void *pvParameters)
 {
-	taskENTER_CRITICAL();
 	printf("STARTED COMPUTE TASK\n");
-	taskEXIT_CRITICAL();
 
 	while (1)
 	{
 		xSemaphoreTake(counterSemaphore1, portMAX_DELAY);
 
+		// make local copy to mitigate need for mutex protection
 		xSemaphoreTake(binarySemaphore2, portMAX_DELAY);
 		unsigned int currentSystemState = systemState;
 		xSemaphoreGive(binarySemaphore2);
@@ -493,17 +495,22 @@ void computeTask(void *pvParameters)
 
 		xSemaphoreTake(binarySemaphore1, portMAX_DELAY);
 		double difference = getTime() - prevTime500;
+
+		// Check if 500 ms has passed and set flag
 		if ((difference >= 0.5) && (prevTime500 != 0)) {
 			TOF_500 = 1;
 			prevTime500 = 0;
 		}
 		xSemaphoreGive(binarySemaphore1);
 
+
+		// Update frequency array and determine stability
 		xSemaphoreTake(binarySemaphore0, portMAX_DELAY);
 		checkNewFrequencyValues();
 		int frequencyUnstable = aboveRateOfFrequency() || belowThresholdFrequency();
 		xSemaphoreGive(binarySemaphore0);
 
+		// Determine system state
 		if (enterMaintenanceState) {
 			nextSystemState = 3; // 3 is Maintenance state
 		} else {
@@ -514,31 +521,27 @@ void computeTask(void *pvParameters)
 			}
 		}
 
-		// If nextState != prevState then restart timers,
+		// Determine if load adjustment is needed
 		if ((currentSystemState != nextSystemState) || TOF_500 || switchChanged) {
-
-//			printf("RoC: %d, Threshold: %d\n", aboveRateOfFrequency(), belowThresholdFrequency());
-//			printf("StateChange: %d, TOV: %d, SWC: %d\n", (systemState != nextSystemState), TOF_500, switchChanged);
-
-
+			// Store value for reaction time if first load is being shed/turned on
 			if ((currentSystemState != nextSystemState) && (nextSystemState != 3)) { // 3 is Maintenance state
 				// Store time
 				prevTime200 = getTime();
 				changedState = 1;
 			}
 
-			// Clear timer flag: TODO: Check no mutex needed
+			// Clear flags
 			TOF_500 = 0;
-			// Clear switch flag // TODO: Check no mutex needed
 			switchChanged = 0;
 
+
+			// Write to global variable
 			xSemaphoreTake(binarySemaphore2, portMAX_DELAY);
-			//Handle mutex
 			systemState = nextSystemState;
 			xSemaphoreGive(binarySemaphore2);
 
-
-			xSemaphoreGive(counterSemaphore2); // Trigger output logic
+			// Give semaphore, scheduling output logic
+			xSemaphoreGive(counterSemaphore2);
 		}
 
 	}
@@ -548,20 +551,19 @@ void computeTask(void *pvParameters)
 
 void outputLogicTask(void *pvParameters)
 {
+	printf("STARTED OUTPUT LOGIC TASK\n");
+
 	int redValue, greenValue;
 	greenValue = 0;
 	redValue = 0;
 
-
-	taskENTER_CRITICAL();
-	printf("STARTED OUTPUT LOGIC TASK\n");
-	taskEXIT_CRITICAL();
-
 	while (1)
 	{
 		xSemaphoreTake(counterSemaphore2, portMAX_DELAY);
+
 		int bitPosition;
 
+		// make local copy to mitigate need for mutex protection
 		xSemaphoreTake(binarySemaphore2, portMAX_DELAY);
 		unsigned int currentSystemState = systemState;
 		xSemaphoreGive(binarySemaphore2);
@@ -571,20 +573,11 @@ void outputLogicTask(void *pvParameters)
 				break;
 			case 1: // STABLE
 
-				// DEBUG
-				taskENTER_CRITICAL();
 				printf("---- STABLE ----\n");
-				taskEXIT_CRITICAL();
 
 				// Store current LED values
 				redValue = 	IORD_ALTERA_AVALON_PIO_DATA(RED_LEDS_BASE);
 				greenValue = IORD_ALTERA_AVALON_PIO_DATA(GREEN_LEDS_BASE);
-
-
-				xSemaphoreTake(binarySemaphore3, portMAX_DELAY);
-				unsigned int localSwitchValue = currentSwitchValue;
-				xSemaphoreGive(binarySemaphore3);
-
 
 				// If relay is not withholding loads, turn on all loads according to switches
 				if (greenValue == 0) {
@@ -597,8 +590,6 @@ void outputLogicTask(void *pvParameters)
 					    handleReactionTimer();
 					    changedState = 0;
 				    }
-
-				    // TODO: Used to check time
 
 				    break; // No loads to turn back on
 
@@ -615,7 +606,6 @@ void outputLogicTask(void *pvParameters)
 					}
 				}
 
-
 				// Update LEDs
 				updateLEDs(greenValue, redValue);
 
@@ -625,14 +615,10 @@ void outputLogicTask(void *pvParameters)
 					changedState = 0;
 				}
 
-				// TODO: Used to check time
 				break;
 			case 2: // UNSTABLE
 
-				// DEBUG
-				taskENTER_CRITICAL();
 				printf("---- UNSTABLE ----\n");
-				taskEXIT_CRITICAL();
 
 				// Store current LED values
 				redValue = 	IORD_ALTERA_AVALON_PIO_DATA(RED_LEDS_BASE);
@@ -648,8 +634,6 @@ void outputLogicTask(void *pvParameters)
 				    	handleReactionTimer();
 				    	changedState = 0;
 				    }
-
-				    // TODO: Used to check time
 
 			    	break; // No loads to shed
 				} else {
@@ -675,19 +659,13 @@ void outputLogicTask(void *pvParameters)
 			   		changedState = 0;
 			   	}
 
-
-				// TODO: Used to take time
-
 				break;
 			case 3: // MAINTENANCE
 
-				// DEBUG
-				taskENTER_CRITICAL();
 				printf("---- MAINTENANCE ----\n");
-				taskEXIT_CRITICAL();
 
 				// Update LEDs
-				updateLEDs(0, currentSwitchValue); // Red LEDs mimick switch state, Green LEDs all off
+				updateLEDs(0, currentSwitchValue); // Red LEDs mimic switch state, Green LEDs all off
 				break;
 		}
 
@@ -701,9 +679,7 @@ void outputLogicTask(void *pvParameters)
 
 void vgaOutputTask(void *pvParameters)
 {
-	taskENTER_CRITICAL();
 	printf("STARTED VGA OUTPUT TASK\n");
-	taskEXIT_CRITICAL();
 
 	while (1)
 	{
@@ -711,18 +687,14 @@ void vgaOutputTask(void *pvParameters)
 		alt_up_pixel_buffer_dma_dev *pixel_buf;
 		pixel_buf = alt_up_pixel_buffer_dma_open_dev(VIDEO_PIXEL_BUFFER_DMA_NAME);
 		if(pixel_buf == NULL){
-//			taskENTER_CRITICAL();
-//			printf("can't find pixel buffer device\n");
-//			taskEXIT_CRITICAL();
+			printf("can't find pixel buffer device\n");
 		}
 		alt_up_pixel_buffer_dma_clear_screen(pixel_buf, 0);
 
 		alt_up_char_buffer_dev *char_buf;
 		char_buf = alt_up_char_buffer_open_dev("/dev/video_character_buffer_with_dma");
 		if(char_buf == NULL){
-//			taskENTER_CRITICAL();
-//			printf("can't find char buffer device\n");
-//			taskEXIT_CRITICAL();
+			printf("can't find char buffer device\n");
 		}
 		alt_up_char_buffer_clear(char_buf);
 
@@ -793,12 +765,15 @@ void vgaOutputTask(void *pvParameters)
 			}
 
 
+			// Store loacal variable to mitigate need for mutex protection
 			xSemaphoreTake(binarySemaphore2, portMAX_DELAY);
 			unsigned int currentSystemState = systemState;
 			xSemaphoreGive(binarySemaphore2);
 
 
-			// Source new data
+			// Source new data, update buffer, draw
+
+			// System state/stability
 			switch(currentSystemState) {
 				case 0: // IDLE
 					sprintf(charData, "Unknown     "); // spaces are intentional, padding to avoid characters not being overwriten
@@ -815,16 +790,18 @@ void vgaOutputTask(void *pvParameters)
 			}
 			alt_up_char_buffer_string(char_buf, charData, 21, 40);
 
-			sprintf(charData, "%f", rateOfChangeThreshold);
+			// Stability conditions
+			sprintf(charData, "%.2f Hz/s", rateOfChangeThreshold);
 			alt_up_char_buffer_string(char_buf, charData, 20, 44);
 
-			sprintf(charData, "%f Hz", levelThreshold);
+			sprintf(charData, "%0.2f Hz", levelThreshold);
 			alt_up_char_buffer_string(char_buf, charData, 21, 46);
 
 			//last five reaction times
 			sprintf(charData, "%.4f, %.4f, %.4f, %.4f, %.4f ms", reactionTimes[0], reactionTimes[1], reactionTimes[2], reactionTimes[3], reactionTimes[4]);
 			alt_up_char_buffer_string(char_buf, charData, 32, 50);
 
+			// Min, Max, Average reaction times
 			double minTime = minValueArray(reactionTimes, reactionCount);
 			sprintf(charData, "%.4f ms", minTime);
 			alt_up_char_buffer_string(char_buf, charData, 27, 52);
@@ -837,21 +814,19 @@ void vgaOutputTask(void *pvParameters)
 			sprintf(charData, "%.4f ms", averageTime);
 			alt_up_char_buffer_string(char_buf, charData, 27, 56);
 
+			// System up time
 			double upTime = getTime();
 			sprintf(charData, "%d sec     ", (int) upTime);
 			alt_up_char_buffer_string(char_buf, charData, 20, 58);
 
-			vTaskDelay(10);
+			vTaskDelay(VGA_DELAY);
 
 		}
 	}
 }
 
+// =============== Initialisation ===============
 
-
-/************/
-/**  INIT  **/
-/************/
 // This function simply creates initial data used in the scope of program
 int initOSDataStructs(void)
 {
@@ -859,30 +834,28 @@ int initOSDataStructs(void)
 	counterSemaphore1 = xSemaphoreCreateCounting( 9999, 0 );
 	counterSemaphore2 = xSemaphoreCreateCounting( 9999, 0 );
 
-	// INITIALISE/CREATE QUEUE
+	// Initialise/create queues
 	frequencyQueue = xQueueCreate(FREQUENCY_DATA_QUEUE_SIZE, sizeof(double));
 	keyboardQueue = xQueueCreate(KEYBOARD_QUEUE_SIZE, sizeof(char));
 
 
 	// Binary Semaphores
-	binarySemaphore0 = xSemaphoreCreateBinary(); //
+	binarySemaphore0 = xSemaphoreCreateBinary();
 	binarySemaphore1 = xSemaphoreCreateBinary();
 	binarySemaphore2 = xSemaphoreCreateBinary();
 	binarySemaphore3 = xSemaphoreCreateBinary();
-
+	// Initial give so semaphore is ready to be taken
 	xSemaphoreGive(binarySemaphore0);
 	xSemaphoreGive(binarySemaphore1);
 	xSemaphoreGive(binarySemaphore2);
 	xSemaphoreGive(binarySemaphore3);
 
-
 	frequencyIndex = 0;
-	tickPerSecond = alt_ticks_per_second();
 	return 0;
 }
 
 
-// This function creates the tasks used in this example
+// This function creates all tasks
 int initCreateTasks(void)
 {
 	xTaskCreate(switchPollingTask, "switchPollingTask", TASK_STACKSIZE, NULL, SWITCH_POLLING_TASK_PRIORITY, NULL);
@@ -935,7 +908,7 @@ int initFrequency(void) {
 	//Register the interrupt handler, context is unused so pass in garbage
 	alt_irq_register(FREQUENCY_ANALYSER_IRQ, context, frequencyISR);
 
-	return 0; // success
+	return 0;
 }
 
 int initKeyboard(void) {
@@ -944,9 +917,7 @@ int initKeyboard(void) {
 
 	// Error
 	if(ps2_device == NULL){
-//		taskENTER_CRITICAL();
-//		printf("can't find PS/2 device\n");
-//		taskEXIT_CRITICAL();
+		printf("can't find PS/2 device\n");
 		return 1;
 	}
 
@@ -956,9 +927,9 @@ int initKeyboard(void) {
 	// Register the PS/2 interrupt
 	alt_irq_register(PS2_IRQ, ps2_device, ps2ISR);
 
-	IOWR_8DIRECT(PS2_BASE,4,1); //WHAT IS THIS??
+	IOWR_8DIRECT(PS2_BASE,4,1);
 
-	return 0; // success
+	return 0;
 }
 
 
@@ -976,9 +947,7 @@ void initAll(void) {
 	return;
 }
 
-/************/
-/**  MAIN  **/
-/************/
+// =============== Main ===============
 
 int main(int argc, char* argv[], char* envp[])
 {
