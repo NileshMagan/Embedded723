@@ -191,6 +191,10 @@ void ps2ISR(void* context) {
 				twoTimes++;
 			}
 		}
+//	} else {
+//		twoTimes++;
+//	}
+//	printf("TT: %d\n", twoTimes);
 }
 
 
@@ -356,7 +360,7 @@ double getTime(void) {
 
 void switchPollingTask(void *pvParameters)
 {
-
+	// DEBUG
 	taskENTER_CRITICAL();
 	printf("STARTED SWITCH POLLING TASK\n");
 	taskEXIT_CRITICAL();
@@ -381,6 +385,7 @@ void switchPollingTask(void *pvParameters)
 void keyboardLogicTask(void *pvParameters)
 {
 
+	// DEBUG
 	taskENTER_CRITICAL();
 	printf("STARTED KEYBOARD LOGIC TASK\n");
 	taskEXIT_CRITICAL();
@@ -388,12 +393,12 @@ void keyboardLogicTask(void *pvParameters)
 	// Array to hold keys
 	char keyValues[THRESHOLD_NUMBER_LENGTH + 1] = {0};
 	int i = 0;
-	int decimalIndex = 0;
+
 
 	while (1)
 	{
 		xSemaphoreTake(counterSemaphore0,portMAX_DELAY);
-
+//		printf("Got you homie\n");
 		// Check if received enough characters yet
 		if (i < THRESHOLD_NUMBER_LENGTH) {
 //			if ( uxQueueMessagesWaiting( keyboardQueue ) != 0) {
@@ -410,30 +415,22 @@ void keyboardLogicTask(void *pvParameters)
 			int thresholdTemp = 0;
 			int invalidCharFlag = 0;
 			int decimalFlag = 0;
-
 			int z;
-		    for (z = 1; z < THRESHOLD_NUMBER_LENGTH + 1; z++) {
-		        if ((keyValues[z] == 46) && !decimalFlag) { // Decimal place
-		            decimalFlag = 1;
-		            decimalIndex = z;
-		            printf("\nFLAG");
-		        }
+			for (z = 1; z < THRESHOLD_NUMBER_LENGTH + 1; z++) {
+				int numberConverted = keyValues[z] - '0';
 
-		        int numberConverted = keyValues[z] - '0';
+				// Decimal number
+				if (keyValues[z] == 46) {
+					decimalFlag = 1;
+				}
 
-		        // Validity checking
-		        if (((numberConverted >= 10) && (numberConverted <= -1)) && !decimalFlag) {
-		            invalidCharFlag = 1;
-		        }
+				// Validity checking
+				if (((numberConverted >= 10) && (numberConverted <= -1)) && (decimalFlag != 1)) {
+					invalidCharFlag = 1;
+				}
 
-
-		        if (!decimalFlag) {
-		            thresholdTemp = numberConverted + thresholdTemp*10;
-		        } else if (decimalIndex != z) {
-		            thresholdTemp = numberConverted*pow(10, decimalIndex-z) + thresholdTemp;
-		        }
-
-		    }
+				thresholdTemp = thresholdTemp + numberConverted*pow(10, THRESHOLD_NUMBER_LENGTH - z);
+			}
 
 			// Update thresholds and give semaphore if valid
 			if (!invalidCharFlag) {
@@ -454,7 +451,6 @@ void keyboardLogicTask(void *pvParameters)
 		}
 	}
 }
-
 
 
 void computeTask(void *pvParameters)
@@ -523,7 +519,7 @@ void outputLogicTask(void *pvParameters)
 	greenValue = 0;
 	redValue = 0;
 
-
+	// DEBUG
 	taskENTER_CRITICAL();
 	printf("STARTED OUTPUT LOGIC TASK\n");
 	taskEXIT_CRITICAL();
@@ -661,6 +657,7 @@ void outputLogicTask(void *pvParameters)
 
 void vgaOutputTask(void *pvParameters)
 {
+	// DEBUG
 	taskENTER_CRITICAL();
 	printf("STARTED VGA OUTPUT TASK\n");
 	taskEXIT_CRITICAL();

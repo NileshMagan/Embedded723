@@ -191,6 +191,10 @@ void ps2ISR(void* context) {
 				twoTimes++;
 			}
 		}
+//	} else {
+//		twoTimes++;
+//	}
+//	printf("TT: %d\n", twoTimes);
 }
 
 
@@ -356,7 +360,7 @@ double getTime(void) {
 
 void switchPollingTask(void *pvParameters)
 {
-
+	// DEBUG
 	taskENTER_CRITICAL();
 	printf("STARTED SWITCH POLLING TASK\n");
 	taskEXIT_CRITICAL();
@@ -381,6 +385,7 @@ void switchPollingTask(void *pvParameters)
 void keyboardLogicTask(void *pvParameters)
 {
 
+	// DEBUG
 	taskENTER_CRITICAL();
 	printf("STARTED KEYBOARD LOGIC TASK\n");
 	taskEXIT_CRITICAL();
@@ -388,12 +393,12 @@ void keyboardLogicTask(void *pvParameters)
 	// Array to hold keys
 	char keyValues[THRESHOLD_NUMBER_LENGTH + 1] = {0};
 	int i = 0;
-	int decimalIndex = 0;
+
 
 	while (1)
 	{
 		xSemaphoreTake(counterSemaphore0,portMAX_DELAY);
-
+//		printf("Got you homie\n");
 		// Check if received enough characters yet
 		if (i < THRESHOLD_NUMBER_LENGTH) {
 //			if ( uxQueueMessagesWaiting( keyboardQueue ) != 0) {
@@ -415,7 +420,7 @@ void keyboardLogicTask(void *pvParameters)
 		    for (z = 1; z < THRESHOLD_NUMBER_LENGTH + 1; z++) {
 		        if ((keyValues[z] == 46) && !decimalFlag) { // Decimal place
 		            decimalFlag = 1;
-		            decimalIndex = z;
+		            index = z;
 		            printf("\nFLAG");
 		        }
 
@@ -428,9 +433,11 @@ void keyboardLogicTask(void *pvParameters)
 
 
 		        if (!decimalFlag) {
-		            thresholdTemp = numberConverted + thresholdTemp*10;
-		        } else if (decimalIndex != z) {
-		            thresholdTemp = numberConverted*pow(10, decimalIndex-z) + thresholdTemp;
+		            thresholdTemp2 = numberConverted + thresholdTemp2*10;//pow(10, z-1);
+		            printf("\nTens: %f", numberConverted);
+		        } else if (index != z) {
+		            printf("\nDec: %f", pow(10, index-z));
+		            thresholdTemp2 = numberConverted*pow(10, index-z) + thresholdTemp2;//pow(10, z-1);
 		        }
 
 		    }
@@ -454,7 +461,6 @@ void keyboardLogicTask(void *pvParameters)
 		}
 	}
 }
-
 
 
 void computeTask(void *pvParameters)
@@ -523,7 +529,7 @@ void outputLogicTask(void *pvParameters)
 	greenValue = 0;
 	redValue = 0;
 
-
+	// DEBUG
 	taskENTER_CRITICAL();
 	printf("STARTED OUTPUT LOGIC TASK\n");
 	taskEXIT_CRITICAL();
@@ -661,6 +667,7 @@ void outputLogicTask(void *pvParameters)
 
 void vgaOutputTask(void *pvParameters)
 {
+	// DEBUG
 	taskENTER_CRITICAL();
 	printf("STARTED VGA OUTPUT TASK\n");
 	taskEXIT_CRITICAL();
@@ -826,11 +833,15 @@ int initOSDataStructs(void)
 // This function creates the tasks used in this example
 int initCreateTasks(void)
 {
+<<<<<<< HEAD
 	xTaskCreate(switchPollingTask, "switchPollingTask", TASK_STACKSIZE, NULL, SWITCH_POLLING_TASK_PRIORITY, NULL);
+=======
+//	xTaskCreate(switchPollingTask, "switchPollingTask", TASK_STACKSIZE, NULL, SWITCH_POLLING_TASK_PRIORITY, NULL);
+>>>>>>> 9d419217cae85bfa300752641b5beaea491ca3b4
 	xTaskCreate(keyboardLogicTask, "keyboardLogicTask", TASK_STACKSIZE, NULL, KEYBOARD_LOGIC_PRIORITY, NULL);
 	xTaskCreate(computeTask, "computeTask", TASK_STACKSIZE, NULL, COMPUTE_TASK_PRIORITY, NULL);
 	xTaskCreate(outputLogicTask, "outputLogicTask", TASK_STACKSIZE, NULL, OUTPUT_LOGIC_TASK_PRIORITY, NULL);
-	xTaskCreate(vgaOutputTask, "vgaOutputTask", TASK_STACKSIZE, NULL, VGA_OUTPUT_TASK_PRIORITY, NULL);
+//	xTaskCreate(vgaOutputTask, "vgaOutputTask", TASK_STACKSIZE, NULL, VGA_OUTPUT_TASK_PRIORITY, NULL);
 	return 0;
 }
 
@@ -909,8 +920,13 @@ void initAll(void) {
 	initOSDataStructs();
 	initCreateTasks();
 	initFlags();
+<<<<<<< HEAD
 	initButtonsPIO();
 	initFrequency();
+=======
+//	initButtonsPIO();
+//	initFrequency();
+>>>>>>> 9d419217cae85bfa300752641b5beaea491ca3b4
 	initKeyboard();
 	taskENTER_CRITICAL();
 	printf("Initialised all\n");

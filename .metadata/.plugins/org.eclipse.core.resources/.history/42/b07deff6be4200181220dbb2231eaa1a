@@ -191,6 +191,10 @@ void ps2ISR(void* context) {
 				twoTimes++;
 			}
 		}
+//	} else {
+//		twoTimes++;
+//	}
+//	printf("TT: %d\n", twoTimes);
 }
 
 
@@ -356,7 +360,7 @@ double getTime(void) {
 
 void switchPollingTask(void *pvParameters)
 {
-
+	// DEBUG
 	taskENTER_CRITICAL();
 	printf("STARTED SWITCH POLLING TASK\n");
 	taskEXIT_CRITICAL();
@@ -381,6 +385,7 @@ void switchPollingTask(void *pvParameters)
 void keyboardLogicTask(void *pvParameters)
 {
 
+	// DEBUG
 	taskENTER_CRITICAL();
 	printf("STARTED KEYBOARD LOGIC TASK\n");
 	taskEXIT_CRITICAL();
@@ -393,7 +398,7 @@ void keyboardLogicTask(void *pvParameters)
 	while (1)
 	{
 		xSemaphoreTake(counterSemaphore0,portMAX_DELAY);
-
+//		printf("Got you homie\n");
 		// Check if received enough characters yet
 		if (i < THRESHOLD_NUMBER_LENGTH) {
 //			if ( uxQueueMessagesWaiting( keyboardQueue ) != 0) {
@@ -454,7 +459,6 @@ void keyboardLogicTask(void *pvParameters)
 		}
 	}
 }
-
 
 
 void computeTask(void *pvParameters)
@@ -523,7 +527,7 @@ void outputLogicTask(void *pvParameters)
 	greenValue = 0;
 	redValue = 0;
 
-
+	// DEBUG
 	taskENTER_CRITICAL();
 	printf("STARTED OUTPUT LOGIC TASK\n");
 	taskEXIT_CRITICAL();
@@ -661,6 +665,7 @@ void outputLogicTask(void *pvParameters)
 
 void vgaOutputTask(void *pvParameters)
 {
+	// DEBUG
 	taskENTER_CRITICAL();
 	printf("STARTED VGA OUTPUT TASK\n");
 	taskEXIT_CRITICAL();
@@ -826,6 +831,7 @@ int initOSDataStructs(void)
 // This function creates the tasks used in this example
 int initCreateTasks(void)
 {
+
 	xTaskCreate(switchPollingTask, "switchPollingTask", TASK_STACKSIZE, NULL, SWITCH_POLLING_TASK_PRIORITY, NULL);
 	xTaskCreate(keyboardLogicTask, "keyboardLogicTask", TASK_STACKSIZE, NULL, KEYBOARD_LOGIC_PRIORITY, NULL);
 	xTaskCreate(computeTask, "computeTask", TASK_STACKSIZE, NULL, COMPUTE_TASK_PRIORITY, NULL);

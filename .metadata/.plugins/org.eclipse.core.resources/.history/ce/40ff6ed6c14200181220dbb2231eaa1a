@@ -356,163 +356,164 @@ double getTime(void) {
 
 void switchPollingTask(void *pvParameters)
 {
-
-	taskENTER_CRITICAL();
-	printf("STARTED SWITCH POLLING TASK\n");
-	taskEXIT_CRITICAL();
-
-	while (1)
-	{
-		//Read edge capture register's value
-		int switch_value = IORD_ALTERA_AVALON_PIO_DATA(SLIDE_SWITCH_BASE);
-
-		if (switch_value != currentSwitchValue) {
-			//Set global flag
-			switchChanged = 1;
-			currentSwitchValue = switch_value;
-//			printf("Given from switch polling task\n");
-			xSemaphoreGive(counterSemaphore1);
-		}
-
-		vTaskDelay(POLLING_DELAY);
-	}
+//	// DEBUG
+//	taskENTER_CRITICAL();
+//	printf("STARTED SWITCH POLLING TASK\n");
+//	taskEXIT_CRITICAL();
+//
+//	while (1)
+//	{
+//		//Read edge capture register's value
+//		int switch_value = IORD_ALTERA_AVALON_PIO_DATA(SLIDE_SWITCH_BASE);
+//
+//		if (switch_value != currentSwitchValue) {
+//			//Set global flag
+//			switchChanged = 1;
+//			currentSwitchValue = switch_value;
+////			printf("Given from switch polling task\n");
+//			xSemaphoreGive(counterSemaphore1);
+//		}
+//
+//		vTaskDelay(POLLING_DELAY);
+//	}
 }
 
 void keyboardLogicTask(void *pvParameters)
 {
 
-	taskENTER_CRITICAL();
-	printf("STARTED KEYBOARD LOGIC TASK\n");
-	taskEXIT_CRITICAL();
-
-	// Array to hold keys
-	char keyValues[THRESHOLD_NUMBER_LENGTH + 1] = {0};
-	int i = 0;
-	int decimalIndex = 0;
-
-	while (1)
-	{
-		xSemaphoreTake(counterSemaphore0,portMAX_DELAY);
-
-		// Check if received enough characters yet
-		if (i < THRESHOLD_NUMBER_LENGTH) {
-//			if ( uxQueueMessagesWaiting( keyboardQueue ) != 0) {
-				if (xQueueReceive(keyboardQueue, keyValues+i, portMAX_DELAY)) { //TODO check if receive buffer works
-					// Check that we have started correctly
-					if ((keyValues[0] == L) || (keyValues[0] == R)) {
-						i++;
-					} else {
-						keyValues[i] = 0;
-					}
-				}
+//	// DEBUG
+//	taskENTER_CRITICAL();
+//	printf("STARTED KEYBOARD LOGIC TASK\n");
+//	taskEXIT_CRITICAL();
+//
+//	// Array to hold keys
+//	char keyValues[THRESHOLD_NUMBER_LENGTH + 1] = {0};
+//	int i = 0;
+//	int decimalIndex = 0;
+//
+//	while (1)
+//	{
+//		xSemaphoreTake(counterSemaphore0,portMAX_DELAY);
+////		printf("Got you homie\n");
+//		// Check if received enough characters yet
+//		if (i < THRESHOLD_NUMBER_LENGTH) {
+////			if ( uxQueueMessagesWaiting( keyboardQueue ) != 0) {
+//				if (xQueueReceive(keyboardQueue, keyValues+i, portMAX_DELAY)) { //TODO check if receive buffer works
+//					// Check that we have started correctly
+//					if ((keyValues[0] == L) || (keyValues[0] == R)) {
+//						i++;
+//					} else {
+//						keyValues[i] = 0;
+//					}
+//				}
+////			}
+//		} else if (xQueueReceive(keyboardQueue, keyValues+i, portMAX_DELAY)) { // Loop through filled array of characters and parse it to thresholds
+//			int thresholdTemp = 0;
+//			int invalidCharFlag = 0;
+//			int decimalFlag = 0;
+//
+//			int z;
+//		    for (z = 1; z < THRESHOLD_NUMBER_LENGTH + 1; z++) {
+//		        if ((keyValues[z] == 46) && !decimalFlag) { // Decimal place
+//		            decimalFlag = 1;
+//		            decimalIndex = z;
+//		            printf("\nFLAG");
+//		        }
+//
+//		        int numberConverted = keyValues[z] - '0';
+//
+//		        // Validity checking
+//		        if (((numberConverted >= 10) && (numberConverted <= -1)) && !decimalFlag) {
+//		            invalidCharFlag = 1;
+//		        }
+//
+//
+//		        if (!decimalFlag) {
+//		            thresholdTemp = numberConverted + thresholdTemp*10;
+//		        } else if (decimalIndex != z) {
+//		            thresholdTemp = numberConverted*pow(10, decimalIndex-z) + thresholdTemp;
+//		        }
+//
+//		    }
+//
+//			// Update thresholds and give semaphore if valid
+//			if (!invalidCharFlag) {
+//				if (keyValues[0] == L) {
+//					levelThreshold = thresholdTemp;
+//					printf("STORED L THRESHOLD: %d\n", levelThreshold);
+//				} else if (keyValues[0] == R) {
+//					rateOfChangeThreshold = thresholdTemp;
+//					printf("STORED R THRESHOLD: %d\n", rateOfChangeThreshold);
+//				}
+//
+//				for (z = 0 ; z < THRESHOLD_NUMBER_LENGTH + 1; z++) { keyValues[z] = 0; } // Reset array to 0
+//
+//				xSemaphoreGive(counterSemaphore1);
 //			}
-		} else if (xQueueReceive(keyboardQueue, keyValues+i, portMAX_DELAY)) { // Loop through filled array of characters and parse it to thresholds
-			int thresholdTemp = 0;
-			int invalidCharFlag = 0;
-			int decimalFlag = 0;
-
-			int z;
-		    for (z = 1; z < THRESHOLD_NUMBER_LENGTH + 1; z++) {
-		        if ((keyValues[z] == 46) && !decimalFlag) { // Decimal place
-		            decimalFlag = 1;
-		            decimalIndex = z;
-		            printf("\nFLAG");
-		        }
-
-		        int numberConverted = keyValues[z] - '0';
-
-		        // Validity checking
-		        if (((numberConverted >= 10) && (numberConverted <= -1)) && !decimalFlag) {
-		            invalidCharFlag = 1;
-		        }
-
-
-		        if (!decimalFlag) {
-		            thresholdTemp = numberConverted + thresholdTemp*10;
-		        } else if (decimalIndex != z) {
-		            thresholdTemp = numberConverted*pow(10, decimalIndex-z) + thresholdTemp;
-		        }
-
-		    }
-
-			// Update thresholds and give semaphore if valid
-			if (!invalidCharFlag) {
-				if (keyValues[0] == L) {
-					levelThreshold = thresholdTemp;
-					printf("STORED L THRESHOLD: %d\n", levelThreshold);
-				} else if (keyValues[0] == R) {
-					rateOfChangeThreshold = thresholdTemp;
-					printf("STORED R THRESHOLD: %d\n", rateOfChangeThreshold);
-				}
-
-				for (z = 0 ; z < THRESHOLD_NUMBER_LENGTH + 1; z++) { keyValues[z] = 0; } // Reset array to 0
-
-				xSemaphoreGive(counterSemaphore1);
-			}
-
-			i = 0;
-		}
-	}
+//
+//			i = 0;
+//		}
+//	}
 }
 
 
 
 void computeTask(void *pvParameters)
 {
-	taskENTER_CRITICAL();
-	printf("STARTED COMPUTE TASK\n");
-	taskEXIT_CRITICAL();
-
-	while (1)
-	{
-		xSemaphoreTake(counterSemaphore1, portMAX_DELAY);
-//		printf("Compute Task took semaphore: %d\n", semCountDebug++ );
-		unsigned int nextSystemState = systemState;
-
-		double difference = getTime() - prevTime500;
-		if ((difference >= 0.5) && (prevTime500 != 0)) {
-			TOF_500 = 1;
-			prevTime500 = 0;
-		}
-
-		if (enterMaintenanceState) {
-			nextSystemState = 3; // 3 is Maintenance state
-		} else {
-			checkNewFrequencyValues();
-
-			int frequencyUnstable = aboveRateOfFrequency() || belowThresholdFrequency();
-
-
-			if ( frequencyUnstable ) {
-				nextSystemState = 2; // 2 is Unstable state
-			} else if ( !frequencyUnstable ) {
-				nextSystemState = 1; // 1 is Stable state
-			}
-		}
-
-		// If nextState != prevState then restart timers,
-		if ((systemState != nextSystemState) || TOF_500 || switchChanged) {
-
-//			printf("RoC: %d, Threshold: %d\n", aboveRateOfFrequency(), belowThresholdFrequency());
-//			printf("StateChange: %d, TOV: %d, SWC: %d\n", (systemState != nextSystemState), TOF_500, switchChanged);
-
-
-			if ((systemState != nextSystemState) && (nextSystemState != 3)) { // 3 is Maintenance state
-				// Store time
-				prevTime200 = getTime();
-				changedState = 1;
-			}
-
-			// Clear timer flag: TODO: Check no mutex needed
-			TOF_500 = 0;
-			// Clear switch flag // TODO: Check no mutex needed
-			switchChanged = 0;
-			//Give semaphore // TODO: Check no mutex needed
-			systemState = nextSystemState;
-			xSemaphoreGive(counterSemaphore2); // Trigger output logic
-		}
-
-	}
+//	taskENTER_CRITICAL();
+//	printf("STARTED COMPUTE TASK\n");
+//	taskEXIT_CRITICAL();
+//
+//	while (1)
+//	{
+//		xSemaphoreTake(counterSemaphore1, portMAX_DELAY);
+////		printf("Compute Task took semaphore: %d\n", semCountDebug++ );
+//		unsigned int nextSystemState = systemState;
+//
+//		double difference = getTime() - prevTime500;
+//		if ((difference >= 0.5) && (prevTime500 != 0)) {
+//			TOF_500 = 1;
+//			prevTime500 = 0;
+//		}
+//
+//		if (enterMaintenanceState) {
+//			nextSystemState = 3; // 3 is Maintenance state
+//		} else {
+//			checkNewFrequencyValues();
+//
+//			int frequencyUnstable = aboveRateOfFrequency() || belowThresholdFrequency();
+//
+//
+//			if ( frequencyUnstable ) {
+//				nextSystemState = 2; // 2 is Unstable state
+//			} else if ( !frequencyUnstable ) {
+//				nextSystemState = 1; // 1 is Stable state
+//			}
+//		}
+//
+//		// If nextState != prevState then restart timers,
+//		if ((systemState != nextSystemState) || TOF_500 || switchChanged) {
+//
+////			printf("RoC: %d, Threshold: %d\n", aboveRateOfFrequency(), belowThresholdFrequency());
+////			printf("StateChange: %d, TOV: %d, SWC: %d\n", (systemState != nextSystemState), TOF_500, switchChanged);
+//
+//
+//			if ((systemState != nextSystemState) && (nextSystemState != 3)) { // 3 is Maintenance state
+//				// Store time
+//				prevTime200 = getTime();
+//				changedState = 1;
+//			}
+//
+//			// Clear timer flag: TODO: Check no mutex needed
+//			TOF_500 = 0;
+//			// Clear switch flag // TODO: Check no mutex needed
+//			switchChanged = 0;
+//			//Give semaphore // TODO: Check no mutex needed
+//			systemState = nextSystemState;
+//			xSemaphoreGive(counterSemaphore2); // Trigger output logic
+//		}
+//
+//	}
 }
 
 
@@ -523,7 +524,7 @@ void outputLogicTask(void *pvParameters)
 	greenValue = 0;
 	redValue = 0;
 
-
+	// DEBUG
 	taskENTER_CRITICAL();
 	printf("STARTED OUTPUT LOGIC TASK\n");
 	taskEXIT_CRITICAL();

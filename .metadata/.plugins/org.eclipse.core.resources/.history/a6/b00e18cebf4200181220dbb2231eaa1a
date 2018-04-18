@@ -191,6 +191,10 @@ void ps2ISR(void* context) {
 				twoTimes++;
 			}
 		}
+//	} else {
+//		twoTimes++;
+//	}
+//	printf("TT: %d\n", twoTimes);
 }
 
 
@@ -356,7 +360,7 @@ double getTime(void) {
 
 void switchPollingTask(void *pvParameters)
 {
-
+	// DEBUG
 	taskENTER_CRITICAL();
 	printf("STARTED SWITCH POLLING TASK\n");
 	taskEXIT_CRITICAL();
@@ -381,6 +385,7 @@ void switchPollingTask(void *pvParameters)
 void keyboardLogicTask(void *pvParameters)
 {
 
+	// DEBUG
 	taskENTER_CRITICAL();
 	printf("STARTED KEYBOARD LOGIC TASK\n");
 	taskEXIT_CRITICAL();
@@ -393,65 +398,65 @@ void keyboardLogicTask(void *pvParameters)
 	while (1)
 	{
 		xSemaphoreTake(counterSemaphore0,portMAX_DELAY);
-
-		// Check if received enough characters yet
-		if (i < THRESHOLD_NUMBER_LENGTH) {
-//			if ( uxQueueMessagesWaiting( keyboardQueue ) != 0) {
-				if (xQueueReceive(keyboardQueue, keyValues+i, portMAX_DELAY)) { //TODO check if receive buffer works
-					// Check that we have started correctly
-					if ((keyValues[0] == L) || (keyValues[0] == R)) {
-						i++;
-					} else {
-						keyValues[i] = 0;
-					}
-				}
+////		printf("Got you homie\n");
+//		// Check if received enough characters yet
+//		if (i < THRESHOLD_NUMBER_LENGTH) {
+////			if ( uxQueueMessagesWaiting( keyboardQueue ) != 0) {
+//				if (xQueueReceive(keyboardQueue, keyValues+i, portMAX_DELAY)) { //TODO check if receive buffer works
+//					// Check that we have started correctly
+//					if ((keyValues[0] == L) || (keyValues[0] == R)) {
+//						i++;
+//					} else {
+//						keyValues[i] = 0;
+//					}
+//				}
+////			}
+//		} else if (xQueueReceive(keyboardQueue, keyValues+i, portMAX_DELAY)) { // Loop through filled array of characters and parse it to thresholds
+//			int thresholdTemp = 0;
+//			int invalidCharFlag = 0;
+//			int decimalFlag = 0;
+//
+//			int z;
+//		    for (z = 1; z < THRESHOLD_NUMBER_LENGTH + 1; z++) {
+//		        if ((keyValues[z] == 46) && !decimalFlag) { // Decimal place
+//		            decimalFlag = 1;
+//		            decimalIndex = z;
+//		            printf("\nFLAG");
+//		        }
+//
+//		        int numberConverted = keyValues[z] - '0';
+//
+//		        // Validity checking
+//		        if (((numberConverted >= 10) && (numberConverted <= -1)) && !decimalFlag) {
+//		            invalidCharFlag = 1;
+//		        }
+//
+//
+//		        if (!decimalFlag) {
+//		            thresholdTemp = numberConverted + thresholdTemp*10;
+//		        } else if (decimalIndex != z) {
+//		            thresholdTemp = numberConverted*pow(10, decimalIndex-z) + thresholdTemp;
+//		        }
+//
+//		    }
+//
+//			// Update thresholds and give semaphore if valid
+//			if (!invalidCharFlag) {
+//				if (keyValues[0] == L) {
+//					levelThreshold = thresholdTemp;
+//					printf("STORED L THRESHOLD: %d\n", levelThreshold);
+//				} else if (keyValues[0] == R) {
+//					rateOfChangeThreshold = thresholdTemp;
+//					printf("STORED R THRESHOLD: %d\n", rateOfChangeThreshold);
+//				}
+//
+//				for (z = 0 ; z < THRESHOLD_NUMBER_LENGTH + 1; z++) { keyValues[z] = 0; } // Reset array to 0
+//
+//				xSemaphoreGive(counterSemaphore1);
 //			}
-		} else if (xQueueReceive(keyboardQueue, keyValues+i, portMAX_DELAY)) { // Loop through filled array of characters and parse it to thresholds
-			int thresholdTemp = 0;
-			int invalidCharFlag = 0;
-			int decimalFlag = 0;
-
-			int z;
-		    for (z = 1; z < THRESHOLD_NUMBER_LENGTH + 1; z++) {
-		        if ((keyValues[z] == 46) && !decimalFlag) { // Decimal place
-		            decimalFlag = 1;
-		            decimalIndex = z;
-		            printf("\nFLAG");
-		        }
-
-		        int numberConverted = keyValues[z] - '0';
-
-		        // Validity checking
-		        if (((numberConverted >= 10) && (numberConverted <= -1)) && !decimalFlag) {
-		            invalidCharFlag = 1;
-		        }
-
-
-		        if (!decimalFlag) {
-		            thresholdTemp = numberConverted + thresholdTemp*10;
-		        } else if (decimalIndex != z) {
-		            thresholdTemp = numberConverted*pow(10, decimalIndex-z) + thresholdTemp;
-		        }
-
-		    }
-
-			// Update thresholds and give semaphore if valid
-			if (!invalidCharFlag) {
-				if (keyValues[0] == L) {
-					levelThreshold = thresholdTemp;
-					printf("STORED L THRESHOLD: %d\n", levelThreshold);
-				} else if (keyValues[0] == R) {
-					rateOfChangeThreshold = thresholdTemp;
-					printf("STORED R THRESHOLD: %d\n", rateOfChangeThreshold);
-				}
-
-				for (z = 0 ; z < THRESHOLD_NUMBER_LENGTH + 1; z++) { keyValues[z] = 0; } // Reset array to 0
-
-				xSemaphoreGive(counterSemaphore1);
-			}
-
-			i = 0;
-		}
+//
+//			i = 0;
+//		}
 	}
 }
 
@@ -523,7 +528,7 @@ void outputLogicTask(void *pvParameters)
 	greenValue = 0;
 	redValue = 0;
 
-
+	// DEBUG
 	taskENTER_CRITICAL();
 	printf("STARTED OUTPUT LOGIC TASK\n");
 	taskEXIT_CRITICAL();
@@ -661,6 +666,7 @@ void outputLogicTask(void *pvParameters)
 
 void vgaOutputTask(void *pvParameters)
 {
+	// DEBUG
 	taskENTER_CRITICAL();
 	printf("STARTED VGA OUTPUT TASK\n");
 	taskEXIT_CRITICAL();
