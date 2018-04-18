@@ -78,13 +78,13 @@ double rateOfChangeData[FREQUENCY_DATA_QUEUE_SIZE] = {0};
 alt_u32 tickPerSecond; // Constants
 unsigned int context;
 double *FreqDebug;
-static volatile unsigned int currentSwitchValue; // Data
+static volatile unsigned int currentSwitchValue = 31; // Data
 static volatile unsigned int TOF_500, switchChanged, enterMaintenanceState, timerStarted; // Flags
 static volatile unsigned int systemState, changedState; // State
-static volatile unsigned int levelThreshold, rateOfChangeThreshold;
 static volatile unsigned int frequencyIndex, reactionCount;
 static volatile unsigned int twoTimes;
 static volatile double prevTime500, prevTime200, timerOverflow;
+static volatile double levelThreshold, rateOfChangeThreshold;
 // 	0  IDLE
 //  1  STABLE
 //  2  UNSTABLE
@@ -400,6 +400,9 @@ void keyboardLogicTask(void *pvParameters)
 				if (xQueueReceive(keyboardQueue, keyValues+i, portMAX_DELAY)) { //TODO check if receive buffer works
 					// Check that we have started correctly
 					if ((keyValues[0] == L) || (keyValues[0] == R)) {
+						if (i = 0) {
+							printf("Type 5 more values to change the respctive threshold\n");
+						}
 						i++;
 					} else {
 						keyValues[i] = 0;
@@ -407,7 +410,7 @@ void keyboardLogicTask(void *pvParameters)
 				}
 //			}
 		} else if (xQueueReceive(keyboardQueue, keyValues+i, portMAX_DELAY)) { // Loop through filled array of characters and parse it to thresholds
-			int thresholdTemp = 0;
+			double thresholdTemp = 0;
 			int invalidCharFlag = 0;
 			int decimalFlag = 0;
 
@@ -416,7 +419,6 @@ void keyboardLogicTask(void *pvParameters)
 		        if ((keyValues[z] == 46) && !decimalFlag) { // Decimal place
 		            decimalFlag = 1;
 		            decimalIndex = z;
-		            printf("\nFLAG");
 		        }
 
 		        int numberConverted = keyValues[z] - '0';
@@ -432,17 +434,16 @@ void keyboardLogicTask(void *pvParameters)
 		        } else if (decimalIndex != z) {
 		            thresholdTemp = numberConverted*pow(10, decimalIndex-z) + thresholdTemp;
 		        }
-
 		    }
 
 			// Update thresholds and give semaphore if valid
 			if (!invalidCharFlag) {
 				if (keyValues[0] == L) {
 					levelThreshold = thresholdTemp;
-					printf("STORED L THRESHOLD: %d\n", levelThreshold);
+					printf("STORED L THRESHOLD: %f\n", levelThreshold);
 				} else if (keyValues[0] == R) {
 					rateOfChangeThreshold = thresholdTemp;
-					printf("STORED R THRESHOLD: %d\n", rateOfChangeThreshold);
+					printf("STORED R THRESHOLD: %f\n", rateOfChangeThreshold);
 				}
 
 				for (z = 0 ; z < THRESHOLD_NUMBER_LENGTH + 1; z++) { keyValues[z] = 0; } // Reset array to 0
@@ -475,11 +476,10 @@ void computeTask(void *pvParameters)
 			prevTime500 = 0;
 		}
 
-		checkNewFrequencyValues();
-
 		if (enterMaintenanceState) {
 			nextSystemState = 3; // 3 is Maintenance state
 		} else {
+			checkNewFrequencyValues();
 
 			int frequencyUnstable = aboveRateOfFrequency() || belowThresholdFrequency();
 
@@ -770,10 +770,10 @@ void vgaOutputTask(void *pvParameters)
 			}
 			alt_up_char_buffer_string(char_buf, charData, 21, 40);
 
-			sprintf(charData, "%d", rateOfChangeThreshold);
+			sprintf(charData, "%.2f", rateOfChangeThreshold);
 			alt_up_char_buffer_string(char_buf, charData, 20, 44);
 
-			sprintf(charData, "%d Hz", levelThreshold);
+			sprintf(charData, "%.2f Hz", levelThreshold);
 			alt_up_char_buffer_string(char_buf, charData, 21, 46);
 
 			//last five reaction times

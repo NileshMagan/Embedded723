@@ -78,7 +78,7 @@ double rateOfChangeData[FREQUENCY_DATA_QUEUE_SIZE] = {0};
 alt_u32 tickPerSecond; // Constants
 unsigned int context;
 double *FreqDebug;
-static volatile unsigned int currentSwitchValue; // Data
+static volatile unsigned int currentSwitchValue = 31; // Data
 static volatile unsigned int TOF_500, switchChanged, enterMaintenanceState, timerStarted; // Flags
 static volatile unsigned int systemState, changedState; // State
 static volatile unsigned int levelThreshold, rateOfChangeThreshold;
@@ -475,11 +475,10 @@ void computeTask(void *pvParameters)
 			prevTime500 = 0;
 		}
 
-		checkNewFrequencyValues();
-
 		if (enterMaintenanceState) {
 			nextSystemState = 3; // 3 is Maintenance state
 		} else {
+			checkNewFrequencyValues();
 
 			int frequencyUnstable = aboveRateOfFrequency() || belowThresholdFrequency();
 

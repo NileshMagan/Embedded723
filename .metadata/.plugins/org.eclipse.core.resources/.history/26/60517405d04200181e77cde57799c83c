@@ -475,11 +475,10 @@ void computeTask(void *pvParameters)
 			prevTime500 = 0;
 		}
 
-		checkNewFrequencyValues();
-
 		if (enterMaintenanceState) {
 			nextSystemState = 3; // 3 is Maintenance state
 		} else {
+			checkNewFrequencyValues();
 
 			int frequencyUnstable = aboveRateOfFrequency() || belowThresholdFrequency();
 
