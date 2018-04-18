@@ -479,13 +479,11 @@ void computeTask(void *pvParameters)
 //		printf("Compute Task took semaphore: %d\n", semCountDebug++ );
 		unsigned int nextSystemState = systemState;
 
-		xSemaphoreTake(binarySemaphore1, portMAX_DELAY);
 		double difference = getTime() - prevTime500;
 		if ((difference >= 0.5) && (prevTime500 != 0)) {
 			TOF_500 = 1;
 			prevTime500 = 0;
 		}
-		xSemaphoreGive(binarySemaphore1);
 
 		xSemaphoreTake(binarySemaphore0, portMAX_DELAY);
 		checkNewFrequencyValues();
@@ -571,7 +569,8 @@ void outputLogicTask(void *pvParameters)
 					    changedState = 0;
 				    }
 
-				    // TODO: Used to check time
+				    // Store time for 500ms
+				    prevTime500 = getTime();
 
 				    break; // No loads to turn back on
 
@@ -598,7 +597,8 @@ void outputLogicTask(void *pvParameters)
 					changedState = 0;
 				}
 
-				// TODO: Used to check time
+				// Store time for 500ms
+				prevTime500 = getTime();
 				break;
 			case 2: // UNSTABLE
 
@@ -622,7 +622,8 @@ void outputLogicTask(void *pvParameters)
 				    	changedState = 0;
 				    }
 
-				    // TODO: Used to check time
+				    // Store time for 500ms
+				    prevTime500 = getTime();
 
 			    	break; // No loads to shed
 				} else {
@@ -648,8 +649,8 @@ void outputLogicTask(void *pvParameters)
 			   		changedState = 0;
 			   	}
 
-
-				// TODO: Used to take time
+				// Store time for 500ms
+				prevTime500 = getTime();
 
 				break;
 			case 3: // MAINTENANCE
@@ -663,11 +664,6 @@ void outputLogicTask(void *pvParameters)
 				updateLEDs(0, currentSwitchValue); // Red LEDs mimick switch state, Green LEDs all off
 				break;
 		}
-
-		xSemaphoreTake(binarySemaphore1, portMAX_DELAY);
-		// Store time for 500ms
-		prevTime500 = getTime();
-		xSemaphoreGive(binarySemaphore1);
 
 	}
 }

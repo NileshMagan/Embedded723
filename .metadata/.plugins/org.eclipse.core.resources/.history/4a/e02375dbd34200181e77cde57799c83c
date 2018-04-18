@@ -571,7 +571,8 @@ void outputLogicTask(void *pvParameters)
 					    changedState = 0;
 				    }
 
-				    // TODO: Used to check time
+				    // Store time for 500ms
+				    prevTime500 = getTime();
 
 				    break; // No loads to turn back on
 
@@ -598,7 +599,11 @@ void outputLogicTask(void *pvParameters)
 					changedState = 0;
 				}
 
-				// TODO: Used to check time
+		xSemaphoreTake(binarySemaphore1, portMAX_DELAY);
+				// Store time for 500ms
+				prevTime500 = getTime();
+		xSemaphoreGive(binarySemaphore1);
+
 				break;
 			case 2: // UNSTABLE
 
@@ -622,7 +627,8 @@ void outputLogicTask(void *pvParameters)
 				    	changedState = 0;
 				    }
 
-				    // TODO: Used to check time
+				    // Store time for 500ms
+				    prevTime500 = getTime();
 
 			    	break; // No loads to shed
 				} else {
@@ -648,8 +654,8 @@ void outputLogicTask(void *pvParameters)
 			   		changedState = 0;
 			   	}
 
-
-				// TODO: Used to take time
+				// Store time for 500ms
+				prevTime500 = getTime();
 
 				break;
 			case 3: // MAINTENANCE
@@ -663,11 +669,6 @@ void outputLogicTask(void *pvParameters)
 				updateLEDs(0, currentSwitchValue); // Red LEDs mimick switch state, Green LEDs all off
 				break;
 		}
-
-		xSemaphoreTake(binarySemaphore1, portMAX_DELAY);
-		// Store time for 500ms
-		prevTime500 = getTime();
-		xSemaphoreGive(binarySemaphore1);
 
 	}
 }

@@ -66,10 +66,8 @@
 
 QueueHandle_t frequencyQueue, keyboardQueue;
 
-
 // Definition of Semaphore
-SemaphoreHandle_t counterSemaphore0, counterSemaphore1, counterSemaphore2; // Counting
-SemaphoreHandle_t binarySemaphore0, binarySemaphore1, binarySemaphore2, binarySemaphore3;//, binarySemaphore4, binarySemaphore5; // Binary
+SemaphoreHandle_t counterSemaphore0, counterSemaphore1, counterSemaphore2;
 
 // Storage arrays
 double reactionTimes[REACTION_ARRAY_SIZE] = {1};
@@ -79,20 +77,14 @@ double rateOfChangeData[FREQUENCY_DATA_QUEUE_SIZE] = {0};
 // Global variables
 alt_u32 tickPerSecond; // Constants
 unsigned int context;
-
-
-// MUTEX
-static volatile unsigned int currentSwitchValue; // Data: binarySemaphore3
-static volatile unsigned int systemState; // State: binarySemaphore2
-static volatile unsigned int frequencyIndex; // // binarySemaphore0
-static volatile double prevTime500; // binarySemaphore1
-static volatile double levelThreshold, rateOfChangeThreshold; // // binarySemaphore0
-
-// NO MUTEX
-static volatile double timerOverflow, prevTime200;
-static volatile unsigned int changedState, twoTimes, reactionCount;
-static volatile unsigned int TOF_500, switchChanged, enterMaintenanceState; // Flags
-
+double *FreqDebug;
+static volatile unsigned int currentSwitchValue; // Data
+static volatile unsigned int TOF_500, switchChanged, enterMaintenanceState, timerStarted; // Flags
+static volatile unsigned int systemState, changedState; // State
+static volatile unsigned int levelThreshold, rateOfChangeThreshold;
+static volatile unsigned int frequencyIndex, reactionCount;
+static volatile unsigned int twoTimes;
+static volatile double prevTime500, prevTime200, timerOverflow;
 // 	0  IDLE
 //  1  STABLE
 //  2  UNSTABLE
@@ -445,15 +437,13 @@ void keyboardLogicTask(void *pvParameters)
 
 			// Update thresholds and give semaphore if valid
 			if (!invalidCharFlag) {
-				xSemaphoreTake(binarySemaphore0, portMAX_DELAY);
 				if (keyValues[0] == L) {
 					levelThreshold = thresholdTemp;
-					printf("STORED L THRESHOLD: %f\n", levelThreshold);
+					printf("STORED L THRESHOLD: %d\n", levelThreshold);
 				} else if (keyValues[0] == R) {
 					rateOfChangeThreshold = thresholdTemp;
-					printf("STORED R THRESHOLD: %f\n", rateOfChangeThreshold);
+					printf("STORED R THRESHOLD: %d\n", rateOfChangeThreshold);
 				}
-				xSemaphoreGive(binarySemaphore0);
 
 				for (z = 0 ; z < THRESHOLD_NUMBER_LENGTH + 1; z++) { keyValues[z] = 0; } // Reset array to 0
 
@@ -479,22 +469,21 @@ void computeTask(void *pvParameters)
 //		printf("Compute Task took semaphore: %d\n", semCountDebug++ );
 		unsigned int nextSystemState = systemState;
 
-		xSemaphoreTake(binarySemaphore1, portMAX_DELAY);
 		double difference = getTime() - prevTime500;
 		if ((difference >= 0.5) && (prevTime500 != 0)) {
 			TOF_500 = 1;
 			prevTime500 = 0;
 		}
-		xSemaphoreGive(binarySemaphore1);
 
-		xSemaphoreTake(binarySemaphore0, portMAX_DELAY);
 		checkNewFrequencyValues();
-		int frequencyUnstable = aboveRateOfFrequency() || belowThresholdFrequency();
-		xSemaphoreGive(binarySemaphore0);
 
 		if (enterMaintenanceState) {
 			nextSystemState = 3; // 3 is Maintenance state
 		} else {
+
+			int frequencyUnstable = aboveRateOfFrequency() || belowThresholdFrequency();
+
+
 			if ( frequencyUnstable ) {
 				nextSystemState = 2; // 2 is Unstable state
 			} else if ( !frequencyUnstable ) {
@@ -571,7 +560,8 @@ void outputLogicTask(void *pvParameters)
 					    changedState = 0;
 				    }
 
-				    // TODO: Used to check time
+				    // Store time for 500ms
+				    prevTime500 = getTime();
 
 				    break; // No loads to turn back on
 
@@ -598,7 +588,8 @@ void outputLogicTask(void *pvParameters)
 					changedState = 0;
 				}
 
-				// TODO: Used to check time
+				// Store time for 500ms
+				prevTime500 = getTime();
 				break;
 			case 2: // UNSTABLE
 
@@ -622,7 +613,8 @@ void outputLogicTask(void *pvParameters)
 				    	changedState = 0;
 				    }
 
-				    // TODO: Used to check time
+				    // Store time for 500ms
+				    prevTime500 = getTime();
 
 			    	break; // No loads to shed
 				} else {
@@ -648,9 +640,10 @@ void outputLogicTask(void *pvParameters)
 			   		changedState = 0;
 			   	}
 
+				// Store time for 500ms
+				prevTime500 = getTime();
 
-				// TODO: Used to take time
-
+				timerStarted = 1;
 				break;
 			case 3: // MAINTENANCE
 
@@ -663,11 +656,6 @@ void outputLogicTask(void *pvParameters)
 				updateLEDs(0, currentSwitchValue); // Red LEDs mimick switch state, Green LEDs all off
 				break;
 		}
-
-		xSemaphoreTake(binarySemaphore1, portMAX_DELAY);
-		// Store time for 500ms
-		prevTime500 = getTime();
-		xSemaphoreGive(binarySemaphore1);
 
 	}
 }
@@ -831,23 +819,10 @@ int initOSDataStructs(void)
 	keyboardQueue = xQueueCreate(KEYBOARD_QUEUE_SIZE, sizeof(char));
 
 
-	// Binary Semaphores
-	binarySemaphore0 = xSemaphoreCreateBinary(); //
-	binarySemaphore1 = xSemaphoreCreateBinary();
-	binarySemaphore2 = xSemaphoreCreateBinary();
-	binarySemaphore3 = xSemaphoreCreateBinary();
-
-	xSemaphoreGive(binarySemaphore0);
-	xSemaphoreGive(binarySemaphore1);
-	xSemaphoreGive(binarySemaphore2);
-	xSemaphoreGive(binarySemaphore3);
-
-
 	frequencyIndex = 0;
 	tickPerSecond = alt_ticks_per_second();
 	return 0;
 }
-
 
 // This function creates the tasks used in this example
 int initCreateTasks(void)
@@ -864,6 +839,7 @@ int initCreateTasks(void)
 int initFlags(void)
 {
 	TOF_500 = 0;
+	timerStarted = 0;
 	switchChanged = 0;
 	enterMaintenanceState = 0;
 	currentSwitchValue = 0;
