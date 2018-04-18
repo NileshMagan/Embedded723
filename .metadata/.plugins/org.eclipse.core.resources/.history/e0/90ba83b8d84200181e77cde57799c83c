@@ -374,7 +374,6 @@ void switchPollingTask(void *pvParameters)
 		//Read edge capture register's value
 		int switch_value = IORD_ALTERA_AVALON_PIO_DATA(SLIDE_SWITCH_BASE);
 
-		xSemaphoreTake(binarySemaphore3, portMAX_DELAY);
 		if (switch_value != currentSwitchValue) {
 			//Set global flag
 			switchChanged = 1;
@@ -382,7 +381,6 @@ void switchPollingTask(void *pvParameters)
 //			printf("Given from switch polling task\n");
 			xSemaphoreGive(counterSemaphore1);
 		}
-		xSemaphoreGive(binarySemaphore3);
 
 		vTaskDelay(POLLING_DELAY);
 	}
@@ -574,12 +572,6 @@ void outputLogicTask(void *pvParameters)
 				redValue = 	IORD_ALTERA_AVALON_PIO_DATA(RED_LEDS_BASE);
 				greenValue = IORD_ALTERA_AVALON_PIO_DATA(GREEN_LEDS_BASE);
 
-
-				xSemaphoreTake(binarySemaphore3, portMAX_DELAY);
-				unsigned int localSwitchValue = currentSwitchValue;
-				xSemaphoreGive(binarySemaphore3);
-
-
 				// If relay is not withholding loads, turn on all loads according to switches
 				if (greenValue == 0) {
 					redValue = currentSwitchValue;
@@ -587,10 +579,10 @@ void outputLogicTask(void *pvParameters)
 				    updateLEDs(greenValue, redValue);
 
 				    // Check 200ms timer
-//				    if(changedState = 1){
+				    if(changedState == 1){
 					    handleReactionTimer();
 					    changedState = 0;
-//				    }
+				    }
 
 				    // TODO: Used to check time
 
@@ -614,10 +606,10 @@ void outputLogicTask(void *pvParameters)
 				updateLEDs(greenValue, redValue);
 
 				// Check 200ms timer
-//				if(changedState = 1){
+				if(changedState == 1){
 					handleReactionTimer();
 					changedState = 0;
-//				}
+				}
 
 				// TODO: Used to check time
 				break;
@@ -638,10 +630,10 @@ void outputLogicTask(void *pvParameters)
 				    updateLEDs(greenValue, redValue);
 
 //				    // Check 200ms timer
-//				    if(changedState = 1){
+				    if(changedState == 1){
 				    	handleReactionTimer();
 				    	changedState = 0;
-//				    }
+				    }
 
 				    // TODO: Used to check time
 
@@ -664,10 +656,10 @@ void outputLogicTask(void *pvParameters)
 			    updateLEDs(greenValue, redValue);
 
 				// Check 200ms timer
-//			    if(changedState = 1){
+			    if(changedState == 1){
 			   		handleReactionTimer();
 			   		changedState = 0;
-//			   	}
+			   	}
 
 
 				// TODO: Used to take time
