@@ -414,6 +414,7 @@ void keyboardLogicTask(void *pvParameters)
 
 						// Validity checking
 						if (!(((numberConverted >= 10) || (numberConverted <= -1)) && (numberConverted != -2) && (i != 0))) {
+							printf("Val: %c\n", numberConverted);
 							i++;
 						}
 					} else {

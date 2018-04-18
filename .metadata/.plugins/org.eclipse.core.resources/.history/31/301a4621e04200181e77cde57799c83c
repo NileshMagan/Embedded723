@@ -416,6 +416,8 @@ void keyboardLogicTask(void *pvParameters)
 						if (!(((numberConverted >= 10) || (numberConverted <= -1)) && (numberConverted != -2) && (i != 0))) {
 							i++;
 						}
+
+
 					} else {
 						keyValues[i] = 0;
 					}

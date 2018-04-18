@@ -410,19 +410,14 @@ void keyboardLogicTask(void *pvParameters)
 				if (xQueueReceive(keyboardQueue, keyValues+i, portMAX_DELAY)) { //TODO check if receive buffer works
 					// Check that we have started correctly
 					if ((keyValues[0] == L) || (keyValues[0] == R)) {
-						int numberConverted = keyValues[i] - '0';
-
-						// Validity checking
-						if (!(((numberConverted >= 10) || (numberConverted <= -1)) && (numberConverted != -2) && (i != 0))) {
-							i++;
-						}
+						i++;
 					} else {
 						keyValues[i] = 0;
 					}
 				}
 //			}
 		} else if (xQueueReceive(keyboardQueue, keyValues+i, portMAX_DELAY)) { // Loop through filled array of characters and parse it to thresholds
-			float thresholdTemp = 0;
+			int thresholdTemp = 0;
 			int invalidCharFlag = 0;
 			int decimalFlag = 0;
 

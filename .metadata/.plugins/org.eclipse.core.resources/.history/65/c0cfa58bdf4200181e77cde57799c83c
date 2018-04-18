@@ -413,9 +413,11 @@ void keyboardLogicTask(void *pvParameters)
 						int numberConverted = keyValues[i] - '0';
 
 						// Validity checking
-						if (!(((numberConverted >= 10) || (numberConverted <= -1)) && (numberConverted != -2) && (i != 0))) {
+						if (!(((numberConverted >= 10) || (numberConverted <= -1)) && (numberConverted != -2))) {
 							i++;
 						}
+
+
 					} else {
 						keyValues[i] = 0;
 					}
